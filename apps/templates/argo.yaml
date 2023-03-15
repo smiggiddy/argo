@@ -11,8 +11,8 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: default
   source:
-    path: ./install.yaml 
-    repoURL: https://github.com/argoproj/argo-cd/tree/master/manifests
+    path: manifests/
+    repoURL: https://github.com/argoproj/argo-cd/
     targetRevision: HEAD
 
 
