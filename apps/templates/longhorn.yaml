@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: longhorn
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  labels:
+    apps: utilities 
+spec:
+  destination:
+    namespace: longhorn-system
+    server: {{ .Values.spec.destination.server }}
+  project: default
+source:
+  repoURL: https://charts.longhorn.io
+  targetRevision: 1.4.1
+  chart: longhorn
