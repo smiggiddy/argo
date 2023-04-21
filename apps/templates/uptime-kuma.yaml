@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: uptime-kuma
+  namespace: argocd
+  labels:
+    apps: utilities 
+    smig: charts
+spec:
+  project: default
+  source:
+    repoURL: 'https://smiggiddy.github.io'
+    targetRevision: 0.0.1
+    chart: uptime-kuma
+    helm:
+      parameters: 
+        - name: "storageClassName"
+          value: nfs-client
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+
