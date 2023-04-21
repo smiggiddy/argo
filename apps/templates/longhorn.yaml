@@ -12,10 +12,10 @@ spec:
     namespace: longhorn-system
     server: {{ .Values.spec.destination.server }}
   project: default
-source:
-  repoURL: https://charts.longhorn.io
-  targetRevision: 1.4.1
-  chart: longhorn
+  source:
+    repoURL: https://charts.longhorn.io
+    targetRevision: 1.4.1
+    chart: longhorn
 
   syncPolicy:
     syncOptions:
