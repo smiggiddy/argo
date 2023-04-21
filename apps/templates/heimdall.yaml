@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: 'https://smiggiddy.github.io'
-    targetRevision: 0.2.6
+    targetRevision: 0.2.7
     chart: heimdall
     helm:
       parameters: 
