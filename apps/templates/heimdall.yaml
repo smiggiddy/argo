@@ -18,3 +18,7 @@ spec:
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
+
+  helm:
+    values: |
+      storageClassName: nfs-client
