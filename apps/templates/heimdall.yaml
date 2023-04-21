@@ -20,5 +20,6 @@ spec:
     - CreateNamespace=true
 
   helm:
-    values: 
-      storageClassName: nfs-client
+    parameters: 
+      - name: "storageClassName"
+        value: nfs-client
