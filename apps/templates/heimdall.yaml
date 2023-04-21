@@ -12,6 +12,10 @@ spec:
     repoURL: 'https://smiggiddy.github.io'
     targetRevision: 0.2.3
     chart: heimdall
+    helm:
+      parameters: 
+        - name: "storageClassName"
+          value: nfs-client
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: apps
@@ -19,7 +23,4 @@ spec:
     syncOptions:
     - CreateNamespace=true
 
-  helm:
-    parameters: 
-      - name: "storageClassName"
-        value: nfs-client
+
