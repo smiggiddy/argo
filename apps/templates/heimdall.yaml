@@ -5,6 +5,7 @@ metadata:
   namespace: apps
   labels:
     apps: utilities 
+    smig: charts
 spec:
   project: default
   source:
