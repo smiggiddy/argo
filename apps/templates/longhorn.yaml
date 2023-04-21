@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: longhorn
   namespace: argocd
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
   labels:
     apps: utilities 
 spec:
