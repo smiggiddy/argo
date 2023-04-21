@@ -10,7 +10,7 @@ spec:
     namespace: argocd
     server: https://kubernetes.default.svc 
   project: default
-  source:
+  sources:
     path: manifests/core-install
     repoURL: https://github.com/argoproj/argo-cd/
     targetRevision: HEAD

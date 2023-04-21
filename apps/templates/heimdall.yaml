@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: heimdall
-  namespace: apps
+  namespace: argocd
   labels:
     apps: utilities 
     smig: charts
