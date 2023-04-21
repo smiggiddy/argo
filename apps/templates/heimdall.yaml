@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: 'https://smiggiddy.github.io'
-    targetRevision: 0.2.2
+    targetRevision: 0.2.3
     chart: heimdall
   destination:
     server: 'https://kubernetes.default.svc'
