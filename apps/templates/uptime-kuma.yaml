@@ -10,12 +10,13 @@ spec:
   project: default
   source:
     repoURL: 'https://smiggiddy.github.io'
-    targetRevision: 0.0.6
+    targetRevision: 0.0.8
     chart: uptime-kuma
     helm:
       parameters: 
         - name: "storageClassName"
           value: nfs-client
+        - name:
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: apps
