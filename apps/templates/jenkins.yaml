@@ -22,7 +22,7 @@ spec:
             ingressClassName: traefik
             hostName: jenkins.lab.smig.tech
             tls:
-             - secretName: heimdall
+             - secretName: heimdall-tls
                hosts:
                - jenkins.lab.smig.tech
 
