@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://charts.jenkins.io
     targetRevision: 4.3.22
-    chart: vault 
+    chart: jenkins 
     
     helm:
       values: |
