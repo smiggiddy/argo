@@ -14,9 +14,9 @@ spec:
     
     helm:
       values: |
+        persistence:
+          storageClass: nfs-client
         controller:
-          persistence:
-            storageClass: nfs-client
           ingress:
             enabled: true
             ingressClassName: traefik
