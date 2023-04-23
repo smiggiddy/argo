@@ -14,15 +14,16 @@ spec:
     
     helm:
       values: |
-        persistence:
-          storageClass: nfs-client
-        ingress:
-          enabled: true
-          ingressClassName: traefik
-          hostName: jenkins.lab.smig.tech
-          tls:
-           - secretName: heimdall
-             hosts:
+        controller:
+          persistence:
+            storageClass: nfs-client
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            hostName: jenkins.lab.smig.tech
+            tls:
+             - secretName: heimdall
+               hosts:
                - jenkins.lab.smig.tech
 
   destination:
