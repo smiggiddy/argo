@@ -64,19 +64,7 @@ spec:
                 securityContext:
                   runAsNonRoot: true
                   runAsUser: 999
-                volumeMounts:
-                  - mountPath: /var/run/argocd
-                    name: var-files
-                  - mountPath: /home/argocd/cmp-server/plugins
-                    name: plugins
-                  - mountPath: /tmp
-                    name: tmp
-                  - mountPath: /home/argocd/cmp-server/config/plugin.yaml
-                    subPath: argocd-vault-plugin.yaml
-                    name: cmp-plugin
-                  - name: custom-tools
-                    subPath: argocd-vault-plugin
-                    mountPath: /usr/local/bin/argocd-vault-plugin
+ 
             
             initContainers:
               - name: download-tools
