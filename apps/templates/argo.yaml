@@ -59,12 +59,25 @@ spec:
           repoServer:
             extraContainers: 
               - name: avp
-                command: [/var/run/argocd/argocd-cmp-server]
+                command: 
+                  - "/var/run/argocd/argocd-cmp-server"
                 image: registry.access.redhat.com/ubi8
                 securityContext:
                   runAsNonRoot: true
                   runAsUser: 999
- 
+                volumeMounts:
+                  - mountPath: /var/run/argocd
+                    name: var-files
+                  - mountPath: /home/argocd/cmp-server/plugins
+                    name: plugins
+                  - mountPath: /tmp
+                    name: tmp
+                  - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+                    subPath: argocd-vault-plugin.yaml
+                    name: cmp-plugin
+                  - name: custom-tools
+                    subPath: argocd-vault-plugin
+                    mountPath: /usr/local/bin/argocd-vault-plugin
             
             initContainers:
               - name: download-tools
@@ -72,7 +85,9 @@ spec:
                 env:
                   - name: AVP_VERSION
                     value: 1.11.0
-                command: [sh, -c]
+                command: 
+                  -"sh" 
+                  - "-c"
                 args:
                   - >-
                     curl -L https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$(AVP_VERSION)/argocd-vault-plugin_$(AVP_VERSION)_linux_arm64 -o argocd-vault-plugin &&
