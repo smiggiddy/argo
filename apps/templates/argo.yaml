@@ -3,18 +3,18 @@ kind: Application
 metadata:
   name: argocd
   namespace: argocd
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
+  labels:
+    apps: utilities
 spec:
   destination:
     namespace: argocd
     server: https://kubernetes.default.svc 
   project: default
   source:
-    path: manifests/core-install
-    repoURL: https://github.com/argoproj/argo-cd/
+    repoURL: https://argoproj.github.io/argo-helm 
     targetRevision: HEAD
+    targetRevision: 5.24.0 
+    chart: argo-cd
 
-
-
+    
 
