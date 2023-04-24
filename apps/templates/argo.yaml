@@ -71,13 +71,9 @@ spec:
                     name: plugins
                   - mountPath: /tmp
                     name: tmp
-
-                  # Register plugins into sidecar
                   - mountPath: /home/argocd/cmp-server/config/plugin.yaml
                     subPath: argocd-vault-plugin.yaml
                     name: cmp-plugin
-
-                  # Important: Mount tools into $PATH
                   - name: custom-tools
                     subPath: argocd-vault-plugin
                     mountPath: /usr/local/bin/argocd-vault-plugin
