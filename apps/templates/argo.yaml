@@ -31,23 +31,23 @@ spec:
           configs:
             params:
               server.insecure: true
-              cmp:
-                create: yes
-                plugins:
-                  argocd-vault-plugin:
-                    allowConcurrency: true
-                    discover:
-                      find:
-                        command:
-                          - sh
-                          - "-c"
-                          - "find . -name '*.yaml' | xargs -I {} grep \"<path\\|avp\\.kubernetes\\.io\" {} | grep ."
-                    generate:
+            cmp:
+              create: yes
+              plugins:
+                argocd-vault-plugin:
+                  allowConcurrency: true
+                  discover:
+                    find:
                       command:
-                        - argocd-vault-plugin
-                        - generate
-                        - "."
-                    lockRepo: false
+                        - sh
+                        - "-c"
+                        - "find . -name '*.yaml' | xargs -I {} grep \"<path\\|avp\\.kubernetes\\.io\" {} | grep ."
+                  generate:
+                    command:
+                      - argocd-vault-plugin
+                      - generate
+                      - "."
+                  lockRepo: false
 
           server:
             ingress:
