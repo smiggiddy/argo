@@ -59,10 +59,7 @@ spec:
                     -"sh" 
                     - "-c"
                   args:
-                    - >-
-                      curl -L https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$(AVP_VERSION)/argocd-vault-plugin_$(AVP_VERSION)_linux_arm64 -o argocd-vault-plugin &&
-                      chmod +x argocd-vault-plugin &&
-                      mv argocd-vault-plugin /custom-tools/
+                    - "curl -L https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$(AVP_VERSION)/argocd-vault-plugin_$(AVP_VERSION)_linux_arm64 -o argocd-vault-plugin &&  chmod +x argocd-vault-plugin && mv argocd-vault-plugin /custom-tools/"
                   volumeMounts:
                     - mountPath: /custom-tools
                       name: custom-tools
