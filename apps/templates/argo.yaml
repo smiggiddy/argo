@@ -28,6 +28,9 @@ spec:
           value: "traefik"
         
       values: |
+          configs:
+            params:
+              server.insecure: true
           server:
             ingress:
               tls:
