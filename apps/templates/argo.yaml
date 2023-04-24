@@ -18,8 +18,10 @@ spec:
 
     helm:     
       values: |
-      
+
             repoServer:
+              serviceAccount:
+                automountServiceAccountToken: true
               volumes:
                 - configMap:
                     name: argocd-cmp-cm
