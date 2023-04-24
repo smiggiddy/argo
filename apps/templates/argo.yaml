@@ -16,5 +16,8 @@ spec:
     targetRevision: 5.24.0 
     chart: argo-cd
 
-    
+    helm:
+      parameters:
+        - name: configs.params."server.insecure"
+          value: true
 
