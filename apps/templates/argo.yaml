@@ -30,10 +30,10 @@ spec:
       values: |
           repoServer:
             extraContainers: 
-              - name: avp
-                command: 
+              - name: cmp-my-plugin
+                command:
                   - "/var/run/argocd/argocd-cmp-server"
-                image: registry.access.redhat.com/ubi8
+                image: busybox
                 securityContext:
                   runAsNonRoot: true
                   runAsUser: 999
@@ -42,14 +42,15 @@ spec:
                     name: var-files
                   - mountPath: /home/argocd/cmp-server/plugins
                     name: plugins
-                  - mountPath: /tmp
-                    name: tmp
+                  # Remove this volumeMount if you've chosen to bake the config file into the sidecar image.
                   - mountPath: /home/argocd/cmp-server/config/plugin.yaml
-                    subPath: argocd-vault-plugin.yaml
-                    name: cmp-plugin
-                  - name: custom-tools
-                    subPath: argocd-vault-plugin
-                    mountPath: /usr/local/bin/argocd-vault-plugin
+                    subPath: my-plugin.yaml
+                    name: argocd-cmp-cm
+                  # Starting with v2.4, do NOT mount the same tmp volume as the repo-server container. The filesystem separation helps
+                  # mitigate path traversal attacks.
+                  - mountPath: /tmp
+                    name: cmp-tmp
+
             
             initContainers:
               - name: download-tools
