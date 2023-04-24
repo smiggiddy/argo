@@ -18,8 +18,6 @@ spec:
 
     helm:
       parameters:
-        - name: configs.params.server.insecure
-          value: "true"
         - name: server.ingress.enabled 
           value: "true"
         - name: server.ingress.hosts[0]
