@@ -19,5 +19,5 @@ spec:
     helm:
       parameters:
         - name: configs.params.server.insecure
-          value: true
+          value: "true"
 
