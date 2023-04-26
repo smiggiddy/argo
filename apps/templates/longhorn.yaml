@@ -16,6 +16,10 @@ spec:
     targetRevision: 1.4.1
     chart: longhorn
 
+    helm:
+      values:
+        test: <path:k8s/data/argocd/test#ingress>
+
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
