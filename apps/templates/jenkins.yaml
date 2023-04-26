@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
   labels:
     apps: utilities 
+  annotations:
+    avp.kubernetes.io/path: k8s/argocd/test
 spec:
   project: default
   source:
@@ -19,7 +21,7 @@ spec:
         controller:
           ingress:
             enabled: true
-            ingressClassName: traefik
+            ingressClassName: <ingress>
             hostName: jenkins.lab.smig.tech
             tls:
              - secretName: heimdall-tls
