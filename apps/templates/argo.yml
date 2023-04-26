@@ -49,6 +49,26 @@ spec:
                     - name: custom-tools
                       subPath: argocd-vault-plugin
                       mountPath: /usr/local/bin/argocd-vault-plugin   
+                - name: avp-helm
+                  command: 
+                    - /var/run/argocd/argocd-cmp-server
+                  image: registry.access.redhat.com/ubi8
+                  securityContext:
+                    runAsNonRoot: true
+                    runAsUser: 999
+                  volumeMounts:
+                    - mountPath: /var/run/argocd
+                      name: var-files
+                    - mountPath: /home/argocd/cmp-server/plugins
+                      name: plugins
+                    - mountPath: /tmp
+                      name: tmp
+                    - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+                      subPath: argocd-vault-plugin-helm.yaml
+                      name: cmp-plugin
+                    - name: custom-tools
+                      subPath: argocd-vault-plugin
+                      mountPath: /usr/local/bin/argocd-vault-plugin 
               initContainers:
                 - name: download-tools
                   image: registry.access.redhat.com/ubi8
@@ -87,6 +107,22 @@ spec:
                         - "."
                         - "-s"
                         - vault-configuration
+                    lockRepo: false      
+                  argocd-vault-plugin-helm:
+                    allowConcurrency: true
+                    discover:
+                      find:
+                        command:
+                          - sh
+                          - "-c"
+                          - "find . -name 'Chart.yaml' && find . -name 'values.yaml'"
+                    generate:
+                      command:
+                        - bash
+                        - "-c"
+                        - |
+                          helm template $ARGOCD_APP_NAME -n $ARGOCD_APP_NAMESPACE -f <(echo "$ARGOCD_ENV_helm_values") . |
+                          argocd-vault-plugin generate -
                     lockRepo: false
             server:
               ingress:
