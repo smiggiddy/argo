@@ -19,7 +19,7 @@ spec:
         controller:
           ingress:
             enabled: true
-            ingressClassName: <path:k8s/argocd/test#foo>
+            ingressClassName: <path:k8s/data/argocd/test#foo>
             hostName: jenkins.lab.smig.tech
             tls:
              - secretName: heimdall-tls
