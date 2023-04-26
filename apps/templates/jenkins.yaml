@@ -5,6 +5,7 @@ metadata:
   namespace: argocd
   labels:
     apps: utilities 
+    test: <path:k8s/argocd/test#foo>
 spec:
   project: default
   source:
