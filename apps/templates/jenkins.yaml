@@ -5,9 +5,6 @@ metadata:
   namespace: argocd
   labels:
     apps: utilities 
-    test: <foo>
-  annotations:
-    avp.kubernetes.io/path: "k8s/argocd/test"
 spec:
   project: default
   source:
