@@ -88,23 +88,6 @@ spec:
                         - "-s"
                         - vault-configuration
                     lockRepo: false
-                  argocd-vault-plugin-helm:
-                    allowConcurrency: true
-                    discover:
-                      find:
-                        command:
-                          - sh
-                          - "-c"
-                          - "find . -name 'Chart.yaml' && find . -name 'values.yaml'"
-                    generate:
-                      command:
-                        - sh
-                        - "-c"
-                        - |
-                          helm template $ARGOCD_APP_NAME --include-crds . |
-                          argocd-vault-plugin generate -
-                    lockRepo: false
-
             server:
               ingress:
                 enabled: true
