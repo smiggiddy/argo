@@ -16,9 +16,12 @@ spec:
     targetRevision: 1.4.1
     chart: longhorn
 
-    helm:
-      values:
-        test: <path:k8s/data/argocd/test#ingress>
+    plugin:
+      name: argocd-vault-plugin-helm
+      env:
+        - name: helm_values
+          value: |
+            test: <path:k8s/data/argocd/test#ingress>
 
   syncPolicy:
     syncOptions:
