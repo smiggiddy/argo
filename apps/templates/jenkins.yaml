@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
   labels:
     apps: utilities 
+  annotations:
+     avp.kubernetes.io/path: "k8s/data/argocd/test"
 
 spec:
   project: default
@@ -29,7 +31,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: apps
+    namespace: <ingress>
 
   syncPolicy:
     syncOptions:
