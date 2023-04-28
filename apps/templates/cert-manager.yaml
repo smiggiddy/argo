@@ -15,6 +15,9 @@ spec:
     chart: cert-manager
 
     helm:
+      values: |
+          annotations:
+             avp.kubernetes.io/ignore: "true"
       paramaters:
         - name: "installCRDs"
           value: "true"
