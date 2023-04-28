@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: argocd
+  labels:
+    apps: utilities 
+  annotations:
+   avp.kubernetes.io/ignore: "true"
+spec:
+  project: default
+  source:
+    repoURL: https://charts.jetstack.io
+    targetRevision: 1.11.0 
+    chart: cert-manager
+
+    helm:
+      paramaters:
+        - name: "installCRDs"
+          value: "true"
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: utilities
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
