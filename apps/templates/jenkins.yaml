@@ -36,14 +36,14 @@ spec:
             - configuration-as-code:1625.v27444588cc3d
             - gitea:1.4.5
           
-          JCasC:
-            securityRealm: |-
-              github:
-                githubWebUri: "https://github.com"
-                githubApiUri: "https://api.github.com"
-                clientID: "someId"
-                clientSecret: "1234566"
-                oauthScopes: "read:org,user:email"
+          # JCasC:
+          #   securityRealm: |-
+          #     github:
+          #       githubWebUri: "https://github.com"
+          #       githubApiUri: "https://api.github.com"
+          #       clientID: "someId"
+          #       clientSecret: "1234566"
+          #       oauthScopes: "read:org,user:email"
   destination:
     server: https://kubernetes.default.svc
     namespace: apps
