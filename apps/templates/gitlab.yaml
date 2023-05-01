@@ -15,6 +15,7 @@ spec:
     helm:
       values: |
             certsSecretName: certs
+            useTini: true
             gitlabUrl: https://gitlab.lab.smig.tech:8929
             rbac:
               create: true
