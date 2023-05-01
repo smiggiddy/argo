@@ -16,6 +16,8 @@ spec:
       values: |
             certsSecretName: certs
             gitlabUrl: https://gitlab.lab.smig.tech:8929
+            rbac:
+              create: true
             runners:
               secret: gitlab-runner
               name: k8s-runner
