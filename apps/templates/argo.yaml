@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
   labels:
     apps: utilities
+  annotations:
+   avp.kubernetes.io/ignore: "true"
 spec:
   destination:
     namespace: argocd
