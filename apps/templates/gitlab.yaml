@@ -25,7 +25,7 @@ spec:
                     [[runners]]
                       [runners.kubernetes]
                           namespace = "{{.Release.Namespace}}"
-                          image = "alpine"
+                          image = "ubuntu:20.04"
 
 
 
