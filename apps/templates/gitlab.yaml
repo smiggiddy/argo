@@ -15,7 +15,7 @@ spec:
     helm:
       values: |
             certsSecretName: certs
-
+            gitlabUrl: https://gitlab.lab.smig.tech:8929
             runners:
               secret: gitlab-runner
               name: k8s-runner
