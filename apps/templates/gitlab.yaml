@@ -28,6 +28,7 @@ spec:
                           image = "alpine:ae64b940fbdd6c1720976cd0dc3497577c94b26c13938dae3cbb0569a681e762"
                           privileged = true
                           pull_policy = "if-not-present"
+                          helper_image = "gitlab/gitlab-runner-helper:arm64-21da6177"
 
 
   destination:
