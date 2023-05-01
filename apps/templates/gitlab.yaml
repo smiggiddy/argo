@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitlab-runner
+  namespace: argocd
+  labels:
+    apps: utilities 
+spec:
+  project: default
+  source:
+    repoURL: https://helm.releases.hashicorp.com
+    targetRevision: 0.53.0
+    chart: gitlab-runner 
+
+    helm:
+      values: |
+            certsSecretName: certs
+
+            runners:
+              secret: gitlab-runner
+              name: k8s-runner
+              config: |
+                    [[runners]]
+                      [runners.kubernetes]
+                          namespace = "{{.Release.Namespace}}"
+                          image = "alpine"
+
+
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gitlab-runner
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
