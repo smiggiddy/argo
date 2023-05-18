@@ -18,7 +18,7 @@ spec:
         - name: nfs.path
           value: /volume1/kubernetes
         - name: storageClass.defaultClass
-          value: true
+          value: "true"
      
 
   destination:
