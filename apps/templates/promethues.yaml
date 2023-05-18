@@ -16,16 +16,13 @@ spec:
     helm:
       values: |
           server:
+            persistentVolume:
+              storageClass: nfs-client
+              storageClassName: nfs-client
             ingress:
-                ## If true, Prometheus server Ingress will be created
-                ##
-                enabled: true
-
-                ## Prometheus server Ingress hostnames
-                ## Must be provided if Ingress is enabled
-                ##
-                hosts:
-                - k3s-prom.lab.smig.tech
+              enabled: true
+              hosts:
+              - k3s-prom.lab.smig.tech
 
   destination:
     server: https://kubernetes.default.svc
