@@ -30,11 +30,11 @@ spec:
                - jenkins.lab.smig.tech
 
           installPlugins:
-            - kubernetes:3900.va_dce992317b_4
-            - workflow-aggregator:596.v8c21c963d92d
-            - git:5.0.0
-            - configuration-as-code:1625.v27444588cc3d
-            - gitea:1.4.5
+            - kubernetes
+            - workflow-aggregator
+            - git
+            - configuration-as-code
+            - gitea
           
           # JCasC:
           #   securityRealm: |-
