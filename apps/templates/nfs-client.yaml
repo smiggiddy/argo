@@ -17,6 +17,8 @@ spec:
           value: smigs-nas.lab.smig.tech 
         - name: nfs.path
           value: /volume1/kubernetes
+        - name: storageClass.defaultClass
+          value: true
      
 
   destination:
