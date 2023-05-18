@@ -27,6 +27,10 @@ spec:
               enabled: true
               hosts:
               - k3s-prom.lab.smig.tech
+              tls:
+              - secretName: heimdall-tls
+                hosts:
+                - k3s-prom.lab.smig.tech
 
   destination:
     server: https://kubernetes.default.svc
