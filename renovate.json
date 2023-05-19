@@ -3,7 +3,7 @@
   "extends": [
     "config:base",
     ":dependencyDashboard"
-  ]
+  ],
     "argocd": {
     "fileMatch": ["apps/.+\\.yaml$"]
   }
