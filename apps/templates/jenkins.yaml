@@ -21,11 +21,13 @@ spec:
           storageClass: nfs-client
         controller:
           ingress:
+            annotations:
+              cert-manager.io/cluster-issuer: cluster-ca-issuer
             enabled: true
             ingressClassName: traefik
             hostName: jenkins.lab.smig.tech
             tls:
-             - secretName: heimdall-tls
+             - secretName: jenkins-tls
                hosts:
                - jenkins.lab.smig.tech
 
