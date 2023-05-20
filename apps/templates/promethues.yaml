@@ -25,10 +25,12 @@ spec:
               storageClassName: nfs-client
             ingress:
               enabled: true
+              annotations:
+                cert-manager.io/cluster-issuer: cluster-ca-issuer
               hosts:
               - k3s-prom.lab.smig.tech
               tls:
-              - secretName: heimdall-tls
+              - secretName: smigtech-prom-tls
                 hosts:
                 - k3s-prom.lab.smig.tech
 

@@ -94,6 +94,8 @@ spec:
 
             server:
               ingress:
+                annotations:
+                  cert-manager.io/cluster-issuer: cluster-ca-issuer
                 enabled: true
                 hosts:
                 - argocd.lab.smig.tech
@@ -101,7 +103,7 @@ spec:
                 tls:
                 - hosts:
                   - argocd.lab.smig.tech
-                  secretName: argocd-tls
+                  secretName: smigtech-argocd-tls
           
 
 
