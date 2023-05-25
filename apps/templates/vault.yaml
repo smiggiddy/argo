@@ -12,6 +12,11 @@ spec:
     targetRevision: 0.24.1
     chart: vault 
 
+    helm:
+      parameters:
+        - name: server.dataStorage.storageClass
+          value: nfs-client
+
 
   destination:
     server: https://kubernetes.default.svc
