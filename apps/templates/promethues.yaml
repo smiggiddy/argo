@@ -15,10 +15,10 @@ spec:
     
     helm:
       values: |
-          # alertmanager:
-          #   persistence:
-          #     storageClass: nfs-client
-          #     storageClassName: nfs-client
+          alertmanager:
+            persistence:
+              storageClass: nfs-client
+              # storageClassName: nfs-client
           server:
             persistentVolume:
               storageClass: nfs-client
