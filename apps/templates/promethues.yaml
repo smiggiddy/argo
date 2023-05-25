@@ -20,6 +20,8 @@ spec:
               storageClass: nfs-client
               # storageClassName: nfs-client
           server:
+            statefulSet:
+              enabled: true
             persistentVolume:
               storageClass: nfs-client
               storageClassName: nfs-client
