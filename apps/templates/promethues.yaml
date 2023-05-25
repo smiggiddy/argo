@@ -20,6 +20,8 @@ spec:
               storageClass: nfs-client
               # storageClassName: nfs-client
           server:
+            extraFlags:
+              - storage.tsdb.no-lockfile
             statefulSet:
               enabled: true
             persistentVolume:
