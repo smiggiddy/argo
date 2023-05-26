@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: awx
+  namespace: argocd
+  labels:
+    apps: utilities 
+spec:
+  project: default
+  source:
+    repoURL: https://ansible.github.io/awx-operator/
+    targetRevision: 2.1.0
+    chart: awx-operator
+
+    helm:
+      parameters:
+        - name: server.dataStorage.storageClass
+          value: nfs-client
+        - name: AWX.spec.admin_user
+          value: smig
+        - name: AWX.enabled
+          value: "true"
+        - name: AWX.spec.service_type
+          value: NodePort 
+        - name: AWX.spec.nodeport_port
+          value: "30080"
+        - name:  AWX.spec.ingress_type
+          value: ingress 
+        - name: AWX.spec.hostname
+          value: awx.lab.smig.tech 
+        - name: AWX.spec.ingress_tls_secret
+          value: awx-secret-tls
+        - name: AWX.spec.auto_upgrade
+          value: "true"
+        - name: AWX.spec.replicas.task_replicas
+          value: "2"
+
+
+  destination:
+    server: https://pxmx-awx01.lab.smig.tech
+    namespace: awx
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+
+
+
+# helm upgrade awx -n awx awx-operator/awx-operator 
+
+# --set AWX.spec.admin_user=smig 
+# --set AWX.enabled=true 
+# --set AWX.spec.service_type=NodePort 
+# --set AWX.spec.nodeport_port=30080 
+# --set AWX.spec.ingress_type=ingress 
+# --set AWX.spec.hostname=awx.lab.smig.tech 
+# --set AWX.spec.ingress_tls_secret=awx-secret-tls 
+# --set AWX.spec.auto_upgrade=true 
+# --set AWX.spec.replicas.task_replicas=2
