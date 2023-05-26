@@ -22,7 +22,7 @@ spec:
             hosts:
             - host: it-tools.lab.smig.tech
               paths:
-        `     - path: /
+              - path: /
                 pathType: Prefix
             tls: 
             - secretName: it-tools-tls
