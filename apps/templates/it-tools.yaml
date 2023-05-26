@@ -21,10 +21,13 @@ spec:
               cert-manager.io/cluster-issuer: cluster-ca-issuer
             hosts:
             - host: it-tools.lab.smig.tech
-              tls: 
-              - secretName: it-tools-tls
-                hosts:
-                - it-tools.lab.smig.tech
+              paths:
+        `     - path: /
+                pathType: Prefix
+            tls: 
+            - secretName: it-tools-tls
+              hosts:
+              - it-tools.lab.smig.tech
 
 
 
