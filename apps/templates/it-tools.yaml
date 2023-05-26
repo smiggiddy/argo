@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: it-tools
+  namespace: argocd
+  labels:
+    apps: utilities 
+    smig: charts
+spec:
+  project: default
+  source:
+    repoURL: 'https://smiggiddy.github.io'
+    targetRevision: 0.1.0
+    chart: it-tools
+    helm:
+      values: | 
+          ingress:
+            enabled: true
+            className: "traefik"
+            annotations: 
+              cert-manager.io/cluster-issuer: cluster-ca-issuer
+            hosts:
+                - host: it-tools.lab.smig.tech
+            tls: 
+            - secretName: it-tools-tls
+              hosts:
+              - it-tools.lab.smig.tech
+
+
+
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
