@@ -1,5 +1,17 @@
 ---
 apiVersion: v1
+kind: Secret
+metadata:
+  name: renovate-secrets
+  namespace: renovate
+  annotations:
+    avp.kubernetes.io/path: "k8s/data/renovate-bot/config"
+type: Opaque
+data:
+  RENOVATE_TOKEN: <token>
+
+---
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: renovate-config
