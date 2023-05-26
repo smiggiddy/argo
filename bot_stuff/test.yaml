@@ -22,7 +22,6 @@ data:
     {
       "repositories": ["smiggiddy/argocd"],
       "endpoint": "https://gitea.smigz.com",
-      "dryRun" : "true",
       "argocd": {
       "fileMatch": ["apps/.+\\.yaml$"]
     }
