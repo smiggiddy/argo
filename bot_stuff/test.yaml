@@ -20,7 +20,7 @@ data:
   config.json: |-
     {
       "repositories": ["smiggiddy/argocd"],
-      "endpoint": "https://gitea.smigz.com"
+      "endpoint": "https://gitea.smigz.com",
       "dryRun" : "true",
       "gitAuthor": "renovate",
       "argocd": {
