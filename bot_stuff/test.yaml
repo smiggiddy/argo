@@ -6,6 +6,7 @@ metadata:
   namespace: renovate
   annotations:
     avp.kubernetes.io/path: "k8s/data/renovate-bot/config"
+    avp.kubernetes.io/secret-version: "2"
 type: Opaque
 data:
   RENOVATE_TOKEN: <token>
