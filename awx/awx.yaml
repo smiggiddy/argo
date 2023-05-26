@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://ansible.github.io/awx-operator/
-    targetRevision: 2.1.0
+    targetRevision: 2.2.1
     chart: awx-operator
 
     helm:
@@ -32,12 +32,12 @@ spec:
           value: awx-secret-tls
         - name: AWX.spec.auto_upgrade
           value: "true"
-        - name: AWX.spec.replicas.task_replicas
+        - name: AWX.spec.task_replicas
           value: "2"
 
 
   destination:
-    server: https://pxmx-awx01.lab.smig.tech
+    server: https://pxmx-awx01:6443
     namespace: awx
 
   syncPolicy:
