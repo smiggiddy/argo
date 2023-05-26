@@ -20,11 +20,11 @@ spec:
             annotations: 
               cert-manager.io/cluster-issuer: cluster-ca-issuer
             hosts:
-                - host: it-tools.lab.smig.tech
-            tls: 
-            - secretName: it-tools-tls
-              hosts:
-              - it-tools.lab.smig.tech
+            - host: it-tools.lab.smig.tech
+              tls: 
+              - secretName: it-tools-tls
+                hosts:
+                - it-tools.lab.smig.tech
 
 
 
