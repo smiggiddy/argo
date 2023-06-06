@@ -40,7 +40,7 @@ spec:
                           helper_image = "gitlab/gitlab-runner-helper:arm64-21da6177"
                       [[runners.kubernetes.volumes.secret]]
                           name = "smigtech-cert"
-                          mount_path = "/home/gitlab-runner/certs/smigtech.pem"
+                          mount_path = "/secrets/smigtech.pem"
 
 
   destination:
