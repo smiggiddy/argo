@@ -18,6 +18,13 @@ spec:
             gitlabUrl: https://gitlab.lab.smig.tech:8929
             rbac:
               create: true
+              rules:
+                - resources: ["configmaps", "pods", "pods/attach", "secrets", "services"]
+                  verbs: ["get", "list", "watch", "create", "patch", "update", "delete"]
+                - apiGroups: [""]
+                  resources: ["pods/exec"]
+                  verbs: ["create", "patch", "delete"]
+
             runners:
               secret: gitlab-runner
               name: k8s-runner
