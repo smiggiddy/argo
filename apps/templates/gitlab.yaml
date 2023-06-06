@@ -36,6 +36,9 @@ spec:
                           privileged = true
                           pull_policy = "if-not-present"
                           helper_image = "gitlab/gitlab-runner-helper:arm64-21da6177"
+                      [[runners.kubernetes.volumes.secret]]
+                          name = "smigtech-cert"
+                          mount_path = "/etc/gitlab-runner/certs/smigtech.pem"
 
 
   destination:
