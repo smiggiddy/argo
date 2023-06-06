@@ -16,6 +16,8 @@ spec:
       values: |
             certsSecretName: certs
             gitlabUrl: https://gitlab.lab.smig.tech:8929
+            secrets:
+              - smigtech-cert
             rbac:
               create: true
               rules:
