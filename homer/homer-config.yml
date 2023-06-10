@@ -74,28 +74,7 @@ colors:
     link-hover: "#ffdd57"
     background-image: "assets/your/dark/bg.png"
 
-# Optional message
-message:
-  # url: "https://<my-api-endpoint>" # Can fetch information from an endpoint to override value below.
-  # mapping: # allows to map fields from the remote format to the one expected by Homer
-  #   title: 'id' # use value from field 'id' as title
-  #   content: 'value' # value from field 'value' as content
-  # refreshInterval: 10000 # Optional: time interval to refresh message
-  #
-  # Real example using chucknorris.io for showing Chuck Norris facts as messages:
-  # url: https://api.chucknorris.io/jokes/random
-  # mapping:
-  #   title: 'id'
-  #   content: 'value'
-  # refreshInterval: 10000
-  style: "is-warning"
-  title: "Optional message!"
-  icon: "fa fa-exclamation-triangle"
-  content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 
-# Optional navbar
-# links: [] # Allows for navbar (dark mode, layout, and search) without any links
-links: []
 
 # Services
 # First level array represents a group.
@@ -107,26 +86,26 @@ services:
     # logo: "path/to/logo"
     items:
       - name: "Proxmox"
-        icon: "fab fa-computer"
+        icon: "fas fa-computer"
           #subtitle: "Bookmark example"
         tag: "app"
         url: "https://smig-lab-proxmox.lab.smig.tech:8006/"
         target: "_blank" # optional html tag target attribute
       - name: "Xen-Orchestsra"
-        logo: "fab fa-computer"
+        logo: "fas fa-computer"
         tag: "app"
         # Optional tagstyle
         url: "https://xo-sever"
   - name: "Kubernetes"
-    icon: "fas fa-docker"
+    icon: "fab fa-docker"
     items:
       - name: "ArgoCD - Lab"
-        logo: "assets/tools/sample.png"
+        logo: "fab fa-docker"
         tag: "other"
         url: "https://argocd.lab.smig.tech/"
         target: "_blank" # optional html a tag target attribute
       - name: "ArgoCD - OCI"
-        logo: "assets/tools/sample.png"
+        logo: "fab fa-docker"
         tag: "other"
         url: "https://argo.apps.smigz.com/"
         target: "_blank" # optional html a tag target attribute
@@ -134,12 +113,12 @@ services:
     icon: "fas fa-git-alt"
     items:
       - name: "Gitlab"
-        logo: "fas fa-gitlab"
+        logo: "fab fa-gitlab"
         tag: "other"
         url: "https://gitlab.lab.smig.tech:8929/"
         target: "_blank" # optional html a tag target attribute
       - name: "Gitea"
-        logo: "fas fa-git"
+        logo: "fab fa-git"
         tag: "other"
         url: "https://gitlab.lab.smig.tech:8929/"
         target: "_blank" # optional html a tag target attribute
@@ -147,12 +126,12 @@ services:
     icon: "fas fa-rocket"
     items:
       - name: "uptime kuma"
-        logo: "fas fa-cloud"
+        logo: "fab fa-cloud"
         tag: "other"
         url: "https://up-k.lab.smig.tech"
         target: "_blank" # optional html a tag target attribute
       - name: "Synology"
-        logo: "fas fa-cloud"
+        logo: "fa-solid fa-cloud"
         tag: "other"
         url: "https://smigs-nas.lab.smig.tech"
         target: "_blank" # optional html a tag target attribute
