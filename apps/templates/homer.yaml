@@ -23,12 +23,15 @@ spec:
           ingress:
             main: 
               enabled: true
+              ingressClassName: traefik
               annotations:
                 cert-manager.io/cluster-issuer: cluster-ca-issuer
                 traefik.ingress.kubernetes.io/router.entrypoints: websecure
               hosts:
-              - argocd.lab.smig.tech
-              ingressClassName: traefik
+              - host: argocd.lab.smig.tech
+                paths:
+                - path: /
+                  pathType: Prefix
               tls:
               - hosts:
                 - homer.lab.smig.tech
