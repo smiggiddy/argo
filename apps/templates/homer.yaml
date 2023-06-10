@@ -13,10 +13,6 @@ spec:
     targetRevision: 8.0.2
     chart: homer
     helm:
-      parameters: 
-        - name: "storageClassName"
-          value: nfs-client
-      helm:     
         values: |
           configmap:
             config:
