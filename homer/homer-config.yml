@@ -125,7 +125,7 @@ services:
     icon: "fas fa-rocket"
     items:
       - name: "uptime kuma"
-        icon: "fab fa-cloud"
+        icon: "fas fa-cloud"
         tag: "other"
         url: "https://up-k.lab.smig.tech"
         target: "_blank" # optional html a tag target attribute
