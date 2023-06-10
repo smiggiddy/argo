@@ -24,7 +24,7 @@ spec:
             path: /opt/homer/assets
           configmap:
             config:
-              enabled: true
+              enabled: false
               data:
                 config.yml: |
                    externalConfig: "https://smiggiddy.github.io/argo/homer/homer-config.yml"
