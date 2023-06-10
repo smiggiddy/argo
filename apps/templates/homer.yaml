@@ -16,10 +16,10 @@ spec:
         values: |
           configmap:
             config:
-                enabled: true
-                data:
-                  config.yml: |
-                    externalConfig: "https://smiggiddy.github.io/argo/homer/homer-config.yml"
+              enabled: true
+              data:
+                config.yml: |
+                   externalConfig: "https://smiggiddy.github.io/argo/homer/homer-config.yml"
           ingress:
             main: 
               enabled: true
@@ -28,11 +28,11 @@ spec:
                 traefik.ingress.kubernetes.io/router.entrypoints: websecure
               hosts:
               - argocd.lab.smig.tech
-                ingressClassName: traefik
+              ingressClassName: traefik
               tls:
               - hosts:
                 - homer.lab.smig.tech
-                  secretName: homer-tls
+                secretName: homer-tls
 
 
   destination:
