@@ -9,7 +9,7 @@
 title: "App dashboard"
 subtitle: "Lab.Smig.Tech"
 # documentTitle: "Welcome" # Customize the browser tab text
-logo: "fas fa-flask"
+icon: "fas fa-flask"
 # Alternatively a fa icon can be provided:
 # icon: "fas fa-skull-crossbones"
 
@@ -87,12 +87,11 @@ services:
     items:
       - name: "Proxmox"
         icon: "fas fa-computer"
-          #subtitle: "Bookmark example"
         tag: "app"
         url: "https://smig-lab-proxmox.lab.smig.tech:8006/"
         target: "_blank" # optional html tag target attribute
       - name: "Xen-Orchestsra"
-        logo: "fas fa-computer"
+        icon: "fas fa-computer"
         tag: "app"
         # Optional tagstyle
         url: "https://xo-sever"
@@ -100,12 +99,12 @@ services:
     icon: "fab fa-docker"
     items:
       - name: "ArgoCD - Lab"
-        logo: "fab fa-docker"
+        icon: "fab fa-docker"
         tag: "other"
         url: "https://argocd.lab.smig.tech/"
         target: "_blank" # optional html a tag target attribute
       - name: "ArgoCD - OCI"
-        logo: "fab fa-docker"
+        icon: "fab fa-docker"
         tag: "other"
         url: "https://argo.apps.smigz.com/"
         target: "_blank" # optional html a tag target attribute
@@ -113,12 +112,12 @@ services:
     icon: "fab fa-git-alt"
     items:
       - name: "Gitlab"
-        logo: "fab fa-gitlab"
+        icon: "fab fa-gitlab"
         tag: "other"
         url: "https://gitlab.lab.smig.tech:8929/"
         target: "_blank" # optional html a tag target attribute
       - name: "Gitea"
-        logo: "fab fa-git"
+        icon: "fab fa-git"
         tag: "other"
         url: "https://gitlab.lab.smig.tech:8929/"
         target: "_blank" # optional html a tag target attribute
@@ -126,37 +125,37 @@ services:
     icon: "fas fa-rocket"
     items:
       - name: "uptime kuma"
-        logo: "fab fa-cloud"
+        icon: "fab fa-cloud"
         tag: "other"
         url: "https://up-k.lab.smig.tech"
         target: "_blank" # optional html a tag target attribute
       - name: "Synology"
-        logo: "fa-solid fa-cloud"
+        icon: "fa-solid fa-cloud"
         tag: "other"
         url: "https://smigs-nas.lab.smig.tech"
         target: "_blank" # optional html a tag target attribute
       - name: "Kemp"
-        logo: "fas fa-cloud"
+        icon: "fas fa-cloud"
         tag: "other"
         url: "https://pxmx-kemp.lab.smig.tech"
         target: "_blank" # optional html a tag target attribute
       - name: "AWX"
-        logo: "fas fa-cloud"
+        icon: "fas fa-cloud"
         tag: "other"
         url: "https://awx.lab.smig.tech"
         target: "_blank" # optional html a tag target attribute
       - name: "IT Tools"
-        logo: "fas fa-cloud"
+        icon: "fas fa-cloud"
         tag: "other"
         url: "https://it-tools.lab.smig.tech"
         target: "_blank" # optional html a tag target attribute
       - name: "Unami"
-        logo: "fas fa-cloud"
+        icon: "fas fa-cloud"
         tag: "other"
         url: "https://unami.smigz.com"
         target: "_blank" # optional html a tag target attribute
       - name: "Prometheus"
-        logo: "fas fa-cloud"
+        icon: "fas fa-cloud"
         tag: "other"
         url: "https://pxmx-metrics01:9090/"
         target: "_blank" # optional html a tag target attribute
