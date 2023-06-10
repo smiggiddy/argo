@@ -19,7 +19,10 @@ spec:
           value: /volume1/kubernetes
         - name: storageClass.defaultClass
           value: "true"
-     
+      values: |
+            nfs:
+              mountOptions:
+                - fsc
 
   destination:
     server: https://kubernetes.default.svc
