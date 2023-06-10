@@ -23,7 +23,7 @@ spec:
                 enabled: true
                 data:
                   config.yml: |
-                    externalConfig: ""
+                    externalConfig: "https://smiggiddy.github.io/argo/homer/homer-config.yml"
           ingress:
             main: 
               enabled: true
