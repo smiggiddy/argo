@@ -9,7 +9,7 @@
 title: "App dashboard"
 subtitle: "Lab.Smig.Tech"
 # documentTitle: "Welcome" # Customize the browser tab text
-logo: "assets/logo.png"
+logo: "fas fa-flask"
 # Alternatively a fa icon can be provided:
 # icon: "fas fa-skull-crossbones"
 
@@ -110,7 +110,7 @@ services:
         url: "https://argo.apps.smigz.com/"
         target: "_blank" # optional html a tag target attribute
   - name: "Repos"
-    icon: "fas fa-git-alt"
+    icon: "fab fa-git-alt"
     items:
       - name: "Gitlab"
         logo: "fab fa-gitlab"
