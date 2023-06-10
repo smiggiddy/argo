@@ -23,6 +23,9 @@ spec:
             nfs:
               mountOptions:
                 - fsc
+                - rsize=1048576
+                - wsize=1048576
+                - timeo=600
 
   destination:
     server: https://kubernetes.default.svc
