@@ -1,0 +1,47 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: homer
+  namespace: argocd
+  labels:
+    apps: utilities 
+    smig: charts
+spec:
+  project: default
+  source:
+    repoURL: 'https://djjudas21.github.io/charts/'
+    targetRevision: 8.0.2
+    chart: homer
+    helm:
+      parameters: 
+        - name: "storageClassName"
+          value: nfs-client
+      helm:     
+        values: |
+          configmap:
+            config:
+                enabled: true
+                data:
+                  config.yml: |
+                    externalConfig: ""
+          ingress:
+            main: 
+              enabled: true
+              annotations:
+                cert-manager.io/cluster-issuer: cluster-ca-issuer
+                traefik.ingress.kubernetes.io/router.entrypoints: websecure
+              hosts:
+              - argocd.lab.smig.tech
+                ingressClassName: traefik
+              tls:
+              - hosts:
+                - homer.lab.smig.tech
+                  secretName: homer-tls
+
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
