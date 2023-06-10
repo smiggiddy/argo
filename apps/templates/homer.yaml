@@ -16,15 +16,15 @@ spec:
         values: |
           nodeSelector: smig-ca06
           persistence:
-          config:
-            enabled: true
-            mountPath: /www/assets
-            readOnly: true
-            type: hostPath
-            path: /opt/homer/assets
+            config:
+              enabled: true
+              mountPath: /www/assets
+              readOnly: true
+              type: hostPath
+              path: /opt/homer/assets
           configmap:
             config:
-              enabled: false
+              enabled: true
               data:
                 config.yml: |
                    externalConfig: "https://smiggiddy.github.io/argo/homer/homer-config.yml"
