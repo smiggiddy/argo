@@ -86,12 +86,12 @@ services:
     # logo: "path/to/logo"
     items:
       - name: "Proxmox"
-        icon: "fas fa-computer"
+        icon: "fas fa-server"
         tag: "app"
         url: "https://smig-lab-proxmox.lab.smig.tech:8006/"
         target: "_blank" # optional html tag target attribute
       - name: "Xen-Orchestsra"
-        icon: "fas fa-computer"
+        icon: "fas fa-server"
         tag: "app"
         # Optional tagstyle
         url: "https://xo-sever"
@@ -130,7 +130,7 @@ services:
         url: "https://up-k.lab.smig.tech"
         target: "_blank" # optional html a tag target attribute
       - name: "Synology"
-        icon: "fa-solid fa-cloud"
+        icon: "fas fa-hard-drive"
         tag: "other"
         url: "https://smigs-nas.lab.smig.tech"
         target: "_blank" # optional html a tag target attribute
@@ -145,7 +145,7 @@ services:
         url: "https://awx.lab.smig.tech"
         target: "_blank" # optional html a tag target attribute
       - name: "IT Tools"
-        icon: "fas fa-cloud"
+        icon: "fas fa-toolbox"
         tag: "other"
         url: "https://it-tools.lab.smig.tech"
         target: "_blank" # optional html a tag target attribute
