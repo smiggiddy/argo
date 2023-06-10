@@ -13,14 +13,14 @@ logo: "assets/logo.png"
 # Alternatively a fa icon can be provided:
 # icon: "fas fa-skull-crossbones"
 
-header: true # Set to false to hide the header
+header: false # Set to false to hide the header
 # Optional: Different hotkey for search, defaults to "/"
 # hotkey:
 #   search: "Shift"
 footer: false
 #footer: '<p>Created with <span class="has-text-danger">❤️</span> with <a href="https://bulma.io/">bulma</a>, <a href="https://vuejs.org/">vuejs</a> & <a href="https://fontawesome.com/">font awesome</a> // Fork me on <a href="https://github.com/bastienwirtz/homer"><i class="fab fa-github-alt"></i></a></p>' # set false if you want to hide it.
 
-columns: "3" # "auto" or number (must be a factor of 12: 1, 2, 3, 4, 6, 12)
+columns: "auto" # "auto" or number (must be a factor of 12: 1, 2, 3, 4, 6, 12)
 connectivityCheck: false # whether you want to display a message when the apps are not accessible anymore (VPN disconnected for example).
                         # You should set it to true when using an authentication proxy, it also reloads the page when a redirection is detected when checking connectivity.
 
@@ -96,48 +96,88 @@ message:
 # Optional navbar
 # links: [] # Allows for navbar (dark mode, layout, and search) without any links
 links: []
-  # - name: "Gitlab"
-  #   icon: "fab fa-gitlab"
-  #   url: "https://gitlab.lab.smig.tech:8929"
-  #   target: "_blank" # optional html tag target attribute
-  # - name: "link 2"
-  #   icon: "fas fa-book"
-  #   url: "https://github.com/bastienwirtz/homer"
-  # # this will link to a second homer page that will load config from page2.yml and keep default config values as in config.yml file
-  # # see url field and assets/page.yml used in this example:
-  # - name: "Second Page"
-  #   icon: "fas fa-file-alt"
-  #   url: "#page2"
 
 # Services
 # First level array represents a group.
 # Leave only a "items" key if not using group (group name, icon & tagstyle are optional, section separation will not be displayed).
 services:
   - name: "Virtualization"
-    icon: "fas fa-code-branch"
+    icon: "fas fa-power-off"
     # A path to an image can also be provided. Note that icon take precedence if both icon and logo are set.
     # logo: "path/to/logo"
     items:
       - name: "Proxmox"
-        icon: "fab fa-proxmox"
+        icon: "fab fa-computer"
           #subtitle: "Bookmark example"
         tag: "app"
         url: "https://smig-lab-proxmox.lab.smig.tech:8006/"
         target: "_blank" # optional html tag target attribute
       - name: "Xen-Orchestsra"
-        logo: "fab fa-xen-orchestra"
+        logo: "fab fa-computer"
         tag: "app"
         # Optional tagstyle
         url: "https://xo-sever"
-  - name: "Other group"
-    icon: "fas fa-heartbeat"
+  - name: "Kubernetes"
+    icon: "fas fa-docker"
     items:
-      - name: "Pi-hole"
+      - name: "ArgoCD - Lab"
         logo: "assets/tools/sample.png"
-        # subtitle: "Network-wide Ad Blocking" # optional, if no subtitle is defined, PiHole statistics will be shown
         tag: "other"
-        url: "http://192.168.0.151/admin"
-        type: "PiHole" # optional, loads a specific component that provides extra features. MUST MATCH a file name (without file extension) available in `src/components/services`
+        url: "https://argocd.lab.smig.tech/"
         target: "_blank" # optional html a tag target attribute
-        # class: "green" # optional custom CSS class for card, useful with custom stylesheet
-        # background: red # optional color for card to set color directly without custom stylesheet
+      - name: "ArgoCD - OCI"
+        logo: "assets/tools/sample.png"
+        tag: "other"
+        url: "https://argo.apps.smigz.com/"
+        target: "_blank" # optional html a tag target attribute
+  - name: "Repos"
+    icon: "fas fa-git-alt"
+    items:
+      - name: "Gitlab"
+        logo: "fas fa-gitlab"
+        tag: "other"
+        url: "https://gitlab.lab.smig.tech:8929/"
+        target: "_blank" # optional html a tag target attribute
+      - name: "Gitea"
+        logo: "fas fa-git"
+        tag: "other"
+        url: "https://gitlab.lab.smig.tech:8929/"
+        target: "_blank" # optional html a tag target attribute
+  - name: "Services"
+    icon: "fas fa-rocket"
+    items:
+      - name: "uptime kuma"
+        logo: "fas fa-cloud"
+        tag: "other"
+        url: "https://up-k.lab.smig.tech"
+        target: "_blank" # optional html a tag target attribute
+      - name: "Synology"
+        logo: "fas fa-cloud"
+        tag: "other"
+        url: "https://smigs-nas.lab.smig.tech"
+        target: "_blank" # optional html a tag target attribute
+      - name: "Kemp"
+        logo: "fas fa-cloud"
+        tag: "other"
+        url: "https://pxmx-kemp.lab.smig.tech"
+        target: "_blank" # optional html a tag target attribute
+      - name: "AWX"
+        logo: "fas fa-cloud"
+        tag: "other"
+        url: "https://awx.lab.smig.tech"
+        target: "_blank" # optional html a tag target attribute
+      - name: "IT Tools"
+        logo: "fas fa-cloud"
+        tag: "other"
+        url: "https://it-tools.lab.smig.tech"
+        target: "_blank" # optional html a tag target attribute
+      - name: "Unami"
+        logo: "fas fa-cloud"
+        tag: "other"
+        url: "https://unami.smigz.com"
+        target: "_blank" # optional html a tag target attribute
+      - name: "Prometheus"
+        logo: "fas fa-cloud"
+        tag: "other"
+        url: "https://pxmx-metrics01:9090/"
+        target: "_blank" # optional html a tag target attribute
