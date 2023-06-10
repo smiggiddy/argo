@@ -113,27 +113,22 @@ links:
 # First level array represents a group.
 # Leave only a "items" key if not using group (group name, icon & tagstyle are optional, section separation will not be displayed).
 services:
-  - name: "Application"
+  - name: "Virtualization"
     icon: "fas fa-code-branch"
     # A path to an image can also be provided. Note that icon take precedence if both icon and logo are set.
     # logo: "path/to/logo"
     items:
-      - name: "Awesome app"
-        logo: "assets/tools/sample.png"
-        # Alternatively a fa icon can be provided:
-        # icon: "fab fa-jenkins"
-        subtitle: "Bookmark example"
+      - name: "Proxmox"
+        icon: "fab fa-proxmox"
+          #subtitle: "Bookmark example"
         tag: "app"
-        keywords: "self hosted reddit" # optional keyword used for searching purpose
-        url: "https://www.reddit.com/r/selfhosted/"
+        url: "https://smig-lab-proxmox.lab.smig.tech:8006/"
         target: "_blank" # optional html tag target attribute
-      - name: "Another one"
-        logo: "assets/tools/sample2.png"
-        subtitle: "Another application"
+      - name: "Xen-Orchestsra"
+        logo: "fab fa-xen-orchestra"
         tag: "app"
         # Optional tagstyle
-        tagstyle: "is-success"
-        url: "#"
+        url: "https://xo-sever"
   - name: "Other group"
     icon: "fas fa-heartbeat"
     items:
