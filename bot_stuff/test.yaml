@@ -20,7 +20,7 @@ metadata:
 data:
   config.json: |-
     {
-      "repositories": ["smiggiddy/argocd"],
+      "repositories": ["smiggiddy/argocd", "smiggiddy/oci_docker"],
       "endpoint": "https://gitea.smigz.com",
       "argocd": {
       "fileMatch": ["apps/.+\\.yaml$"]
