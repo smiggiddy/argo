@@ -14,20 +14,15 @@ spec:
     chart: homer
     helm:
         values: |
-          nodeSelector: smig-ca06
+          nodeSelector: 
+            kubernetes.io/hostname: smig-ca06
           persistence:
             config:
               enabled: true
               mountPath: /www/assets
-              #readOnly: true
               type: hostPath
-              path: /opt/homer/assets
-          configmap:
-            config:
-              enabled: true
-              data:
-                config.yml: |
-                   externalConfig: "https://smiggiddy.github.io/argo/homer/homer-config.yml"
+              hostPath: /opt/homer/assets
+
           ingress:
             main: 
               enabled: true
