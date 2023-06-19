@@ -19,7 +19,7 @@ spec:
           persistence:
             config:
               enabled: true
-              mountPath: /www/assets
+              mountPath: /www/assets/
               type: hostPath
               hostPath: /opt/homer/assets
 
