@@ -5,6 +5,6 @@
     ":dependencyDashboard"
   ],
     "argocd": {
-    "fileMatch": ["apps/.+\\.yaml$"]
+    "fileMatch": ["apps/.+\\.yaml$", "awx/.+\\.yaml$"]
   }
 }
