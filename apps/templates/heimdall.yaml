@@ -15,7 +15,7 @@ spec:
     helm:
       parameters: 
         - name: "storageClassName"
-          value: nfs-client
+          value: longhorn
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: apps
