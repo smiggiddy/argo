@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: longhorn
+  namespace: argocd
+  labels:
+    apps: utilities 
+spec:
+  destination:
+    namespace: longhorn-system
+    server: {{ .Values.spec.destination.server }}
+  project: default
+  source:
+    repoURL: https://charts.longhorn.io
+    targetRevision: 1.4.1
+    chart: longhorn
+    helm:
+      values: |
+          
+        ingress:
+          enabled: true
+          ingressClassName: traefik
+          tls: true
+          host: longhorn.lab.smig.tech
+          annotations:
+            cert-manager.io/cluster-issuer: cluster-ca-issuer
+          secrets: longhorn-tls
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
