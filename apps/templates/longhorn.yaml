@@ -10,7 +10,7 @@ metadata:
 spec:
   destination:
     namespace: longhorn-system
-    server: {{ .Values.spec.destination.server }}
+    server: https://kubernetes.default.svc
   project: default
   source:
     repoURL: https://charts.longhorn.io
