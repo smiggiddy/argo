@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
   labels:
     apps: utilities 
+  annotations:
+   avp.kubernetes.io/ignore: "true"
 spec:
   destination:
     namespace: longhorn-system
@@ -16,7 +18,6 @@ spec:
     chart: longhorn
     helm:
       values: |
-          
         ingress:
           enabled: true
           ingressClassName: traefik
