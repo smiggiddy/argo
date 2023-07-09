@@ -22,10 +22,10 @@ spec:
           enabled: true
           ingressClassName: traefik
           tls: true
+          tlsSecret: longhorn-tls
           host: longhorn.lab.smig.tech
           annotations:
             cert-manager.io/cluster-issuer: cluster-ca-issuer
-          secrets: longhorn-tls
 
   syncPolicy:
     syncOptions:
