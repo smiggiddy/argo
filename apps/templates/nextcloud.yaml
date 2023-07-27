@@ -60,6 +60,7 @@ spec:
                 auth:
                   existingSecret: nextcloud-db
                   secretKeys:
+                    username: db-username
                     adminPasswordKey: db-password
                     userPasswordKey: user-db-password
                     replicationPasswordKey: replication-pw-key
