@@ -19,6 +19,11 @@ spec:
       values: |
           redis:
             enabled: true
+            image:
+              registry: docker.io
+              repository: bitnami/redis
+              tag: 7.0.12-debian-11-r13
+              digest: ""
           cronjob:
             enabled: true
           persistence:
