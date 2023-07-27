@@ -59,6 +59,7 @@ spec:
             global:
               postgresql:
                 auth:
+                  username: smigs-cloud
                   existingSecret: nextcloud-db
                   secretKeys:
                     username: db-username
