@@ -60,3 +60,9 @@ spec:
              - secretName: cloud-tls
                hosts:
                - cloud.lab.smig.tech
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: nextcloud
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
