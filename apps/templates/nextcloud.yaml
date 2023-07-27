@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: nextcloud
-  namespace: nextcloud
+  namespace: argocd
   labels:
     apps: homelab 
   annotations:
