@@ -69,7 +69,7 @@ spec:
             host: cloud.lab.smig.tech
             existingSecret:
               enabled: true
-              secretName: nextcloud-creds
+              secretName: nextcloud-db
               usernameKey: nextcloud-username
               passwordKey: nextcloud-password
           ingress:
