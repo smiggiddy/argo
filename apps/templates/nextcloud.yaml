@@ -49,6 +49,8 @@ spec:
             existingSecret:
               enabled: true
               secretName: nextcloud-creds
+              usernameKey: nextcloud-username
+              passwordKey: nextcloud-password
           ingress:
             annotations:
               cert-manager.io/cluster-issuer: cluster-ca-issuer
