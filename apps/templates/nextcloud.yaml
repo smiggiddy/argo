@@ -17,6 +17,10 @@ spec:
     
     helm:
       values: |
+          redis:
+            enabled: true
+          cronjob:
+            enabled: true
           persistence:
             enabled: true
             storageClass: longhorn
