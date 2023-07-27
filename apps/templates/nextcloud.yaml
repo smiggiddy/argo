@@ -28,7 +28,7 @@ spec:
               enabled: true
               secretName: nextcloud-db
               usernameKey: db-username
-              passwordKey: db-password
+              passwordKey: user-db-password
           postgresql:
             image:
               registry: docker.io
