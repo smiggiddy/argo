@@ -23,6 +23,7 @@ spec:
           externalDatabase:
             enabled: true
             type: postgresql
+            user: smigs-cloud
             existingSecret:
               enabled: true
               secretName: nextcloud-db
