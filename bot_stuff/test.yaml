@@ -9,7 +9,8 @@ metadata:
     avp.kubernetes.io/secret-version: "2"
 type: Opaque
 data:
-  RENOVATE_TOKEN: <token>
+  RENOVATE_TOKEN: <gitea_token>
+  GITHUB_TOKEN: <github_token>
 
 ---
 apiVersion: v1
