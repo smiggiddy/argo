@@ -8,7 +8,7 @@ metadata:
     avp.kubernetes.io/path: "k8s/data/renovate-bot/config"
     avp.kubernetes.io/secret-version: "2"
 type: Opaque
-data:
+stringData:
   RENOVATE_TOKEN: <gitea_token>
   GITHUB_TOKEN: <github_token>
 
