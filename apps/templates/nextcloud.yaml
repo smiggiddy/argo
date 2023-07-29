@@ -78,9 +78,9 @@ spec:
           internalDatabase:
             enabled: false
           nextcloud:
-            configs:
-              config.php: |-
-                  overwriteprotocol: https
+            extraEnv:
+              OVERWRITEPROTOCOL: https
+              OVERWRITEHOST: cloud.lab.smig.tech
             host: cloud.lab.smig.tech
             existingSecret:
               enabled: true
