@@ -6,11 +6,11 @@ metadata:
   namespace: renovate
   annotations:
     avp.kubernetes.io/path: "k8s/data/renovate-bot/config"
-    avp.kubernetes.io/secret-version: "4"
+    avp.kubernetes.io/secret-version: "3"
 type: Opaque
 stringData:
-  RENOVATE_TOKEN: <giteatoken>
-  GITHUB_TOKEN: <githubtoken>
+  RENOVATE_TOKEN: <gitea_token>
+  GITHUB_TOKEN: <github_token>
 
 ---
 apiVersion: v1
