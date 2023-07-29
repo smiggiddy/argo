@@ -47,6 +47,11 @@ spec:
               env: 
                 - name: RENOVATE_PLATFORM
                   value: 'gitea'
+                - name: GITHUB_COM_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: renovate-secrets
+                      key: GITHUB_TOKEN
                 - name: RENOVATE_TOKEN
                   valueFrom:
                     secretKeyRef:
