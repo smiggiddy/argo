@@ -22,7 +22,7 @@ spec:
             rbac:
               create: true
               rules:
-                - resources: ["configmaps", "pods", "pods/attach", "secrets", "services"]
+                - resources: ["configmaps", "pods", "pods/attach", "secrets", "services", "events"]
                   verbs: ["get", "list", "watch", "create", "patch", "update", "delete"]
                 - apiGroups: [""]
                   resources: ["pods/exec"]
