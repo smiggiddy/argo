@@ -22,8 +22,9 @@ spec:
             protocol: https
           redis:
             enabled: true
-            existingSecret: nextcloud-db
-            existingSecretPasswordKey: user-db-password
+            auth:
+              existingSecret: nextcloud-db
+              existingSecretPasswordKey: user-db-password
             image:
               registry: docker.io
               repository: bitnami/redis
