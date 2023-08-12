@@ -20,6 +20,7 @@ spec:
         persistence:
           storageClass: nfs-client
         controller:
+          adminSecret: false
           ingress:
             annotations:
               cert-manager.io/cluster-issuer: cluster-ca-issuer
