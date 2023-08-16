@@ -12,7 +12,7 @@ spec:
   project: default
   source:
     repoURL: https://nextcloud.github.io/helm/
-    targetRevision: 3.5.20
+    targetRevision: 3.5.22
     chart: nextcloud
     
     helm:
