@@ -20,6 +20,8 @@ spec:
 
     helm:     
       values: |
+          persistence: 
+            storageClass: longhorn
           ingress:
             enabled: true
             className: "traefik"
