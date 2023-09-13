@@ -24,13 +24,13 @@ spec:
             storageClass: longhorn
           ingress:
             enabled: true
-            className: "traefik"
+            ingressClassName: "traefik"
             annotations: 
               cert-manager.io/cluster-issuer: cluster-ca-issuer
             hosts:
             - host: code-server.lab.smig.tech
               paths:
-              - path: /
+              - /
             tls: 
             - secretName: code-server-tls
               hosts:
