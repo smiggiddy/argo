@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: code-server
+  namespace: argocd
+  labels:
+    apps: utilities
+  annotations:
+   avp.kubernetes.io/ignore: "true"
+spec:
+  destination:
+    namespace: apps
+    server: https://kubernetes.default.svc 
+  project: default
+  source:
+    repoURL: https://smiggiddy.github.io
+    targetRevision: HEAD
+    targetRevision: 1.0.0
+    chart: code-server
+
+    helm:     
+      values: |
+          ingress:
+            enabled: true
+            className: "traefik"
+            annotations: 
+              cert-manager.io/cluster-issuer: cluster-ca-issuer
+            hosts:
+            - host: code-server.lab.smig.tech
+              paths:
+              - path: /
+                pathType: Prefix
+            tls: 
+            - secretName: code-server-tls
+              hosts:
+              - code-server.lab.smig.tech
