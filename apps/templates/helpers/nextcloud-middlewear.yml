@@ -1,0 +1,38 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nextcloud-ingressroute
+  namespace: nextcloud
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`cloud.lab.smig.tech`)
+      middlewares:
+        - name: nextcloud-middleware
+        - name: nextcloud-middleware-sts
+      services:
+        - name: nextcloud
+          port: 8080
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: nextcloud-middleware
+  namespace: nextcloud
+spec:
+  redirectRegex:
+    permanent: true
+    regex: 'https://(.*)/.well-known/(card|cal)dav'
+    replacement: 'https://${1}/remote.php/dav'
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: nextcloud-middleware-sts
+  namespace: nextcloud
+spec:
+  headers:
+    stsSeconds: 15552000
+    stsPreload: true
