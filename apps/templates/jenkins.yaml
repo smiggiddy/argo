@@ -12,7 +12,7 @@ spec:
   project: default
   source:
     repoURL: https://charts.jenkins.io
-    targetRevision: 4.6.6
+    targetRevision: 4.7.2
     chart: jenkins 
     
     helm:
