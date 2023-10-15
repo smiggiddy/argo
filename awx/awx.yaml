@@ -20,10 +20,10 @@ spec:
           value: smig
         - name: AWX.enabled
           value: "true"
-        - name: AWX.spec.service_type
-          value: NodePort 
-        - name: AWX.spec.nodeport_port
-          value: "30080"
+        # - name: AWX.spec.service_type
+        #   value: NodePort 
+        # - name: AWX.spec.nodeport_port
+        #   value: "30080"
         - name:  AWX.spec.ingress_type
           value: ingress 
         - name: AWX.spec.hostname
