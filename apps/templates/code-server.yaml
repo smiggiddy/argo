@@ -20,6 +20,8 @@ spec:
 
     helm:     
       values: |
+          image:
+            tag: 'latest'
           persistence: 
             storageClass: longhorn
           ingress:
