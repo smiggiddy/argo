@@ -7,8 +7,8 @@ spec:
   concurrency: 1
   cordon: true
   tolerations:
-    - key: node-role.kubernetes.io/master
-      operator: Exists
+    - key: "node-role.kubernetes.io/master"
+      operator: "Equal"
       value: "true"
       effect: "NoSchedule"
   nodeSelector:
