@@ -11,6 +11,7 @@ spec:
       operator: In
       values:
       - "true"
+      effect: "NoSchedule"
   nodeSelector:
     matchExpressions:
     - key: node-role.kubernetes.io/master
