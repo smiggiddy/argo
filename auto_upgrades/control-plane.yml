@@ -6,6 +6,11 @@ metadata:
 spec:
   concurrency: 1
   cordon: true
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      operator: In
+      values:
+      - "true"
   nodeSelector:
     matchExpressions:
     - key: node-role.kubernetes.io/master
