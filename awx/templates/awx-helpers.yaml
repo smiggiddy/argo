@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    path: /awx/templates/
+    path: /awx/templates/helpers
     repoURL: 'https://github.com/smiggiddy/argo'
     targetRevision: HEAD
 
