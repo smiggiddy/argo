@@ -15,7 +15,7 @@ spec:
   source:
     repoURL: https://argoproj.github.io/argo-helm 
     targetRevision: HEAD
-    targetRevision: 5.51.4
+    targetRevision: 5.51.6
     chart: argo-cd
 
     helm:     
@@ -57,7 +57,7 @@ spec:
                   image: registry.access.redhat.com/ubi8
                   env:
                     - name: AVP_VERSION
-                      value: 1.16.1
+                      value: 1.17.0
                   command: 
                     - sh 
                     - "-c"
