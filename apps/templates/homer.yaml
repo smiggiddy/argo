@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: 'https://djjudas21.github.io/charts/'
-    targetRevision: 8.1.8
+    targetRevision: 8.1.9
     chart: homer
     helm:
         values: |
@@ -20,6 +20,9 @@ spec:
               type: persistentVolumeClaim
               storageClass: longhorn
               retain: true
+              globalMounts:
+              - path: /www/assets
+                readOnly: false
 
           ingress:
             main: 
