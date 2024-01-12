@@ -14,8 +14,6 @@ spec:
     chart: homer
     helm:
         values: |
-          nodeSelector: 
-            kubernetes.io/hostname: smig-ca06
           persistence:
             config:
               enabled: true
