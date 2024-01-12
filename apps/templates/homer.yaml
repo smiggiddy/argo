@@ -20,8 +20,9 @@ spec:
             config:
               enabled: true
               mountPath: /www/assets/
-              type: hostPath
-              hostPath: /opt/homer/assets
+              type: persistentVolumeClaim
+              storageClass: longhorn
+              retain: true
 
           ingress:
             main: 
