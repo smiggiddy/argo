@@ -17,7 +17,7 @@ spec:
           persistence:
             config:
               enabled: true
-              type: persistentVolumeClaim
+              # type: persistentVolumeClaim
               storageClass: longhorn
               retain: true
               globalMounts:
