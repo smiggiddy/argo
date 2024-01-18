@@ -10,7 +10,8 @@ spec:
     - kind: Rule
       match: Host(`cloud.lab.smig.tech`)
       middlewares:
-        - name: nextcloud-middleware
+        # - name: nextcloud-middleware
+        # - name: nextcloud-middlewear-redirect
         - name: nextcloud-middleware-sts
       services:
         - name: nextcloud
@@ -36,3 +37,14 @@ spec:
   headers:
     stsSeconds: 15552000
     stsPreload: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: nextcloud-middleware-redirect
+  namespace: nextcloud
+spec:
+  redirectRegex:
+    permanent: true
+    regex: 'https://(.*)/(.well-known[^#]*)'
+    replacement: 'https://${1}/index.php/$${2}'
