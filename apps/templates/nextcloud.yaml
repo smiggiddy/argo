@@ -17,6 +17,10 @@ spec:
     
     helm:
       values: |
+          image:
+            flavor: fpm
+          nginx:
+            enabled: true
           phpClientHttpsFix:
             enabled: true
             protocol: https
