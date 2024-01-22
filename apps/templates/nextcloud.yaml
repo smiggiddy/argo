@@ -17,6 +17,8 @@ spec:
     
     helm:
       values: |
+          rbac:
+            enabled: true
           image:
             flavor: fpm
           nginx:
