@@ -24,7 +24,7 @@ spec:
           nginx:
             enabled: true
           phpClientHttpsFix:
-            enabled: true
+            enabled: false 
             protocol: https
           redis:
             enabled: true
