@@ -1,13 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base",
-    ":dependencyDashboard"
-  ],
-    "argocd": {
+  "extends": ["config:base", ":dependencyDashboard"],
+  "argocd": {
     "fileMatch": ["apps/.+\\.yaml$", "awx/.+\\.yaml$"]
   },
-{
   "customDatasources": {
     "k3s": {
       "defaultRegistryUrlTemplate": "https://update.k3s.io/v1-release/channels",
@@ -16,5 +12,4 @@
       ]
     }
   }
-}
 }
