@@ -92,7 +92,6 @@ spec:
                 imagePullPolicy: Always
                 image: "ghcr.io/tailscale/tailscale:latest"
                 env:
-                - name: 
                 - name: TS_HOSTNAME
                   value: cloud
                 - name: TS_KUBE_SECRET
