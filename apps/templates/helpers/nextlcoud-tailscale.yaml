@@ -1,6 +1,7 @@
 apiVersion: v1
 stringData:
   TS_AUTHKEY: <TS_AUTHKEY>
+  extra_args: <extra_args>
 kind: Secret
 metadata:
   name: tailscale-auth-nextcloud

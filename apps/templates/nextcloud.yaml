@@ -92,11 +92,19 @@ spec:
                 imagePullPolicy: Always
                 image: "ghcr.io/tailscale/tailscale:latest"
                 env:
-                  # Store the state in a k8s secret
+                - name: 
+                - name: TS_HOSTNAME
+                  value: cloud
                 - name: TS_KUBE_SECRET
                   value: tailscale-auth-nextcloud
                 - name: TS_USERSPACE
                   value: "false"
+                - name: TS_EXTRA_ARGS
+                  valueFrom:
+                    secretKeyRef:
+                      name: tailscale-auth-nextcloud
+                      key: extra_args
+                      optional: true
                 - name: TS_AUTHKEY
                   valueFrom:
                     secretKeyRef:
