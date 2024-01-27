@@ -4,9 +4,16 @@
   "argocd": {
     "fileMatch": ["apps/.+\\.yaml$", "awx/.+\\.yaml$"]
   },
-  "k3s": {
-    "fileMatch": ["auto_upgrades/.+\\.yaml$"]
-  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["k3s.version"],
+      "matchStrings": ["(?<currentValue>\\S+)"],
+      "depNameTemplate": "k3s",
+      "versioningTemplate": "semver-coerced",
+      "datasourceTemplate": "custom.k3s"
+    }
+  ],
   "customDatasources": {
     "k3s": {
       "defaultRegistryUrlTemplate": "https://update.k3s.io/v1-release/channels",
