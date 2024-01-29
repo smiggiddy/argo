@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: stirling-pdf
+  namespace: argocd
+  labels:
+    apps: utilities 
+    smig: charts
+spec:
+  project: default
+  source:
+    repoURL: 'https://smiggiddy.github.io'
+    targetRevision: 0.1.0
+    chart: stirling-pdf
+    helm:
+        values: |
+          # persistence:
+          #   config:
+          #     enabled: true
+          #     # type: persistentVolumeClaim
+          #     storageClass: longhorn
+          #     retain: true
+          #     globalMounts:
+          #     - path: /www/assets
+          #       readOnly: false
+
+          ingress:
+            main: 
+              enabled: true
+              ingressClassName: traefik
+              annotations:
+                cert-manager.io/cluster-issuer: cluster-ca-issuer
+                traefik.ingress.kubernetes.io/router.entrypoints: websecure
+              hosts:
+              - host: stirling-pdf.lab.smig.tech
+                paths:
+                - path: /
+                  pathType: Prefix
+              tls:
+              - hosts:
+                - stirling-pdf.lab.smig.tech
+                secretName: stirling-pdf-tls
+
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
