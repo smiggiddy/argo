@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: 'https://smiggiddy.github.io'
-    targetRevision: 0.1.0
+    targetRevision: 0.1.1
     chart: stirling-pdf
     helm:
         values: |
