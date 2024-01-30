@@ -25,21 +25,20 @@ spec:
           #       readOnly: false
 
           ingress:
-            main: 
-              enabled: true
-              ingressClassName: traefik
-              annotations:
-                cert-manager.io/cluster-issuer: cluster-ca-issuer
-                traefik.ingress.kubernetes.io/router.entrypoints: websecure
-              hosts:
-              - host: stirling-pdf.lab.smig.tech
-                paths:
-                - path: /
-                  pathType: Prefix
-              tls:
-              - hosts:
-                - stirling-pdf.lab.smig.tech
-                secretName: stirling-pdf-tls
+            enabled: true
+            ingressClassName: traefik
+            annotations:
+              cert-manager.io/cluster-issuer: cluster-ca-issuer
+              traefik.ingress.kubernetes.io/router.entrypoints: websecure
+            hosts:
+            - host: stirling-pdf.lab.smig.tech
+              paths:
+              - path: /
+                pathType: Prefix
+            tls:
+            - hosts:
+              - stirling-pdf.lab.smig.tech
+              secretName: stirling-pdf-tls
 
 
   destination:
