@@ -10,33 +10,25 @@ spec:
   project: default
   source:
     repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: 25.11.0
-    chart: prometheus 
+    targetRevision: 56.6.0
+    chart: kube-prometheus-stack
     
     helm:
       values: |
-          alertmanager:
+          grafana:
             persistence:
-              storageClass: nfs-client
-              # storageClassName: nfs-client
-          server:
-            extraFlags:
-              - storage.tsdb.no-lockfile
-            statefulSet:
-              enabled: true
-            persistentVolume:
-              storageClass: nfs-client
-              storageClassName: nfs-client
+              type: sts
+              storageClassName: longhorn
             ingress:
               enabled: true
               annotations:
                 cert-manager.io/cluster-issuer: cluster-ca-issuer
               hosts:
-              - k3s-prom.lab.smig.tech
+              - grafana-k3s.lab.smig.tech
               tls:
-              - secretName: smigtech-prom-tls
+              - secretName: smigtech-grafana-tls
                 hosts:
-                - k3s-prom.lab.smig.tech
+                - grafana-k3s.lab.smig.tech
 
   destination:
     server: https://kubernetes.default.svc
