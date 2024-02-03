@@ -17,6 +17,9 @@ spec:
     
     helm:
       values: |
+          metrics:
+            enabled: true
+            
           rbac:
             enabled: true
           image:
