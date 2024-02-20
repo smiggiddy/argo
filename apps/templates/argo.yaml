@@ -105,8 +105,6 @@ spec:
                   traefik.ingress.kubernetes.io/router.entrypoints: websecure
                 enabled: true
                 hostname: argocd.lab.smig.tech
-                hosts:
-                - argocd.lab.smig.tech
                 ingressClassName: traefik
                 tls: true
           
