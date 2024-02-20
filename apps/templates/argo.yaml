@@ -70,6 +70,11 @@ spec:
                     - mountPath: /custom-tools
                       name: custom-tools
             configs:
+              cm:
+                oidc.config: | 
+                  name: Gitea
+                  clientID: $gitea-argocd:clientID
+                  clientSecret: $gitea-argocd:clientSecret
               params:
                 server.insecure: true
               cmp:
