@@ -74,8 +74,8 @@ spec:
                 oidc.config: | 
                   name: Gitea
                   issuer: https://gitea.smigz.com
-                  clientID: $gitea-argocd:clientID
-                  clientSecret: $gitea-argocd:clientSecret
+                  clientID: $<gitea-argocd>:clientID
+                  clientSecret: $<gitea-argocd>:clientSecret
               params:
                 server.insecure: true
               cmp:
