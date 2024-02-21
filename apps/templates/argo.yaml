@@ -78,6 +78,7 @@ spec:
                 policy.default: role:readonly
                 scopes: '[cognito:groups, email]'
               cm:
+                admin.enabled: false
                 oidc.config: | 
                   name: Gitea
                   issuer: https://gitea.smigz.com/
