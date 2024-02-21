@@ -69,6 +69,8 @@ spec:
                   volumeMounts:
                     - mountPath: /custom-tools
                       name: custom-tools
+            global:
+              domain: argocd.lab.smig.tech
             configs:
               cm:
                 oidc.config: | 
