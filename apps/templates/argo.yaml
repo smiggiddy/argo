@@ -20,7 +20,9 @@ spec:
 
     helm:     
       values: |
-
+            
+            global:
+              domain: argocd.lab.smig.tech
             repoServer:
               serviceAccount:
                 automountServiceAccountToken: true
