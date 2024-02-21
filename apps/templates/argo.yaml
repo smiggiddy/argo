@@ -14,7 +14,6 @@ spec:
   project: default
   source:
     repoURL: https://argoproj.github.io/argo-helm 
-    targetRevision: HEAD
     targetRevision: 6.2.3
     chart: argo-cd
 
@@ -72,6 +71,12 @@ spec:
             global:
               domain: argocd.lab.smig.tech
             configs:
+              rbac:
+                create: true
+                policy.csv: |
+                  g, "smiggiddy@gmail.com", role:admin
+                policy.default: role:readonly
+                scopes: '[cognito:groups, email]'
               cm:
                 oidc.config: | 
                   name: Gitea
