@@ -8,7 +8,7 @@ metadata:
     smig: charts
 spec:
   project: default
-  source:
+  sources:
   - repoURL: 'https://djjudas21.github.io/charts/'
     targetRevision: 8.1.9
     chart: homer
