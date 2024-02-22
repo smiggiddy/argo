@@ -9,37 +9,16 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://djjudas21.github.io/charts/'
+  - repoURL: 'https://djjudas21.github.io/charts/'
     targetRevision: 8.1.9
     chart: homer
     helm:
-        values: |
-          persistence:
-            config:
-              enabled: true
-              # type: persistentVolumeClaim
-              storageClass: longhorn
-              retain: true
-              globalMounts:
-              - path: /www/assets
-                readOnly: false
+      valueFiles:
+      - $values/homer/values.yaml
 
-          ingress:
-            main: 
-              enabled: true
-              ingressClassName: traefik
-              annotations:
-                cert-manager.io/cluster-issuer: cluster-ca-issuer
-                traefik.ingress.kubernetes.io/router.entrypoints: websecure
-              hosts:
-              - host: homer.lab.smig.tech
-                paths:
-                - path: /
-                  pathType: Prefix
-              tls:
-              - hosts:
-                - homer.lab.smig.tech
-                secretName: homer-tls
+  - repoURL: 'https://gitea.smigz.com/smiggiddy/argocd-values.git'
+    targetRevision: HEAD
+    ref: values
 
 
   destination:
