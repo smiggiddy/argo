@@ -21,7 +21,10 @@ spec:
         ingress:
           enabled: true
           ingressClassName: traefik
-          tls: true
+          tls:
+           - secretName: minio-tls
+             hosts:
+             - minio.lab.smig.tech
           tlsSecret: minio-tls
           host: minio.lab.smig.tech
           annotations:
