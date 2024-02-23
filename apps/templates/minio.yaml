@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio-operator
+  namespace: argocd
+  labels:
+    apps: utilities 
+  annotations:
+   avp.kubernetes.io/ignore: "true"
+spec:
+  destination:
+    namespace: minio-operator
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://operator.min.io
+    targetRevision: 5.0.12
+    chart: operator
+    helm:
+      values: |
+        ingress:
+          enabled: true
+          ingressClassName: traefik
+          tls: true
+          tlsSecret: minio-tls
+          host: minio.lab.smig.tech
+          annotations:
+            cert-manager.io/cluster-issuer: cluster-ca-issuer
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
