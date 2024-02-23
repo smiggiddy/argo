@@ -18,17 +18,18 @@ spec:
     chart: operator
     helm:
       values: |
-        ingress:
-          enabled: true
-          ingressClassName: traefik
-          tls:
-           - secretName: minio-tls
-             hosts:
-             - minio.lab.smig.tech
-          tlsSecret: minio-tls
-          host: minio.lab.smig.tech
-          annotations:
-            cert-manager.io/cluster-issuer: cluster-ca-issuer
+        console:
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            tls:
+             - secretName: minio-tls
+               hosts:
+               - minio.lab.smig.tech
+            tlsSecret: minio-tls
+            host: minio.lab.smig.tech
+            annotations:
+              cert-manager.io/cluster-issuer: cluster-ca-issuer
 
   syncPolicy:
     syncOptions:
