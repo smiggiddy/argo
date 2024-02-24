@@ -26,9 +26,9 @@ spec:
               name: smigtech-tenant-secret
             name: smigtech
             pools:
-            - servers: 3
+            - servers: 4
               name: pool-0
-              volumesPerServer: 3
+              volumesPerServer: 4
               size: 6Gi
               storageClassName: longhorn
             features:
