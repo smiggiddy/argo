@@ -35,6 +35,9 @@ spec:
                 - https://minio-api.lab.smig.tech
                 console: https://minio-console.lab.smig.tech
             certificates:
+              externalCACertSource:
+              - name: ca-key-pair
+                type: kubernetes.io/tls
               externalCertSecret:
               - name: console-tls
                 type: kubernetes.io/tls
