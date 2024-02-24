@@ -28,6 +28,11 @@ spec:
               volumesPerServer: 3
               size: 6Gi
               storageClassName: longhorn
+            features:
+              bucketDNS: true
+              domains:
+                minio: https://minio-api.lab.smig.tech
+                console: https://minio-console.lab.smig.tech
           ingress:
             console:
               enabled: true
