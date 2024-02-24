@@ -31,7 +31,8 @@ spec:
             features:
               bucketDNS: true
               domains:
-                minio: https://minio-api.lab.smig.tech
+                minio: 
+                - https://minio-api.lab.smig.tech
                 console: https://minio-console.lab.smig.tech
           ingress:
             console:
