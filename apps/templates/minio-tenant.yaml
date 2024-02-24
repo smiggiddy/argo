@@ -42,7 +42,7 @@ spec:
               enabled: true
               ingressClassName: traefik
               tls:
-               - secretName: minio-tenant-tls
+               - secretName: smigtech-tls
                  hosts:
                  - minio-console.lab.smig.tech
               host: minio-console.lab.smig.tech
@@ -52,7 +52,7 @@ spec:
               enabled: true
               ingressClassName: traefik
               tls:
-               - secretName: minio-api-tenant-tls
+               - secretName: smigtech-tls
                  hosts:
                  - minio-api.lab.smig.tech
               host: minio-api.lab.smig.tech
