@@ -48,7 +48,7 @@ spec:
               enabled: true
               ingressClassName: traefik
               tls:
-               - secretName: minio-tenant-tls
+               - secretName: console-tls
                  hosts:
                  - minio-console.lab.smig.tech
               host: minio-console.lab.smig.tech
