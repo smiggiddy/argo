@@ -18,12 +18,12 @@ spec:
     chart: tenant
     helm:
       values: |
-          secrets:
-            existingSecret:
-              name: smigtech-tenant-secret
+          # secrets:
+          #   existingSecret:
+          #     name: smigtech-tenant-secret
           tenant:
-            configuration:
-              name: smigtech-tenant-secret
+            # configuration:
+            #   name: smigtech-tenant-secret
             name: smigtech
             pools:
             - servers: 1
@@ -32,17 +32,17 @@ spec:
               size: 50Gi
               storageClassName: longhorn
             features:
-              bucketDNS: true
+              # bucketDNS: true
               domains:
                 minio: 
                 - https://minio-api.lab.smig.tech
                 console: https://minio-console.lab.smig.tech
-            certificates:
-              externalCertSecret:
-              - name: console-tls
-                type: kubernetes.io/tls
-              - name: api-tls
-                type: kubernetes.io/tls
+            # certificates:
+            #   externalCertSecret:
+            #   - name: console-tls
+            #     type: kubernetes.io/tls
+            #   - name: api-tls
+            #     type: kubernetes.io/tls
           ingress:
             console:
               enabled: true
@@ -54,16 +54,16 @@ spec:
               host: minio-console.lab.smig.tech
               annotations:
                 cert-manager.io/cluster-issuer: cluster-ca-issuer
-            api:
-              enabled: true
-              ingressClassName: traefik
-              tls:
-               - secretName: api-tls
-                 hosts:
-                 - minio-api.lab.smig.tech
-              host: minio-api.lab.smig.tech
-              annotations:
-                cert-manager.io/cluster-issuer: cluster-ca-issuer
+            # api:
+            #   enabled: true
+            #   ingressClassName: traefik
+            #   tls:
+            #    - secretName: api-tls
+            #      hosts:
+            #      - minio-api.lab.smig.tech
+            #   host: minio-api.lab.smig.tech
+            #   annotations:
+            #     cert-manager.io/cluster-issuer: cluster-ca-issuer
 
   syncPolicy:
     syncOptions:
