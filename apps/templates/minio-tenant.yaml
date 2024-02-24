@@ -25,16 +25,15 @@ spec:
               name: pool-0
               volumesPerServer: 3
               size: 22Gi
-              storageClassName: nfs-client
+              storageClassName: longhorn
           ingress:
             console:
               enabled: true
               ingressClassName: traefik
               tls:
-               - secretName: minio-console-tenant-tls
+               - secretName: minio-tenant-tls
                  hosts:
                  - minio-console.lab.smig.tech
-              tlsSecret: minio-tls
               host: minio-console.lab.smig.tech
               annotations:
                 cert-manager.io/cluster-issuer: cluster-ca-issuer
@@ -45,7 +44,6 @@ spec:
                - secretName: minio-api-tenant-tls
                  hosts:
                  - minio-api.lab.smig.tech
-              tlsSecret: minio-tls
               host: minio-api.lab.smig.tech
               annotations:
                 cert-manager.io/cluster-issuer: cluster-ca-issuer
