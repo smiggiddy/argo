@@ -18,9 +18,9 @@ spec:
     chart: tenant
     helm:
       values: |
-          existingSecret:
-            name: smigtech-tenant-secret
           tenant:
+            configuration:
+              name: smigtech-tenant-secret
             name: smigtech
             pools:
             - servers: 3
