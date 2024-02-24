@@ -1,0 +1,67 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio-tenant
+  namespace: argocd
+  labels:
+    apps: utilities 
+  annotations:
+   avp.kubernetes.io/ignore: "true"
+spec:
+  destination:
+    namespace: minio-tenant
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://operator.min.io
+    targetRevision: 5.0.12
+    chart: tenant
+    helm:
+      values: |
+          # secrets:
+          #   existingSecret:
+          #     name: smigtech-tenant-secret
+          # tenant:
+            # configuration:
+            #   name: smigtech-tenant-secret
+            name: smigtech
+            pools:
+            - size: 50Gi
+              storageClassName: longhorn
+            # features:
+              # bucketDNS: true
+              # domains:
+              #   minio: 
+              #   - https://minio-api.lab.smig.tech
+              #   console: https://minio-console.lab.smig.tech
+            # certificates:
+            #   externalCertSecret:
+            #   - name: console-tls
+            #     type: kubernetes.io/tls
+            #   - name: api-tls
+            #     type: kubernetes.io/tls
+          ingress:
+            console:
+              enabled: true
+              ingressClassName: traefik
+              tls:
+               - secretName: minio-tenant-tls
+                 hosts:
+                 - minio-console.lab.smig.tech
+              host: minio-console.lab.smig.tech
+              annotations:
+                cert-manager.io/cluster-issuer: cluster-ca-issuer
+            # api:
+            #   enabled: true
+            #   ingressClassName: traefik
+            #   tls:
+            #    - secretName: api-tls
+            #      hosts:
+            #      - minio-api.lab.smig.tech
+            #   host: minio-api.lab.smig.tech
+            #   annotations:
+            #     cert-manager.io/cluster-issuer: cluster-ca-issuer
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
