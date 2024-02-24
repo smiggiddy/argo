@@ -18,6 +18,8 @@ spec:
     chart: tenant
     helm:
       values: |
+          existingSecret:
+            name: smigtech-tenant-secret
           tenant:
             name: smigtech
             pools:
