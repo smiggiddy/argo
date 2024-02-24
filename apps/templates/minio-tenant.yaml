@@ -24,7 +24,7 @@ spec:
             - servers: 3
               name: pool-0
               volumesPerServer: 3
-              size: 200Gi
+              size: 22Gi
               storageClassName: nfs-client
           ingress:
             console:
