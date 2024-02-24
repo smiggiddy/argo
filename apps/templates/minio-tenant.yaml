@@ -37,12 +37,18 @@ spec:
                 minio: 
                 - https://minio-api.lab.smig.tech
                 console: https://minio-console.lab.smig.tech
+            certificates:
+              externalCertSecret:
+              - name: console-tls
+                type: kubernetes.io/tls
+              - name: api-tls
+                type: kubernetes.io/tls
           ingress:
             console:
               enabled: true
               ingressClassName: traefik
               tls:
-               - secretName: smigtech-tls
+               - secretName: console-tls
                  hosts:
                  - minio-console.lab.smig.tech
               host: minio-console.lab.smig.tech
@@ -52,7 +58,7 @@ spec:
               enabled: true
               ingressClassName: traefik
               tls:
-               - secretName: smigtech-tls
+               - secretName: api-tls
                  hosts:
                  - minio-api.lab.smig.tech
               host: minio-api.lab.smig.tech
