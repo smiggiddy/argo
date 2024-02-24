@@ -27,7 +27,7 @@ spec:
               name: pool-0
               volumesPerServer: 3
               size: 22Gi
-              storageClassName: longhorn
+              storageClassName: nfs-client
           ingress:
             console:
               enabled: true
