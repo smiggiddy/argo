@@ -28,6 +28,11 @@ spec:
             pools:
             - size: 6Gi
               storageClassName: longhorn
+            features:
+              bucketDNS: true
+              minio:
+              - minio-api.lab.smig.tech
+              console: minio-console.lab.smig.tech
             certificates:
               externalCaCertSecret:
               - name: ca-key-pair
