@@ -26,14 +26,8 @@ spec:
               name: smigtech-tenant-secret
             name: smigtech
             pools:
-            - size: 4Gi
-              storageClassName: local-path
-            features:
-              bucketDNS: true
-              domains:
-                minio: 
-                - https://minio-api.lab.smig.tech
-                console: https://minio-console.lab.smig.tech
+            - size: 6Gi
+              storageClassName: longhorn
             certificates:
               externalCaCertSecret:
               - name: ca-key-pair
