@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: minio-operator
+  name: minio
   namespace: argocd
   labels:
     apps: utilities 
@@ -20,7 +20,7 @@ spec:
       values: |
         existingSecret: 'minio'
         persistence:
-          size: 80Gi
+          size: 8Gi
           storageClass: longhorn
         consoleIngress:
           enabled: true
