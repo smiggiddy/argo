@@ -31,14 +31,13 @@ spec:
             features:
               bucketDNS: true
               domains:
-                minio:
-                - minio-api.lab.smig.tech
-                console: minio-console.lab.smig.tech
+                console: https://minio-console.lab.smig.tech
             certificates:
+              requestAutoCert: false
               externalCaCertSecret:
               - name: ca-key-pair
                 type: kubernetes.io/tls
-              externalCertSecret:
+              externalCertSecret: 
               - name: console-tls
                 type: kubernetes.io/tls
               - name: api-tls
