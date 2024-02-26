@@ -19,6 +19,7 @@ spec:
     helm:
       values: |
         existingSecret: 'minio'
+        replicas: 8
         persistence:
           size: 8Gi
           storageClass: longhorn
