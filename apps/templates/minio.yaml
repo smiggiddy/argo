@@ -18,6 +18,9 @@ spec:
     chart: minio
     helm:
       values: |
+        resources:
+          requests:
+            memory: 2Gi
         existingSecret: 'minio'
         replicas: 4
         drivesPerNode: 4
