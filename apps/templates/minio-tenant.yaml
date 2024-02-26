@@ -28,7 +28,7 @@ spec:
             pools:
             - size: 6Gi
               storageClassName: longhorn
-            certificates:
+            certificate:
               requestAutoCert: false
           ingress:
             console:
