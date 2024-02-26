@@ -54,6 +54,7 @@ spec:
               host: minio-console.lab.smig.tech
               annotations:
                 cert-manager.io/cluster-issuer: cluster-ca-issuer
+                traefik.ingress.kubernetes.io/router.entrypoints: websecure
             api:
               enabled: true
               ingressClassName: traefik
@@ -64,6 +65,7 @@ spec:
               host: minio-api.lab.smig.tech
               annotations:
                 cert-manager.io/cluster-issuer: cluster-ca-issuer
+                traefik.ingress.kubernetes.io/router.entrypoints: websecure
 
   syncPolicy:
     syncOptions:
