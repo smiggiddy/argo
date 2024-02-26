@@ -28,20 +28,8 @@ spec:
             pools:
             - size: 6Gi
               storageClassName: longhorn
-            features:
-              bucketDNS: true
-              domains:
-                console: https://minio-console.lab.smig.tech
             certificates:
               requestAutoCert: false
-              externalCaCertSecret:
-              - name: ca-key-pair
-                type: kubernetes.io/tls
-              externalCertSecret: 
-              - name: console-tls
-                type: kubernetes.io/tls
-              - name: api-tls
-                type: kubernetes.io/tls
           ingress:
             console:
               enabled: true
