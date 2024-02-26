@@ -19,9 +19,10 @@ spec:
     helm:
       values: |
         existingSecret: 'minio'
-        replicas: 8
+        replicas: 4
+        drivesPerNode: 4
         persistence:
-          size: 8Gi
+          size: 4Gi
           storageClass: longhorn
         consoleIngress:
           enabled: true
