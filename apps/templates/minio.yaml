@@ -34,7 +34,8 @@ spec:
            - secretName: minio-console-tls
              hosts:
              - minio-console.lab.smig.tech
-          host: minio-console.lab.smig.tech
+          hosts: 
+          - minio-console.lab.smig.tech
           annotations:
             cert-manager.io/cluster-issuer: cluster-ca-issuer
         ingress:
@@ -44,7 +45,8 @@ spec:
            - secretName: minio-tls
              hosts:
              - minio.lab.smig.tech
-          host: minio.lab.smig.tech
+          hosts: 
+          - minio.lab.smig.tech
           annotations:
             cert-manager.io/cluster-issuer: cluster-ca-issuer
 
