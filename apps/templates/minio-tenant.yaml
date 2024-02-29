@@ -30,6 +30,9 @@ spec:
               storageClassName: longhorn
             certificate:
               requestAutoCert: false
+            prometheusOperator: true
+            metrics:
+              enabled: true
           ingress:
             console:
               enabled: true
