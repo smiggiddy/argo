@@ -14,7 +14,7 @@ spec:
   project: default
   source:
     repoURL: https://smiggiddy.github.io
-    targetRevision: 3.12.1
+    targetRevision: 3.17.2
     chart: code-server
 
     helm:     
