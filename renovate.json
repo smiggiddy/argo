@@ -7,7 +7,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["k3s.version"],
+      "fileMatch": ["auto_upgrades/.+\\.yaml$"],
       "matchStrings": ["(?<currentValue>\\S+)"],
       "depNameTemplate": "k3s",
       "versioningTemplate": "semver-coerced",
