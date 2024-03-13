@@ -1,4 +1,4 @@
-apiVersion: upgrade.cattle.io/v1
+apiVersion: v1.28.7+k3s1
 kind: Plan
 metadata:
   name: agent-plan
