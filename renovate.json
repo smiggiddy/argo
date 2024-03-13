@@ -8,7 +8,7 @@
     {
       "customType": "regex",
       "fileMatch": ["auto_upgrades/.+\\.yaml$"],
-      "matchStrings": ["(?<currentValue>\\S+)"],
+      "matchStrings": ["version:(?<currentValue>\\S+)"],
       "depNameTemplate": "k3s",
       "versioningTemplate": "semver-coerced",
       "datasourceTemplate": "custom.k3s"
