@@ -22,9 +22,9 @@ spec:
           value: "true"
         - name:  AWX.spec.ingress_type
           value: ingress 
-        - name: AWX.spec.hostname
+        - name: AWX.spec.ingress_hosts[0].hostname
           value: awx.lab.smig.tech 
-        - name: AWX.spec.ingress_tls_secret
+        - name: AWX.spec.ingress_hosts[0].tls_secret
           value: awx-secret-tls
         - name: AWX.spec.auto_upgrade
           value: "true"
@@ -41,18 +41,5 @@ spec:
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
-
-
-
-
-# helm upgrade awx -n awx awx-operator/awx-operator 
-
-# --set AWX.spec.admin_user=smig 
-# --set AWX.enabled=true 
-# --set AWX.spec.service_type=NodePort 
-# --set AWX.spec.nodeport_port=30080 
-# --set AWX.spec.ingress_type=ingress 
-# --set AWX.spec.hostname=awx.lab.smig.tech 
-# --set AWX.spec.ingress_tls_secret=awx-secret-tls 
-# --set AWX.spec.auto_upgrade=true 
-# --set AWX.spec.replicas.task_replicas=2
+    automated:
+      selfHeal: true
