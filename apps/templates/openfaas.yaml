@@ -13,7 +13,7 @@ spec:
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
-  project: prod
+  project: default
   source:
     repoURL: https://openfaas.github.io/faas-netes/ 
     targetRevision: 14.2.32
