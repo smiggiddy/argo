@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: openfaas
+  namespace: argocd
+  labels:
+    apps: homelab 
+
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: openfaas
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+  project: prod
+  source:
+    repoURL: https://openfaas.github.io/faas-netes/ 
+    targetRevision: 14.2.32
+    chart: openfaas
+    
+    # helm:
+    #   values: |
