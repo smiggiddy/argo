@@ -45,10 +45,11 @@ spec:
     namespace: apps
 
   syncPolicy:
-    ignoreDifferences:
-      - kind: Secret 
-        name: jenkins
-        jsonPointers:
-        - /data
     syncOptions:
     - CreateNamespace=true
+
+  ignoreDifferences:
+    - kind: Secret 
+      name: jenkins
+      jsonPointers:
+        - /data
