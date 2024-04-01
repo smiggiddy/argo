@@ -40,18 +40,15 @@ spec:
             - configuration-as-code
             - gitea
           
-          # JCasC:
-          #   securityRealm: |-
-          #     github:
-          #       githubWebUri: "https://github.com"
-          #       githubApiUri: "https://api.github.com"
-          #       clientID: "someId"
-          #       clientSecret: "1234566"
-          #       oauthScopes: "read:org,user:email"
   destination:
     server: https://kubernetes.default.svc
     namespace: apps
 
   syncPolicy:
+    ignoreDifferences:
+      - kind: Secret 
+        name: jenkins
+        jsonPointers:
+        - /data
     syncOptions:
     - CreateNamespace=true
