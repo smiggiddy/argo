@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://ansible.github.io/awx-operator/
-    targetRevision: 2.15.0
+    targetRevision: 2.16.1
     chart: awx-operator
 
     helm:
