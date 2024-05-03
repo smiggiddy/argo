@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://charts.gitlab.io
-    targetRevision: 0.64.0
+    targetRevision: 0.64.1
     chart: gitlab-runner 
 
     helm:
