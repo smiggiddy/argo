@@ -26,6 +26,9 @@ spec:
           host: longhorn.lab.smig.tech
           annotations:
             cert-manager.io/cluster-issuer: cluster-ca-issuer
+        persistence:
+          defaultClassReplicaCount: 2
+
 
   syncPolicy:
     syncOptions:
