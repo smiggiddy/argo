@@ -10,13 +10,14 @@ spec:
   project: default
   source:
     repoURL: 'https://smiggiddy.github.io'
-    targetRevision: 0.0.15
+    targetRevision: 0.0.16
     chart: uptime-kuma
     helm:
       parameters: 
         - name: "storageClassName"
-          value: nfs-client
-        - name:
+          value: longhorn
+        - name: "storageSize"
+          value: 2Gi
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: apps
