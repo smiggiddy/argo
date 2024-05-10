@@ -27,6 +27,7 @@ spec:
             name: smigtech
             pools:
             - size: 6Gi
+              name: pool-0
               storageClassName: longhorn
             certificate:
               requestAutoCert: false
