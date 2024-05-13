@@ -19,5 +19,8 @@ spec:
     targetRevision: 14.2.42
     chart: openfaas
     
-    # helm:
-    #   values: |
+    helm:
+      values: |
+        functionNamespace: openfaas
+        operator:
+          create: true
