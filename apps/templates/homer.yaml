@@ -10,7 +10,7 @@ spec:
   project: default
   sources:
   - repoURL: 'https://djjudas21.github.io/charts/'
-    targetRevision: 8.1.12
+    targetRevision: 8.1.11
     chart: homer
     helm:
       valueFiles:
