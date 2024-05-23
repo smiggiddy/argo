@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki
+  namespace: argocd
+  labels:
+    utilities: kube-system
+spec:
+  destination:
+    namespace: loki
+    server: https://kubernetes.default.svc 
+  project: default
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 6.5.2 
+    chart: loki
+    helm:
+      values: |
+        loki:
+          storage:
+            bucketNames:
+              chunks: loki
+              ruler: loki
+              admin: loki
+            type: s3
+            s3:
+              endpoint: s3://smig-zima.lab.smig.tech:9000/buckets/loki
+              region: us-east-1
+              secretAccessKey: 4Vz78iF0VIMLVCaXuJAp
+              accessKeyId: XLPPh5hRHhC7aOtIjCSgFg9g4OejRuc0tLn08PIm
+              s3ForcePathStyle: false
+              insecure: false
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
