@@ -17,6 +17,7 @@ spec:
     helm:
       values: |
         loki:
+          auth_enabled: false
           storage:
             bucketNames:
               chunks: loki
