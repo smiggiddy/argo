@@ -30,6 +30,7 @@ spec:
               accessKeyId: XLPPh5hRHhC7aOtIjCSgFg9g4OejRuc0tLn08PIm
               s3ForcePathStyle: false
               insecure: false
+          useTestSchema: true
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
