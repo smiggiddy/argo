@@ -36,10 +36,12 @@ spec:
                   regex: "scheduler_(.+)"
                   targetLabel: "job"
                   replacement: "kube-scheduler"
+                  action: replace
                 - sourceLabels: [__name__]
                   regex: "kubeproxy_(.+)"
                   targetLabel: "job"
                   replacement: "kube-proxy"
+                  action: replace
           grafana:
             persistence:
               type: sts
