@@ -20,20 +20,30 @@ spec:
               - 192.168.100.52
               - 192.168.100.53
               - 192.168.100.162
+          kubeApiServer:
+            enabled: false
           kubeScheduler:
-            endpoints:
-              - 192.168.100.52
-              - 192.168.100.53
-              - 192.168.100.162
+            enabled: false
           kubeControllerManager:
-            endpoints:
-              - 192.168.100.52
-              - 192.168.100.53
-              - 192.168.100.162
+            enabled: false
+          kubeProxy:
+            enabled: false
+          kubelet:
+            serviceMonitor:
+              metricRelabelings:
+                # k3s exposes all metrics on all endpoints, relabel jobs that belong to other components
+                - sourceLabels: [__name__]
+                  regex: "scheduler_(.+)"
+                  targetLabel: "job"
+                  replacement: "kube-scheduler"
+                - sourceLabels: [__name__]
+                  regex: "kubeproxy_(.+)"
+                  targetLabel: "job"
+                  replacement: "kube-proxy"
           grafana:
             persistence:
               type: sts
-              storageClassName: longhorn
+              storageClassName: nfs-client
             ingress:
               enabled: true
               annotations:
@@ -44,6 +54,23 @@ spec:
               - secretName: smigtech-grafana-tls
                 hosts:
                 - grafana-k3s.lab.smig.tech
+          prometheus:
+            prometheusSpec:
+              tolerations:
+                - key: node-role.kubernetes.io/master
+                  operator: "Equal"
+                  value: "true"
+                  effect: "NoSchedule"
+              affinity:
+                nodeAffinity:
+                  preferredDuringSchedulingIgnoredDuringExecution:
+                  - weight: 1
+                    preference:
+                      matchExpressions:
+                      - key: node-role.kubernetes.io/control-plane
+                        operator: In
+                        values: 
+                        - "true"
 
   destination:
     server: https://kubernetes.default.svc

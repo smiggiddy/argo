@@ -44,6 +44,8 @@ spec:
               repository: bitnami/redis
               tag: 7.0.12-debian-11-r13
               digest: ""
+            persistence:
+              size: 1Gi
           cronjob:
             enabled: true
           persistence:
