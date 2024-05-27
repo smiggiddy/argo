@@ -46,7 +46,7 @@ spec:
             admin:
               existingSecret: "grafana-admin"
               userKey: admin-user
-              passwordKey: admin-passowrd
+              passwordKey: admin-password
             persistence:
               enabled: true
               type: sts
