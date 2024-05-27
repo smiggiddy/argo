@@ -43,6 +43,10 @@ spec:
                   replacement: "kube-proxy"
                   action: replace
           grafana:
+            admin:
+              existingSecret: "grafana-admin"
+              userKey: admin-user
+              passwordKey: admin-passowrd
             persistence:
               enabled: true
               type: sts
