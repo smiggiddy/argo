@@ -15,7 +15,7 @@ spec:
     helm:
       parameters:
         - name: server.dataStorage.storageClass
-          value: nfs-client
+          value: longhorn
 
 
   destination:
