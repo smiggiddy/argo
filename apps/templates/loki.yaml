@@ -27,8 +27,8 @@ spec:
             s3:
               endpoint: s3://smig-zima.lab.smig.tech:9000/buckets/loki
               region: us-east-1
-              secretAccessKey: 4Vz78iF0VIMLVCaXuJAp
-              accessKeyId: XLPPh5hRHhC7aOtIjCSgFg9g4OejRuc0tLn08PIm
+              secretAccessKey: blah-blah-blah
+              accessKeyId: blah-blah-lbah
               s3ForcePathStyle: true
               insecure: true
           useTestSchema: true
