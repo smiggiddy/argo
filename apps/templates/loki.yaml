@@ -20,17 +20,17 @@ spec:
           auth_enabled: false
           storage:
             bucketNames:
-              chunks: loki
-              ruler: loki
-              admin: loki
+              chunks: loki-chunks
+              ruler: loki-ruler
+              admin: loki-admin
             type: s3
             s3:
               endpoint: s3://smig-zima.lab.smig.tech:9000/buckets/loki
               region: us-east-1
               secretAccessKey: 4Vz78iF0VIMLVCaXuJAp
               accessKeyId: XLPPh5hRHhC7aOtIjCSgFg9g4OejRuc0tLn08PIm
-              s3ForcePathStyle: false
-              insecure: false
+              s3ForcePathStyle: true
+              insecure: true
           useTestSchema: true
   syncPolicy:
     syncOptions:
