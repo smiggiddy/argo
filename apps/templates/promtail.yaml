@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: promtail
+  namespace: argocd
+  labels:
+    utilities: kube-system
+spec:
+  destination:
+    namespace: loki
+    server: https://kubernetes.default.svc 
+  project: default
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 6.15.5
+    chart: promtail
+    helm:
+      values: |
+        config:
+          clients:
+          - url: http://loki-gateway.loki.svc.cluster.local
+            tenant_id: 1
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
