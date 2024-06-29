@@ -46,6 +46,16 @@ spec:
             enabled: true
           querier:
             max_concurrent: 4
+        read:
+          replicas: 2
+        write:
+          replicas: 2
+        chunksCache:
+          enabled: false
+        resultsCache:
+          enabled: false
+        backend:
+          replicas: 2
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
