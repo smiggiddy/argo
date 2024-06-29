@@ -75,6 +75,7 @@ spec:
               pullSecrets: []
               debug: false
             primary:
+              resourcesPreset: "micro"
               persistence:
                 enabled: true
                 storageClass: longhorn
