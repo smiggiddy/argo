@@ -40,6 +40,12 @@ spec:
                 index:
                   prefix: loki_index_
                   period: 24h
+          ingester:
+            chunk_encoding: snappy
+          tracing:
+            enabled: true
+          querier:
+            max_concurrent: 4
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
