@@ -25,7 +25,7 @@ spec:
               admin: loki-admin
             type: s3
             s3:
-              endpoint: smig-zima.lab.smig.tech:9000/buckets/loki
+              endpoint: smig-zima.lab.smig.tech:9000
               region: us-east-1
               secretAccessKey:  <path:k8s/data/argocd/minio#secretAccessKey>
               accessKeyId: <path:k8s/data/argocd/minio#accessKeyId>
