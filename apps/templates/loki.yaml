@@ -25,13 +25,12 @@ spec:
               admin: loki-admin
             type: s3
             s3:
-              endpoint: s3://smig-zima.lab.smig.tech:9000/buckets/loki
+              endpoint: smig-zima.lab.smig.tech:9000/buckets/loki
               region: us-east-1
-              secretAccessKey: blah-blah-blah
-              accessKeyId: blah-blah-lbah
+              secretAccessKey:  <path:k8s/data/argocd/minio#secretAccessKey>
+              accessKeyId: <path:k8s/data/argocd/minio#accessKeyId>
               s3ForcePathStyle: true
               insecure: true
-          useTestSchema: true
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
