@@ -18,7 +18,7 @@ spec:
       values: |
         config:
           clients:
-          - url: http://loki-gateway.loki.svc.cluster.local
+          - url: http://loki-gateway.loki.svc.cluster.local/loki/api/v1/push
             tenant_id: 1
   syncPolicy:
     syncOptions:
