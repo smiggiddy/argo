@@ -19,6 +19,7 @@ spec:
 
     helm:     
       values: |
+          password: <path:k8s/data/argocd/code-server#password>
           image:
             tag: 'latest'
           persistence: 
