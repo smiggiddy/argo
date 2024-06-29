@@ -24,6 +24,7 @@ spec:
             enabled: true
           image:
             flavor: fpm
+            tag: fpm
           nginx:
             enabled: true
             config:
@@ -92,9 +93,6 @@ spec:
           internalDatabase:
             enabled: false
           nextcloud:
-            extraEnv:
-            - name: TRUSTED_PROXIES
-              value: traefik.kube-system 
             host: cloud.lab.smig.tech
             existingSecret:
               enabled: true
