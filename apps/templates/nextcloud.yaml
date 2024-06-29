@@ -24,7 +24,6 @@ spec:
             enabled: true
           image:
             flavor: fpm
-            tag: fpm
           nginx:
             enabled: true
             config:
