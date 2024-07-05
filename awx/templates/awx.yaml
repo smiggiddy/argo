@@ -21,7 +21,7 @@ spec:
             ingress_type: ingress 
             ingress_hosts:
               - hostname: awx.lab.smig.tech 
-                tls_secret: aws-secret-tls 
+                tls_secret: awx-secret-tls 
             auto_upgrade: true 
             task_replicas: 2 
             admin_password_secret: awx-admin
