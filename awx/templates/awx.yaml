@@ -13,25 +13,44 @@ spec:
     chart: awx-operator
 
     helm:
-      parameters:
-        - name: server.dataStorage.storageClass
-          value: nfs-client
-        - name: AWX.spec.admin_user
-          value: smig
-        - name: AWX.enabled
-          value: "true"
-        - name:  AWX.spec.ingress_type
-          value: ingress 
-        - name: AWX.spec.ingress_hosts[0].hostname
-          value: awx.lab.smig.tech 
-        - name: AWX.spec.ingress_hosts[0].tls_secret
-          value: awx-secret-tls
-        - name: AWX.spec.auto_upgrade
-          value: "true"
-        - name: AWX.spec.task_replicas
-          value: "2"
-        - name: AWX.spec.admin_password_secret
-          value: "awx-admin"
+      values:
+        AWX:
+          enabled: true
+          spec:
+            admin_user: smig
+            ingress_type: ingress 
+            ingress_hosts:
+              - hostname: awx.lab.smig.tech 
+                tls_secret: aws-secret-tls 
+            auto_upgrade: true 
+            task_replicas: 2 
+            admin_password_secret: awx-admin
+          server:
+            dataStorage:
+              storageClass: nfs-client
+          task_resource_requirements:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+              ephemeral-storage: 100M
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+              ephemeral-storage: 500M
+          ee_resource_requirements:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 1000m
+              memory: 4Gi
+          web_resource_requirements:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 2Gi
 
 
   destination:
@@ -43,3 +62,4 @@ spec:
     - CreateNamespace=true
     automated:
       selfHeal: true
+      prune: true
