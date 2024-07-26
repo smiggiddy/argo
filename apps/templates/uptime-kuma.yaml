@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: 'https://smiggiddy.github.io'
-    targetRevision: 0.0.17
+    targetRevision: 0.0.18
     chart: uptime-kuma
     helm:
       parameters: 
