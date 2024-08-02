@@ -1,0 +1,7 @@
+apiVersion: v2
+name: Smig.Tech HomeLab Apps
+version: 0.1.0
+description: Collection of Resources at Smig Tech
+maintainers: # (optional)
+  - name: "@Smiggiddy"
+    url: "https://smig.tech"
