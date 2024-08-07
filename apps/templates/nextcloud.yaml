@@ -35,6 +35,8 @@ spec:
             enabled: false 
             protocol: https
           redis:
+            global:
+              storageClass: "local-path"
             enabled: true
             auth:
               existingSecret: nextcloud-db
@@ -45,9 +47,11 @@ spec:
               tag: 7.0.12-debian-11-r13
               digest: ""
             master:
+              resourcesPreset: "micro"
               persistence:
                 size: 1Gi
             replica:
+              resourcesPreset: "micro"
               persistence:
                 size: 1Gi
           cronjob:
