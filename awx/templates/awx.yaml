@@ -8,7 +8,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://ansible.github.io/awx-operator/
+    repoURL: https://ansible-community.github.io/awx-operator-helm/
+    # repoURL: https://ansible.github.io/awx-operator/
     targetRevision: 2.19.0
     chart: awx-operator
 
