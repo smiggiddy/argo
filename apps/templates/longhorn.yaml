@@ -27,7 +27,7 @@ spec:
           annotations:
             cert-manager.io/cluster-issuer: cluster-ca-issuer
         persistence:
-          defaultClassReplicaCount: 2
+          defaultClassReplicaCount: 3
 
 
   syncPolicy:
