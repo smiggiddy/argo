@@ -5,7 +5,8 @@ metadata:
   namespace: argocd
 
 spec:
-  destination: https://kubernetes.default.svc
+  destination: 
+    server: https://kubernetes.default.svc
   namespace: immich
   syncPolicy:
     automated:
