@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immich
+  namespace: argocd
+
+spec:
+  destination: https://kubernetes.default.svc
+  namespace: immich
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+  project: default
+  source:
+    repoURL: https://immich-app.github.io/immich-charts
+    chart: immich
+    helm:
+      values: |
+        immich:
+          persistence:
+            library:
+              existingClaim: immich
+        redis:
+          enabled: true
+        postgresql:
+          enabled: true
+          global:
+            postgresql:
+              auth:
+                password: <path:k8s/data/argocd/immich#password>
+
+        machine-learning:
+          persistence:
+            cache:
+              type: pvc
+              storageClass: longhorn
+        server:
+          ingress:
+            main:
+              enabled: true
+              annotations:
+                cert-manager.io/cluster-issuer: cluster-ca-issuer
+                traefik.ingress.kubernetes.io/router.entrypoints: websecure
+              hosts:
+                - host: immich.lab.smig.tech
+                  paths:
+                    - path: "/"
+              tls: 
+               - secretName: immich-tls
+                 hosts:
+                 - immich.lab.smig.tech
