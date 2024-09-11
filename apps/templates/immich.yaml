@@ -16,12 +16,12 @@ spec:
   project: default
   source:
     repoURL: https://immich-app.github.io/immich-charts
-    targetRevision: 0.7.1
+    targetRevision: 0.7.2
     chart: immich
     helm:
       values: |
         image:
-          tag: v1.112.1
+          tag: v1.114.0
         immich:
           persistence:
             library:
