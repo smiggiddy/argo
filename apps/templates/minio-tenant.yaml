@@ -18,10 +18,10 @@ spec:
     chart: tenant
     helm:
       values: |
-          secrets:
-            existingSecret:
-              name: smigtech-tenant-secret
           tenant:
+            configSecret:
+              name: smigtech-tenant-secret
+              existingSecret: true
             configuration:
               name: smigtech-tenant-secret
             name: smigtech
