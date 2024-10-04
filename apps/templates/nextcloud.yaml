@@ -105,8 +105,7 @@ spec:
                     array (
                       0 => 'localhost',
                       1 => 'cloud.lab.smig.tech',
-                      2 => 'vpn.thecodedom.com'
-
+                      2 => 'cloud.vpn.thecodedom.com'
                       )
                     ];
             host: cloud.lab.smig.tech
