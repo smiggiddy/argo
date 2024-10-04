@@ -19,14 +19,3 @@ spec:
   headers:
     stsSeconds: 15553000
     stsPreload: true
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: nextcloud-middleware-vpn
-  namespace: nextcloud
-spec:
-  redirectRegex:
-    permanent: true
-    regex: 'https://cloud.vpn.thecodedom.com/(.*)'
-    replacement: 'https://cloud.lab.smig.tech/${1}'
