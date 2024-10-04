@@ -1,21 +1,3 @@
-# apiVersion: traefik.containo.us/v1alpha1
-# kind: IngressRoute
-# metadata:
-#   name: nextcloud-ingressroute
-#   namespace: nextcloud
-# spec:
-#   entryPoints:
-#     - websecure
-#   routes:
-#     - kind: Rule
-#       match: Host(`cloud.lab.smig.tech`)
-#       middlewares:
-#         # - name: nextcloud-middleware
-#         # - name: nextcloud-middlewear-redirect
-#         - name: nextcloud-middleware-sts
-#       services:
-#         - name: nextcloud
-#           port: 8080
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
@@ -37,3 +19,14 @@ spec:
   headers:
     stsSeconds: 15553000
     stsPreload: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: nextcloud-middleware-vpn
+  namespace: nextcloud
+spec:
+  redirectRegex:
+    permanent: true
+    regex: 'https://cloud.vpn.thecodedom.com/(.*)'
+    replacement: 'https://cloud.lab.smig.tech/${1}'

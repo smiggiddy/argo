@@ -149,7 +149,8 @@ spec:
             annotations:
               cert-manager.io/cluster-issuer: cluster-ca-issuer
               traefik.ingress.kubernetes.io/router.entrypoints: websecure
-              traefik.ingress.kubernetes.io/router.middlewares: nextcloud-nextcloud-middleware@kubernetescrd,nextcloud-nextcloud-middleware-sts@kubernetescrd
+              traefik.ingress.kubernetes.io/router.middlewares: nextcloud-nextcloud-middleware@kubernetescrd,nextcloud-nextcloud-middleware-sts@kubernetescrd,nextcloud-nextcloud-middleware-vpn@kubernetescrd
+
             enabled: true
             className: traefik
             # hostName: cloud.lab.smig.tech
