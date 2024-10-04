@@ -37,14 +37,14 @@ spec:
   headers:
     stsSeconds: 15552000
     stsPreload: true
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: nextcloud-middleware-redirect
-  namespace: nextcloud
-spec:
-  redirectRegex:
-    permanent: true
-    regex: 'https://(.*)/(.well-known[^#]*)'
-    replacement: 'https://${1}/index.php/$${2}'
+# ---
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: Middleware
+# metadata:
+#   name: nextcloud-middleware-redirect
+#   namespace: nextcloud
+# spec:
+#   redirectRegex:
+#     permanent: true
+#     regex: 'https://(.*)/(.well-known[^#]*)'
+#     replacement: 'https://${1}/index.php/$${2}'

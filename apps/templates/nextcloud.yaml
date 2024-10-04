@@ -145,7 +145,7 @@ spec:
             annotations:
               cert-manager.io/cluster-issuer: cluster-ca-issuer
               traefik.ingress.kubernetes.io/router.entrypoints: websecure
-              traefik.ingress.kubernetes.io/router.middlewares: nextcloud-nextcloud-middleware@kubernetescrd,nextcloud-nextcloud-middleware-sts@kubernetescrd,nextcloud-nextcloud-middleware-redirect@kubernetescrd
+              traefik.ingress.kubernetes.io/router.middlewares: nextcloud-nextcloud-middleware@kubernetescrd,nextcloud-nextcloud-middleware-sts@kubernetescrd
             enabled: true
             ingressClassName: traefik
             hostName: cloud.lab.smig.tech
@@ -153,6 +153,7 @@ spec:
              - secretName: cloud-tls
                hosts:
                - cloud.lab.smig.tech
+               - cloud.vpn.thecodedom.com
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: nextcloud
