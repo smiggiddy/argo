@@ -1,21 +1,21 @@
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: nextcloud-ingressroute
-  namespace: nextcloud
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - kind: Rule
-      match: Host(`cloud.lab.smig.tech`)
-      middlewares:
-        # - name: nextcloud-middleware
-        # - name: nextcloud-middlewear-redirect
-        - name: nextcloud-middleware-sts
-      services:
-        - name: nextcloud
-          port: 8080
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: IngressRoute
+# metadata:
+#   name: nextcloud-ingressroute
+#   namespace: nextcloud
+# spec:
+#   entryPoints:
+#     - websecure
+#   routes:
+#     - kind: Rule
+#       match: Host(`cloud.lab.smig.tech`)
+#       middlewares:
+#         # - name: nextcloud-middleware
+#         # - name: nextcloud-middlewear-redirect
+#         - name: nextcloud-middleware-sts
+#       services:
+#         - name: nextcloud
+#           port: 8080
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
