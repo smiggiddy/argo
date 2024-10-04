@@ -97,17 +97,21 @@ spec:
           internalDatabase:
             enabled: false
           nextcloud:
-            configs:
-              trusted_domains.config.php: |-
-                  <?php
-                  $CONFIG = [
-                  'trusted_domains' =>
-                    array (
-                      0 => 'localhost',
-                      1 => 'cloud.lab.smig.tech',
-                      2 => 'cloud.vpn.thecodedom.com'
-                      )
-                    ];
+            trustedDomains:
+            - localhost
+            - cloud.lab.smig.tech
+            - cloud.vpn.thecodedom.com
+            # configs:
+            #   trusted_domains.config.php: |-
+            #       <?php
+            #       $CONFIG = [
+            #       'trusted_domains' =>
+            #         array (
+            #           0 => 'localhost',
+            #           1 => 'cloud.lab.smig.tech',
+            #           2 => 'cloud.vpn.thecodedom.com'
+            #           )
+            #         ];
             host: cloud.lab.smig.tech
             existingSecret:
               enabled: true
@@ -147,8 +151,8 @@ spec:
               traefik.ingress.kubernetes.io/router.entrypoints: websecure
               traefik.ingress.kubernetes.io/router.middlewares: nextcloud-nextcloud-middleware@kubernetescrd,nextcloud-nextcloud-middleware-sts@kubernetescrd
             enabled: true
-            ingressClassName: traefik
-            hostName: cloud.lab.smig.tech
+            className: traefik
+            # hostName: cloud.lab.smig.tech
             tls:
              - secretName: cloud-tls
                hosts:
