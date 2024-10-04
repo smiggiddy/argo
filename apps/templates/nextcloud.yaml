@@ -98,9 +98,8 @@ spec:
             enabled: false
           nextcloud:
             trustedDomains:
-            - localhost
-            - cloud.lab.smig.tech
-            - cloud.vpn.thecodedom.com
+              - cloud.lab.smig.tech
+              - cloud.vpn.thecodedom.com
             # configs:
             #   trusted_domains.config.php: |-
             #       <?php
