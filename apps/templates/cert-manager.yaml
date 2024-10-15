@@ -16,8 +16,6 @@ spec:
 
     helm:
       values: |
-          annotations:
-             avp.kubernetes.io/ignore: "true"
           crds:
             enabled: true
 
