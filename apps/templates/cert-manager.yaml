@@ -18,9 +18,8 @@ spec:
       values: |
           annotations:
              avp.kubernetes.io/ignore: "true"
-      parameters:
-        - name: "installCRDs"
-          value: "true"
+          crds:
+            enabled: true
 
   destination:
     server: https://kubernetes.default.svc
