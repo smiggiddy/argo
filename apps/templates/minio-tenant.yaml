@@ -21,6 +21,8 @@ spec:
           tenant:
             configSecret:
               name: smigtech-tenant-secret
+              accessKey:
+              secretKey: 
               existingSecret: true
             configuration:
               name: smigtech-tenant-secret
