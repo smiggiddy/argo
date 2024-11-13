@@ -28,7 +28,7 @@ spec:
               name: smigtech-tenant-secret
             name: smigtech
             pools:
-            - size: 6Gi
+            - size: 20Gi
               name: pool-0
               storageClassName: longhorn
             certificate:
