@@ -13,35 +13,34 @@ spec:
     chart: gitlab-runner 
 
     helm:
-      values: |
-            certsSecretName: certs
-            gitlabUrl: https://gitlab.lab.smig.tech:8929
-            # unregisterRunners: true
-            secrets:
-              - name: smigtech-cert
-            rbac:
-              create: true
-              rules:
-                - resources: ["configmaps", "pods", "pods/attach", "secrets", "services", "events"]
-                  verbs: ["get", "list", "watch", "create", "patch", "update", "delete"]
-                - apiGroups: [""]
-                  resources: ["pods/exec"]
-                  verbs: ["create", "patch", "delete"]
+      valuesObject: 
+        certsSecretName: certs
+        gitlabUrl: https://gitlab.lab.smig.tech:8929
+        secrets:
+          - name: smigtech-cert
+        rbac:
+          create: true
+          rules:
+            - resources: ["configmaps", "pods", "pods/attach", "secrets", "services", "events"]
+              verbs: ["get", "list", "watch", "create", "patch", "update", "delete"]
+            - apiGroups: [""]
+              resources: ["pods/exec"]
+              verbs: ["create", "patch", "delete"]
 
-            runners:
-              secret: gitlab-runner
-              name: k8s-runner
-              config: |
-                    [[runners]]
-                      [runners.kubernetes]
-                          namespace = "{{.Release.Namespace}}"
-                          image = "arm64v8/alpine"
-                          privileged = true
-                          pull_policy = "if-not-present"
-                          helper_image = "gitlab/gitlab-runner-helper:arm64-21da6177"
-                      [[runners.kubernetes.volumes.secret]]
-                          name = "smigtech-cert"
-                          mount_path = "/secrets/smigtech/"
+        runners:
+          secret: gitlab-runner
+          name: k8s-runner
+          config: |
+                [[runners]]
+                  [runners.kubernetes]
+                      namespace = "{{.Release.Namespace}}"
+                      image = "arm64v8/alpine"
+                      privileged = true
+                      pull_policy = "if-not-present"
+                      helper_image = "gitlab/gitlab-runner-helper:arm64-21da6177"
+                  [[runners.kubernetes.volumes.secret]]
+                      name = "smigtech-cert"
+                      mount_path = "/secrets/smigtech/"
 
 
   destination:
