@@ -16,7 +16,7 @@ spec:
     chart: nextcloud
     
     helm:
-      values: |
+      valuesObject:
           metrics:
             enabled: true
             
