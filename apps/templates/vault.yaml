@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://helm.releases.hashicorp.com
-    targetRevision: 0.29.0
+    targetRevision: 0.29.1
     chart: vault 
 
     helm:
