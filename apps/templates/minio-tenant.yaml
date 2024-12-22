@@ -30,7 +30,7 @@ spec:
             pools:
             - size: 20Gi
               name: pool-0
-              storageClassName: local-path
+              storageClassName: longhorn
             certificate:
               requestAutoCert: false
             metrics:
