@@ -31,7 +31,7 @@ spec:
             - size: 20Gi
               name: pool-0
               storageClassName: longhorn-noreplicas
-              volumesPerServer: 1
+              volumesPerServer: 3
             certificate:
               requestAutoCert: false
             metrics:
