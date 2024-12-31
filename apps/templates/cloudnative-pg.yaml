@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudnative-pg
+  namespace: argocd
+  labels:
+    apps: utilities 
+    software: database
+  # annotations:
+  #  avp.kubernetes.io/ignore: "true"
+spec:
+  project: default
+  source:
+    repoURL: https://cloudnative-pg.github.io/charts 
+    targetRevision: v0.23.0
+    chart: cloudnative-pg
+
+    # helm:
+    #   valuesObject:
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cnpg-system
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      selfheal: true
+      prune: true
