@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: linkding
+  name: linkding
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linkding
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: linkding
+    spec:
+      containers:
+      - image: sissbruecker/linkding:1.36.0
+        name: linkding
+        volumeMounts:
+        - mountPath: "/etc/linkding/data"
+          name: data
+        env:
+        - name: LD_SUPERUSER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: linkding-secret 
+              key: admin-user
+
+        - name: LD_SUPERUSER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: linkding-secret 
+              key: admin-password
+
+        resources: {}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: linkding-pvc
+status: {}

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: linkding-ingress
+  namespace: apps
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-ca-issuer
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  tls:
+  - hosts:
+      - linkding.lab.smig.tech
+    secretName: testsecret-tls
+  rules:
+  - host: linkding.lab.smig.tech
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: linkding-svc
+            port:
+              number: 80
