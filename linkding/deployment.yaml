@@ -23,7 +23,7 @@ spec:
         name: linkding
         ports:
           - containerPort: 9090
-            name: linkding-web-svc
+            name: linkding-web
         volumeMounts:
         - mountPath: "/etc/linkding/data"
           name: data
