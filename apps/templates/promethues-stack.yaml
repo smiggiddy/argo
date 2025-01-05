@@ -81,6 +81,7 @@ spec:
                 - grafana-k3s.lab.smig.tech
           prometheus:
             prometheusSpec:
+              serviceMonitorNamespaceSelector: {}
               tolerations:
                 - key: node-role.kubernetes.io/master
                   operator: "Equal"
