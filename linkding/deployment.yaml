@@ -18,6 +18,8 @@ spec:
       labels:
         app: linkding
     spec:
+      strategy:
+        type: Recreate
       containers:
       - image: sissbruecker/linkding:1.36.0
         name: linkding
