@@ -21,6 +21,9 @@ spec:
       containers:
       - image: sissbruecker/linkding:1.36.0
         name: linkding
+        ports:
+          - containerPort: 9090
+            name: linkding-web-svc
         volumeMounts:
         - mountPath: "/etc/linkding/data"
           name: data
