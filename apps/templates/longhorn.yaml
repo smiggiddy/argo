@@ -28,6 +28,7 @@ spec:
             cert-manager.io/cluster-issuer: cluster-ca-issuer
         persistence:
           defaultClassReplicaCount: 2
+          defaultDataLocality: "best-effort"
         metrics:
           serviceMonitor:
             enabled: true
