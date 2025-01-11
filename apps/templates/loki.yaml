@@ -48,8 +48,12 @@ spec:
             max_concurrent: 4
         read:
           replicas: 2
+          persistence:
+            storageClass: longhorn-noreplicas
         write:
           replicas: 2
+          persistence:
+            storageClass: longhorn-noreplicas
         chunksCache:
           enabled: false
         resultsCache:
