@@ -20,3 +20,4 @@ spec:
     stsSeconds: 15553000
     stsPreload: true
     stsIncludeSubdomains: true
+    forceSTSHeader: true
