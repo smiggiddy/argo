@@ -19,3 +19,4 @@ spec:
   headers:
     stsSeconds: 15553000
     stsPreload: true
+    stsIncludeSubdomains: true
