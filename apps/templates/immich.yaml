@@ -45,9 +45,24 @@ spec:
             cache:
               type: pvc
               storageClass: longhorn
+            firmware:
+              type: hostPath
+              hostPath: /usr/lib/firmware/arm/mali/arch10.8/mali_csffw.bin
+              globalMounts:
+                - path: /lib/firmware/mali_csffw.bin
+                  readOnly: true
+            driver:
+              type: hostPath
+              hostPath: /usr/lib/aarch64-linux-gnu/dri/mali-dp_dri.so
+              globalMounts:
+                - path: /usr/lib/mali-dp_dri.so
+                  readOnly: true
+                  
           resources:
             limits:
               squat.ai/mali: 1
+          #/usr/lib/firmware/arm/mali/arch10.8/mali_csffw.bin
+          #/usr/lib/aarch64-linux-gnu/dri/mali-dp_dri.so
         server:
           ingress:
             main:
