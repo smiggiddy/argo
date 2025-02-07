@@ -31,6 +31,12 @@ spec:
             - count: 1000
               paths:
                 - path: /dev/net/tun          
+        - --device
+        - |
+          name: mali
+          groups:
+            - paths:
+                - path: /dev/mali0
         name: generic-device-plugin
         resources:
           requests:
