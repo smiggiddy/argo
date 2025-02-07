@@ -46,12 +46,14 @@ spec:
               type: pvc
               storageClass: longhorn
             firmware:
+              enabled: true
               type: hostPath
               hostPath: /usr/lib/firmware/arm/mali/arch10.8/mali_csffw.bin
               globalMounts:
                 - path: /lib/firmware/mali_csffw.bin
                   readOnly: true
             driver:
+              enabled: true
               type: hostPath
               hostPath: /usr/lib/aarch64-linux-gnu/dri/mali-dp_dri.so
               globalMounts:
