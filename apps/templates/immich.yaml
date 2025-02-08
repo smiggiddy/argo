@@ -83,4 +83,4 @@ spec:
           resources:
             limits:
               squat.ai/video: 1
-              squat.ai/mali: 1
+              # squat.ai/mali: 1
