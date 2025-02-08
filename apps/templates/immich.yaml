@@ -41,6 +41,8 @@ spec:
                 password: <path:k8s/data/argocd/immich#password>
 
         machine-learning:
+          image: 
+            repository: ghcr.io/immich-app/immich-machine-learning:v1.125.7-armnn
           persistence:
             cache:
               type: pvc
