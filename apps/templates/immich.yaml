@@ -8,10 +8,10 @@ spec:
   destination: 
     server: https://kubernetes.default.svc
     namespace: immich
-  # syncPolicy:
-  #   automated:
-  #     prune: true
-  #     selfHeal: true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
 
   project: default
   source:
@@ -83,3 +83,4 @@ spec:
           resources:
             limits:
               squat.ai/video: 1
+              squat.ai/mali: 1
