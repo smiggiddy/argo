@@ -37,6 +37,19 @@ spec:
           groups:
             - paths:
                 - path: /dev/mali0
+        - --device
+        - | 
+          name: video
+          groups:
+            - paths:
+                - path: /dev/dri 
+            - paths:
+                - path: /dev/rga
+            - paths:
+                - path: /dev/dma_heap
+            - paths:
+                - path: /dev/mpp_service
+
         name: generic-device-plugin
         resources:
           requests:

@@ -50,19 +50,15 @@ spec:
             fw:
               enabled: true
               type: hostPath
-              hostPath: /usr/lib/firmware/arm/mali/arch10.8/mali_csffw.bin
+              hostPath: /lib/firmware/mali_csffw.bin
               hostPathType: File
               readOnly: true
-              globalMounts:
-                - path: /lib/firmware/mali_csffw.bin
             driver:
               enabled: true
               type: hostPath
-              hostPath: /usr/lib/aarch64-linux-gnu/dri/mali-dp_dri.so
+              hostPath: /usr/lib/libmali.so
               hostPathType: File
               readOnly: true
-              globalMounts:
-                - path: /usr/lib/mali-dp_dri.so
                   
           resources:
             limits:
@@ -84,3 +80,6 @@ spec:
                - secretName: immich-tls
                  hosts:
                  - immich.lab.smig.tech
+          resources:
+            limits:
+              squat.ai/video: 1
