@@ -54,6 +54,8 @@ spec:
               hostPath: /usr/lib/firmware/arm/mali/arch10.8/mali_csffw.bin
               hostPathType: File
               readOnly: true
+              globalMounts:
+                - path: /lib/firmware/mali_csffw.bin
             driver:
               enabled: true
               type: hostPath
@@ -61,6 +63,8 @@ spec:
               hostPath: /usr/lib/aarch64-linux-gnu/dri/mali-dp_dri.so
               hostPathType: File
               readOnly: true
+              globalMounts:
+                - path: /usr/lib/mali-dp_dri.so
                   
           resources:
             limits:
