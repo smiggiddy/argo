@@ -49,6 +49,8 @@ spec:
                 - path: /dev/dma_heap
             - paths:
                 - path: /dev/mpp_service
+            - paths:
+                - path: /dev/mali0
 
         name: generic-device-plugin
         resources:
