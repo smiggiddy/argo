@@ -48,20 +48,14 @@ spec:
             firmware:
               enabled: true
               type: hostPath
-              advancedMounts:
-                main:
-                  main:
-                    - path: /lib/firmware/mali_csffw.bin
+              path: /lib/firmware/mali_csffw.bin
               hostPath: /usr/lib/firmware/arm/mali/arch10.8/mali_csffw.bin
               hostPathType: File
               readOnly: true
             driver:
               enabled: true
               type: hostPath
-              advancedMounts:
-                main:
-                  main:
-                    - path: /usr/lib/mali-dp_dri.so
+              path: /usr/lib/mali-dp_dri.so
               hostPath: /usr/lib/aarch64-linux-gnu/dri/mali-dp_dri.so
               hostPathType: File
               readOnly: true
