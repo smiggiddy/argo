@@ -42,7 +42,7 @@ spec:
 
         machine-learning:
           image: 
-            repository: ghcr.io/immich-app/immich-machine-learning:v1.125.7-armnn
+            tag: v1.125.7-armnn
           persistence:
             cache:
               type: pvc
