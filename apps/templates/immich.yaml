@@ -91,3 +91,9 @@ spec:
               hostPath: /usr/lib/aarch64-linux-gnu/libmali.so.1
               hostPathType: File
               readOnly: true
+            opencl:
+              enabled: true
+              type: hostPath
+              hostPath: /OpenCL
+              hostPathType: Directory
+              readOnly: true
