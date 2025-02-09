@@ -94,6 +94,6 @@ spec:
             opencl:
               enabled: true
               type: hostPath
-              hostPath: /OpenCL
+              hostPath: /etc/OpenCL
               hostPathType: Directory
               readOnly: true
