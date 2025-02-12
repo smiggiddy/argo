@@ -63,8 +63,6 @@ spec:
           resources:
             limits:
               squat.ai/mali: 1
-          #/usr/lib/firmware/arm/mali/arch10.8/mali_csffw.bin
-          #/usr/lib/aarch64-linux-gnu/dri/mali-dp_dri.so
         server:
           ingress:
             main:
@@ -83,7 +81,12 @@ spec:
           resources:
             limits:
               squat.ai/video: 1
-              # squat.ai/mali: 1
+              cpu: "4"
+              memory: "7Gi"
+            requests:
+              cpu: "2"
+              memory: "4Gi"
+            
           persistence:
             driver:
               enabled: true
