@@ -14,6 +14,13 @@ spec:
     chart: excalidraw
     helm:
       valuesObject:
+          image:
+            repository: git.thecodedom.com/smig/excalidraw-image
+            # This sets the pull policy for images.
+            pullPolicy: IfNotPresent
+            # Overrides the image tag whose default is the chart appVersion.
+            tag: "latest"
+
           ingress:
             enabled: true
             className: "traefik"
@@ -38,3 +45,6 @@ spec:
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
