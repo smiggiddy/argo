@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: excalidraw
+  namespace: argocd
+  labels:
+    apps: development
+    smig: charts
+spec:
+  project: default
+  source:
+    repoURL: git.thecodedom.com/smig
+    targetRevision: 0.1.0
+    chart: excalidraw
+    helm:
+      valuesObject:
+          ingress:
+            enabled: true
+            className: "traefik"
+            annotations: 
+              cert-manager.io/cluster-issuer: cluster-ca-issuer
+            hosts:
+            - host: excalidraw.lab.smig.tech
+              paths:
+              - path: /
+                pathType: Prefix
+            tls: 
+            - secretName: excalidraw-tls
+              hosts:
+              - excalidraw.lab.smig.tech
+
+
+
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
