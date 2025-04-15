@@ -21,11 +21,28 @@ spec:
         rbac:
           create: true
           rules:
-            - resources: ["configmaps", "pods", "pods/attach", "secrets", "services", "events"]
-              verbs: ["get", "list", "watch", "create", "patch", "update", "delete"]
-            - apiGroups: [""]
-              resources: ["pods/exec"]
-              verbs: ["create", "patch", "delete"]
+              - resources: ["events"]
+                verbs: ["list", "watch"]
+              - resources: ["pods"]
+                verbs: ["create","delete","get"]
+              - apiGroups: [""]
+                resources: ["pods/attach","pods/exec"]
+                verbs: ["get","create","patch","delete"]
+              - apiGroups: [""]
+                resources: ["pods/log"]
+                verbs: ["get","list"]
+              - resources: ["secrets"]
+                verbs: ["create","delete","get","update"]
+              - resources: ["serviceaccounts"]
+                verbs: ["get"]
+              - resources: ["services"]
+                verbs: ["create","get"]
+
+            # - resources: ["configmaps", "pods", "pods/attach", "secrets", "services", "events"]
+            #   verbs: ["get", "list", "watch", "create", "patch", "update", "delete"]
+            # - apiGroups: [""]
+            #   resources: ["pods/exec"]
+            #   verbs: ["create", "patch", "delete"]
 
         runners:
           secret: gitlab-runner
@@ -37,10 +54,20 @@ spec:
                       image = "arm64v8/alpine"
                       privileged = true
                       pull_policy = "if-not-present"
-                      helper_image = "gitlab/gitlab-runner-helper:arm64-21da6177"
+                      # helper_image = "gitlab/gitlab-runner-helper:arm64-21da6177"
+                      helper_image = "registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:ubuntu-arm64-bleeding"
+                  [runners.kubernetes.pod_resources]
+                      cpu_limit = "4"
+                      memory_limit = "6Gi"
+                      cpu_request = "500m"
+                      memory_request = "1Gi"
                   [[runners.kubernetes.volumes.secret]]
                       name = "smigtech-cert"
                       mount_path = "/secrets/smigtech/"
+                  [[runners.kubernetes.volumes.empty_dir]]
+                      name = "docker-certs"
+                      mount_path = "/certs/client"
+                      medium = "Memory"
 
 
   destination:
