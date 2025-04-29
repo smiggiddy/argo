@@ -97,7 +97,7 @@ spec:
                   # Optionally map user groups to Grafana roles
                   # role_attribute_path: contains(groups, 'Grafana Admins') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor' || 'Viewer'
               server:
-                root_url: {{- if (and .Values.ingress.enabled .Values.ingress.hosts) }}"{{ print "https://" (tpl (first .Values.ingress.hosts) .) }}"{{ else }}''{{ end }}
+                root_url: "https://grafana-k3s.lab.smig.tech"
           prometheus:
             prometheusSpec:
               podMonitorSelectorNilUsesHelmValues: false
