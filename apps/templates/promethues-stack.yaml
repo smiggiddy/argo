@@ -96,6 +96,8 @@ spec:
                   api_url: "https://auth.thecodedom.com/application/o/userinfo/"
                   # Optionally map user groups to Grafana roles
                   # role_attribute_path: contains(groups, 'Grafana Admins') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor' || 'Viewer'
+              server:
+                root_url: {{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}https://{{ tpl (.Values.ingress.hosts | first) . }}{{ else }}''{{ end }}"
           prometheus:
             prometheusSpec:
               podMonitorSelectorNilUsesHelmValues: false
