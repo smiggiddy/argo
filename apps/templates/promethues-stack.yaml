@@ -79,6 +79,21 @@ spec:
               - secretName: smigtech-grafana-tls
                 hosts:
                 - grafana-k3s.lab.smig.tech
+            grafana.ini:
+              auth:
+                  signout_redirect_url: "https://auth.thecodedom.com/application/o/grafana-k3s/end-session/"
+                  oauth_auto_login: true
+              auth.generic_oauth:
+                  name: authentik
+                  enabled: true
+                  client_id: <path:k8s/data/argocd/authentik-grafana#clientId>
+                  client_secret: <path:k8s/data/argocd/authentik-grafana#clientSecret>
+                  scopes: "openid profile email"
+                  auth_url: "https://auth.thecodedom.com/application/o/authorize/"
+                  token_url: "https://auth.thecodedom.com/application/o/token/"
+                  api_url: "https://auth.thecodedom.com/application/o/userinfo/"
+                  # Optionally map user groups to Grafana roles
+                  # role_attribute_path: contains(groups, 'Grafana Admins') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor' || 'Viewer'
           prometheus:
             prometheusSpec:
               podMonitorSelectorNilUsesHelmValues: false
