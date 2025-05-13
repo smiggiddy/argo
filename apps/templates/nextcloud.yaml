@@ -26,11 +26,11 @@ spec:
             flavor: fpm
           nginx:
             enabled: true
-            config:
-              custom: |
-                types {
-                    text/javascript js mjs;
-                  }
+            # config:
+            #   custom: |
+            #     types {
+            #         text/javascript js mjs;
+            #       }
           phpClientHttpsFix:
             enabled: false 
             protocol: https
