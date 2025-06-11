@@ -23,8 +23,6 @@ spec:
           storageClass: longhorn
         updateStrategy:
           type: Recreate
-        mountDind:
-          enabled: true
         ingress:
           enabled: true
           ingressClassName: traefik
