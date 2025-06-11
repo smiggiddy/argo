@@ -33,7 +33,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: gitlab-runner
+    namespace: localstack
 
   syncPolicy:
     syncOptions:
