@@ -25,9 +25,15 @@ spec:
         ingress:
           enabled: true
           ingressClassName: traefik
-          tls: true
-          tlsSecret: localstack-tls
-          host: local-stack.lab.smig.tech
+          hosts:
+            - host: local-stack.lab.smig.tech
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
+          tls: 
+            - secretName: localstack-tls
+              hosts: 
+              - local-stack.lab.smig.tech
           annotations:
             cert-manager.io/cluster-issuer: cluster-ca-issuer
 
