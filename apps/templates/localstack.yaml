@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
   labels:
     type: cloud
-    lab: true
+    lab: "true"
 spec:
   project: default
   source:
