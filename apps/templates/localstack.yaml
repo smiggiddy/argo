@@ -16,7 +16,8 @@ spec:
     helm:
       valuesObject: 
         extraEnvVars:
-          - LOCALSTACK_HOST: local-stack.lab.smig.tech
+          - name: LOCALSTACK_HOST 
+            value: "local-stack.lab.smig.tech"
         persistence:
           enabled: true
           storageClass: longhorn
