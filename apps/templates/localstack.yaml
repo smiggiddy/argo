@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: local-stack
+  namespace: argocd
+  labels:
+    type: cloud
+    lab: true
+spec:
+  project: default
+  source:
+    repoURL: https://localstack.github.io/helm-charts
+    targetRevision: 0.6.24
+    chart: localstack
+
+    helm:
+      valuesObject: 
+        persistence:
+          enabled: true
+          storageClass: longhorn
+        updateStrategy:
+          type: Recreate
+        mountDind:
+          enabled: true
+        ingress:
+          enabled: true
+          ingressClassName: traefik
+          tls: true
+          tlsSecret: localstack-tls
+          host: local-stack.lab.smig.tech
+          annotations:
+            cert-manager.io/cluster-issuer: cluster-ca-issuer
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gitlab-runner
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
