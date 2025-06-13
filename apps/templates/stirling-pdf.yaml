@@ -16,7 +16,7 @@ spec:
         valuesObject:
           image:
             name: froodle/s-pdf
-            tag: 0.45.0
+            tag: 0.46.2
           ingress:
             enabled: true
             ingressClassName: traefik
