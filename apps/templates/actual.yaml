@@ -11,13 +11,27 @@ spec:
   project: default
   source:
     repoURL: git.thecodedom.com/smig
-    targetRevision: 0.1.0
+    targetRevision: 0.1.1
     chart: actual
 
     helm:
       valuesObject:
         persistence:
           existingClaim: "actual-pvc"
+        ingress:
+          enabled: true
+          className: "traefik"
+          annotations: 
+            cert-manager.io/cluster-issuer: cluster-ca-issuer
+          hosts:
+            - host: actual.lab.smig.tech
+              paths:
+                - path: /
+                  pathType: prefix
+          tls: 
+           - secretName: actual-tls
+             hosts:
+               - actual.lab.smig.tech
 
   destination:
     server: https://kubernetes.default.svc
@@ -26,3 +40,7 @@ spec:
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
+
