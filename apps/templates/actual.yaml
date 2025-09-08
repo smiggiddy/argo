@@ -11,7 +11,7 @@ spec:
   project: default
   source:
     repoURL: git.thecodedom.com/smig
-    targetRevision: 0.1.1
+    targetRevision: 0.1.2
     chart: actual
 
     helm:
@@ -27,7 +27,7 @@ spec:
             - host: actual.lab.smig.tech
               paths:
                 - path: /
-                  pathType: prefix
+                  pathType: Prefix
           tls: 
            - secretName: actual-tls
              hosts:
