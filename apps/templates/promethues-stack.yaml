@@ -69,6 +69,7 @@ spec:
               enabled: true
               annotations:
                 cert-manager.io/cluster-issuer: cluster-ca-issuer
+                traefik.ingress.kubernetes.io/router.entrypoints: websecure
               hosts:
               - grafana-k3s.lab.smig.tech
               tls:
