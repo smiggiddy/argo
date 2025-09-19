@@ -61,6 +61,14 @@ spec:
                         values: 
                         - "true"
           grafana:
+            additionalDataSources:
+              - name: loki
+                access: proxy
+                basicAuth: false
+                url: http://loki-gateway.loki
+                jsonData:
+                  timeout: 300
+                  maxLines: 1000
             persistence:
               enabled: true
               type: sts
