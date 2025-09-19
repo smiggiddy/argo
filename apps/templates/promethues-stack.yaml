@@ -63,6 +63,7 @@ spec:
           grafana:
             additionalDataSources:
               - name: loki
+                type: loki
                 access: proxy
                 basicAuth: false
                 url: http://loki-gateway.loki
