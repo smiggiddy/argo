@@ -1,17 +1,29 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":dependencyDashboard"],
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard"
+  ],
   "argocd": {
-    "fileMatch": ["apps/.+\\.yaml$", "awx/.+\\.yaml$"]
+    "managerFilePatterns": [
+      "/apps/.+\\.yaml$/",
+      "/awx/.+\\.yaml$/"
+    ]
   },
   "helm-values": {
-    "fileMatch": ["apps/.}\\.yaml$"]
+    "managerFilePatterns": [
+      "/apps/.}\\.yaml$/"
+    ]
   },
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["auto_upgrades/.+\\.yaml$"],
-      "matchStrings": ["version: (?<currentValue>\\S+)"],
+      "managerFilePatterns": [
+        "/auto_upgrades/.+\\.yaml$/"
+      ],
+      "matchStrings": [
+        "version: (?<currentValue>\\S+)"
+      ],
       "depNameTemplate": "k3s",
       "versioningTemplate": "semver-coerced",
       "datasourceTemplate": "custom.k3s"
