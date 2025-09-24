@@ -33,11 +33,6 @@ spec:
             flavor: fpm
           nginx:
             enabled: true
-            # config:
-            #   custom: |
-            #     types {
-            #         text/javascript js mjs;
-            #       }
           phpClientHttpsFix:
             enabled: false 
             protocol: https
@@ -69,7 +64,7 @@ spec:
             size: 20Gi
           externalDatabase:
             enabled: true
-            host: nextcloud-po-rw
+            host: nextcloud-po-rw:5432
             type: postgresql
             user: smigs-cloud
             existingSecret:
