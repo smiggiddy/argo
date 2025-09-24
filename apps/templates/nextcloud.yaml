@@ -69,6 +69,7 @@ spec:
             size: 20Gi
           externalDatabase:
             enabled: true
+            host: nextcloud-po-rw
             type: postgresql
             user: smigs-cloud
             existingSecret:
@@ -76,31 +77,6 @@ spec:
               secretName: nextcloud-db
               usernameKey: db-username
               passwordKey: user-db-password
-          postgresql:
-            image:
-              registry: docker.io
-              repository: bitnami/postgresql
-              tag: 15.3.0-debian-11-r75
-              digest: ""
-              pullPolicy: IfNotPresent
-              pullSecrets: []
-              debug: false
-            primary:
-              resourcesPreset: "micro"
-              persistence:
-                enabled: true
-                storageClass: longhorn
-            enabled: true
-            global:
-              postgresql:
-                auth:
-                  username: smigs-cloud
-                  existingSecret: nextcloud-db
-                  secretKeys:
-                    username: db-username
-                    adminPasswordKey: db-password
-                    userPasswordKey: user-db-password
-                    replicationPasswordKey: replication-pw-key
           internalDatabase:
             enabled: false
           nextcloud:

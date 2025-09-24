@@ -1,0 +1,30 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: nextcloud-pg
+  namespace: nextcloud
+spec:
+  instances: 1
+  storage:
+    size: 4Gi
+
+  # bootstrap:
+  #   initdb:
+  #     import: 
+  #       type: microservice
+  #       databases: 
+  #       - nextcloud
+  #       source:
+  #         externalCluster: nextcloud-pg
+  #
+  # externalClusters:
+  #   - name: nextcloud-pg
+  #     connectionParameters:
+  #       # Use the correct IP or host name for the source database
+  #       host: nextcloud-postgresql
+  #       user: smigs-cloud
+  #       dbname: nextcloud
+  #     password:
+  #       name: nextcloud-db
+  #       key: user-db-password
+
