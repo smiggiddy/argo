@@ -64,7 +64,7 @@ spec:
             size: 20Gi
           externalDatabase:
             enabled: true
-            host: nextcloud-po-rw.nextcloud.svc.cluster.local:5432
+            host: nextcloud-pg-rw.nextcloud.svc.cluster.local:5432
             type: postgresql
             database: app
             existingSecret:
