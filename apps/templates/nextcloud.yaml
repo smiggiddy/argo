@@ -76,6 +76,14 @@ spec:
             enabled: false
           nextcloud:
             configs:
+              logging.config.php: |-
+                <?php
+                $CONFIG = array (
+                  'log_type' => 'file',
+                  'logfile' => 'nextcloud.log',
+                  'loglevel' => 0,
+                  'logdateformat' => 'F d, Y H:i:s'
+                  );
               trusted_domains.config.php: |-
                   <?php
                   $CONFIG = [
