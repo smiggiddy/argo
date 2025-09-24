@@ -46,7 +46,7 @@ spec:
             image:
               registry: docker.io
               repository: bitnami/redis
-              tag: 7.0.12-debian-11-r13
+              tag: 8.2.1-debian-12-r0
               digest: ""
             master:
               resourcesPreset: "micro"
