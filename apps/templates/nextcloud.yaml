@@ -41,8 +41,8 @@ spec:
               storageClass: "local-path"
             enabled: true
             auth:
-              existingSecret: nextcloud-db
-              existingSecretPasswordKey: user-db-password
+              existingSecret: nextcloud-pg-app
+              existingSecretPasswordKey: password
             image:
               registry: docker.io
               repository: bitnami/redis
@@ -69,9 +69,9 @@ spec:
             database: nextcloud
             existingSecret:
               enabled: true
-              secretName: nextcloud-db
-              usernameKey: db-username
-              passwordKey: user-db-password
+              secretName: nextcloud-pg-app
+              usernameKey: username
+              passwordKey: password
           internalDatabase:
             enabled: false
           nextcloud:
