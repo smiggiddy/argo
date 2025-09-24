@@ -66,7 +66,7 @@ spec:
             enabled: true
             host: nextcloud-po-rw.nextcloud.svc.local:5432
             type: postgresql
-            database: nextcloud
+            database: app
             existingSecret:
               enabled: true
               secretName: nextcloud-pg-app
