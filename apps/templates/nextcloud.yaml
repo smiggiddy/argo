@@ -64,9 +64,9 @@ spec:
             size: 20Gi
           externalDatabase:
             enabled: true
-            host: nextcloud-po-rw
+            host: nextcloud-po-rw.nextcloud.svc.local:5432
             type: postgresql
-            user: smigs-cloud
+            database: nextcloud
             existingSecret:
               enabled: true
               secretName: nextcloud-db
