@@ -74,6 +74,8 @@ spec:
               passwordKey: password
           internalDatabase:
             enabled: false
+          postgresql:
+            enabled: false
           nextcloud:
             configs:
               logging.config.php: |-
