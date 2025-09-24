@@ -97,9 +97,9 @@ spec:
             host: cloud.lab.smig.tech
             existingSecret:
               enabled: true
-              secretName: nextcloud-pg-app
-              usernameKey: username
-              passwordKey: password
+              secretName: nextcloud-db
+              usernameKey: nextcloud-username
+              passwordKey: nextcloud-password
             extraSidecarContainers:
               - name: ts-sidecar
                 imagePullPolicy: Always
