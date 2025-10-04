@@ -5,3 +5,9 @@ namespace: nextcloud
 patches:
   - path: ./deploy-resources.yaml
   - path: ./pvc-name.yaml
+
+commonLabels:
+  app.kubernetes.io/name: redis
+  app.kubernetes.io/component: cache
+  app.kubernetes.io/part-of: nextcloud
+  app.kubernetes.io/managed-by: kustomize

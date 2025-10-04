@@ -16,6 +16,10 @@ spec:
       labels:
         app: redis
     spec:
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 999
+        runAsNonRoot: true
       containers:
         - command:
             - valkey-server
@@ -24,10 +28,22 @@ spec:
             - "1"
           image: valkey/valkey:8.1.4-trixie
           name: valkey
+          ports:
+            - containerPort: 6379
           resources: {}
           volumeMounts:
             - mountPath: "/data"
               name: data
+          livenessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
       volumes:
         - name: data
           persistentVolumeClaim:
