@@ -5,7 +5,7 @@ metadata:
   namespace: nextcloud
 spec:
   configuration:
-    destinationPath: "s3://cnpg-backups/nextcloud-pg/"
+    destinationPath: "s3://cnpg-backups/nextcloud-pg"
     endpointURL: http://minio.minio-tenant
     s3Credentials:
       accessKeyId:
