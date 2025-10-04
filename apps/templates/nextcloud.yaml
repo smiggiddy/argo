@@ -33,29 +33,14 @@ spec:
             flavor: fpm
           nginx:
             enabled: true
+	    config:
+	      headers:
+	        "Strict-Transport-Security": "max-age=15552000; includeSubDomains; preload;"
           phpClientHttpsFix:
             enabled: false 
             protocol: https
           redis:
-            # global:
-            #   storageClass: "local-path"
             enabled: false
-            # auth:
-            #   existingSecret: nextcloud-pg-app
-            #   existingSecretPasswordKey: password
-            # image:
-            #   registry: docker.io
-            #   repository: bitnami/redis
-            #   tag: 7.0.12-debian-11-r13
-            #   digest: ""
-            # master:
-            #   resourcesPreset: "micro"
-            #   persistence:
-            #     size: 1Gi
-            # replica:
-            #   resourcesPreset: "micro"
-            #   persistence:
-            #     size: 1Gi
           cronjob:
             enabled: true
           persistence:
@@ -77,6 +62,10 @@ spec:
           postgresql:
             enabled: false
           nextcloud:
+	    defaultConfigs:
+	      .htaccess: false
+	      apache-pretty-urls.config.php: false
+	      swift.config.php: false
             configs:
               logging.config.php: |-
                 <?php
