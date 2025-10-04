@@ -20,11 +20,17 @@ spec:
     helm:     
       values: |
           extraVars:
-            CODER_OIDC_ISSUER_URL: https://auth.thecodedom.com/application/o/code-server/
-            CODER_OIDC_EMAIL_DOMAIN: acme.company,acme-corp.company
-            CODER_OIDC_CLIENT_ID: <path:k8s/data/argocd/code-server#client_id>
-            CODER_OIDC_CLIENT_SECRET: <path:k8s/data/argocd/code-server#client_secret>
-            CODER_OIDC_SIGN_IN_TEXT: "Log in with authentik"
+            - name: CODER_OIDC_ISSUER_URL
+              value: "https://auth.thecodedom.com/application/o/code-server/"
+            - name: CODER_OIDC_EMAIL_DOMAIN
+              value: "gmail.com"
+            - name: CODER_OIDC_CLIENT_ID
+              value: "<path:k8s/data/argocd/code-server#client_id>"
+            - name: CODER_OIDC_CLIENT_SECRET
+              value: "<path:k8s/data/argocd/code-server#client_secret>"
+            - name: CODER_OIDC_SIGN_IN_TEXT
+              value: "Log in with authentic"
+
 
           # password: <path:k8s/data/argocd/code-server#password>
           image:
