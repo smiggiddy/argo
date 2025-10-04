@@ -20,6 +20,7 @@ spec:
         runAsUser: 999
         runAsGroup: 999
         runAsNonRoot: true
+        fsGroup: 999
       containers:
         - command:
             - valkey-server
