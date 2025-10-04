@@ -17,6 +17,7 @@ spec:
     spec:
       containers:
         - command:
+            - valkey-server
             - --save
             - "60"
             - "1"
