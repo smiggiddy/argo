@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: redis
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - command:
+            - --save
+            - "60"
+            - "1"
+          image: valkey/valkey:8.1.4-trixie
+          name: valkey
+          resources: {}
+          volumeMounts:
+            - mountPath: "/data"
+              name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: redis-pvc
+status: {}

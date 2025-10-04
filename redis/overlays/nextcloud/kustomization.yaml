@@ -1,0 +1,6 @@
+resources:
+  - ../../base/
+namePrefix: nextcloud-
+namespace: nextcloud
+patches:
+  - path: pvc-name.yaml

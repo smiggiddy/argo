@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  template:
+    spec:
+      containers:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: nextcloud-redis-pvc

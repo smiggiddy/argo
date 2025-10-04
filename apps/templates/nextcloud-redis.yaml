@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nextcloud-redis
+  namespace: argocd
+spec:
+  project: default
+  source:
+    path: './redis/overlays/nextcloud'
+    repoURL: 'https://github.com/smiggiddy/argo'
+    targetRevision: HEAD
+  destination:
+    namespace: nextcloud
+    server: 'https://kubernetes.default.svc'
