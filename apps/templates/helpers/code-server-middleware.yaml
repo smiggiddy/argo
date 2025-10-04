@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: authentik
+  namespace: apps
+spec:
+  type: ExternalName
+  externalName: auth.thecodedom.com
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+    name: code-server
+    namespace: apps
+spec:
+    forwardAuth:
+        # This address should point to the cluster endpoint provided by the kubernetes service, not the Ingress.
+        address: https://authentik/outpost.goauthentik.io/auth/authentik
+        trustForwardHeader: true
+        authResponseHeaders:
+            - X-authentik-username
+            - X-authentik-groups
+            - X-authentik-entitlements
+            - X-authentik-email
+            - X-authentik-name
+            - X-authentik-uid
+            - X-authentik-jwt
+            - X-authentik-meta-jwks
+            - X-authentik-meta-outpost
+            - X-authentik-meta-provider
+            - X-authentik-meta-app
+            - X-authentik-meta-version
