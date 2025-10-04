@@ -15,7 +15,7 @@ metadata:
 spec:
     forwardAuth:
         # This address should point to the cluster endpoint provided by the kubernetes service, not the Ingress.
-        address: https://authentik/outpost.goauthentik.io/auth/code-server
+        address: http://code-server:8080/outpost.goauthentik.io/auth/code-server
         trustForwardHeader: true
         authResponseHeaders:
             - X-authentik-username
