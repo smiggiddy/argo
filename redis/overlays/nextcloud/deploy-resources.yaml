@@ -6,10 +6,11 @@ spec:
   template:
     spec:
       containers:
-        resources:
-          requests:
-            cpu: 100m
-            memory: "64Mi"
-          limits:
-            cpu: 150m
-            memory: "128Mi"
+        - name: valkey
+          resources:
+            requests:
+              cpu: 100m
+              memory: "64Mi"
+            limits:
+              cpu: 150m
+              memory: "128Mi"
