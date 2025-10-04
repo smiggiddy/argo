@@ -3,4 +3,5 @@ resources:
 namePrefix: nextcloud-
 namespace: nextcloud
 patches:
-  - path: pvc-name.yaml
+  - path: ./deploy-resources.yaml
+  - path: ./pvc-name.yaml
