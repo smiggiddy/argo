@@ -19,7 +19,14 @@ spec:
 
     helm:     
       values: |
-          password: <path:k8s/data/argocd/code-server#password>
+          extraVars:
+            CODER_OIDC_ISSUER_URL: https://auth.thecodedom.com/application/o/code-server/
+            CODER_OIDC_EMAIL_DOMAIN: acme.company,acme-corp.company
+            CODER_OIDC_CLIENT_ID: <path:k8s/data/argocd/code-server#client_id>
+            CODER_OIDC_CLIENT_SECRET: <path:k8s/data/argocd/code-server#client_secret>
+            CODER_OIDC_SIGN_IN_TEXT: "Log in with authentik"
+
+          # password: <path:k8s/data/argocd/code-server#password>
           image:
             tag: 'latest'
           persistence: 
