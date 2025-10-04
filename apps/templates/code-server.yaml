@@ -40,7 +40,7 @@ spec:
             ingressClassName: "traefik"
             annotations: 
               cert-manager.io/cluster-issuer: cluster-ca-issuer
-              traefik.ingress.kubernetes.io/router.middlewares: code-server@kubernetescrd
+              traefik.ingress.kubernetes.io/router.middlewares: apps-code-server@kubernetescrd
             hosts:
             - host: code-server.lab.smig.tech
               paths:
