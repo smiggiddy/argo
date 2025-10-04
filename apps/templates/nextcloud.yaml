@@ -33,9 +33,9 @@ spec:
             flavor: fpm
           nginx:
             enabled: true
-	    config:
-	      headers:
-	        "Strict-Transport-Security": "max-age=15552000; includeSubDomains; preload;"
+            config:
+              headers:
+                "Strict-Transport-Security": "max-age=15552000; includeSubDomains; preload;"
           phpClientHttpsFix:
             enabled: false 
             protocol: https
@@ -62,10 +62,10 @@ spec:
           postgresql:
             enabled: false
           nextcloud:
-	    defaultConfigs:
-	      .htaccess: false
-	      apache-pretty-urls.config.php: false
-	      swift.config.php: false
+            defaultConfigs:
+              .htaccess: false
+              apache-pretty-urls.config.php: false
+              swift.config.php: false
             configs:
               logging.config.php: |-
                 <?php
