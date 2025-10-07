@@ -19,10 +19,10 @@ spec:
       valuesObject:
           resources: 
             limits:
-             cpu: 500m
+             cpu: 1000m
              memory: 768Mi
             requests:
-             cpu: 100m
+             cpu: 500m
              memory: 256Mi
           metrics:
             enabled: true
