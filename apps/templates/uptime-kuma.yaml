@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: 'https://smiggiddy.github.io'
-    targetRevision: 0.0.18
+    targetRevision: 0.0.19
     chart: uptime-kuma
     helm:
       parameters: 
@@ -20,6 +20,8 @@ spec:
           value: 2Gi
         - name: "image.tag"
           value: "1.23.16"
+        - name: "tailscale.authSecretName"
+          value: "tailscale-auth"
 
   destination:
     server: 'https://kubernetes.default.svc'
