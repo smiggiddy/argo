@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: 'https://smiggiddy.github.io'
-    targetRevision: 0.0.19
+    targetRevision: 0.0.20
     chart: uptime-kuma
     helm:
       parameters: 
@@ -22,6 +22,22 @@ spec:
           value: "1.23.16"
         - name: "tailscale.authSecretName"
           value: "tailscale-auth"
+      valuesObject:
+        ingress:
+          enabled: true
+          className: "traefik"
+          annotations: 
+            cert-manager.io/cluster-issuer: cluster-ca-issuer
+          hosts:
+            - host: up-k.lab.smig.tech
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - secretName: uptime-kuma-tls
+              hosts:
+                - up-k.lab.smig.tech
+
 
   destination:
     server: 'https://kubernetes.default.svc'
