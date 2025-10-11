@@ -12,7 +12,7 @@ spec:
         exposedPort: 8080
         protocol: TCP
 
-     additionalArguments:
-        - "--entryPoints.cloudflare.address=:8080"
-        - "--entryPoints.cloudflare.forwardedHeaders.trustedIPs=103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17"
-        - "--entryPoints.cloudflare.proxyProtocol.trustedIPs=103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17"
+    additionalArguments:
+      - "--entryPoints.cloudflare.address=:8080"
+      - "--entryPoints.cloudflare.forwardedHeaders.trustedIPs=103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17"
+      - "--entryPoints.cloudflare.proxyProtocol.trustedIPs=103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17"
