@@ -9,7 +9,7 @@ spec:
       cloudflare:
         port: 8085
         expose: 
-          default: false
+          default: true
         exposedPort: 8085
         protocol: TCP
 
