@@ -8,7 +8,8 @@ spec:
     ports:
       cloudflare:
         port: 8080
-        expose: true
+        expose: 
+          default: false
         exposedPort: 8080
         protocol: TCP
 
