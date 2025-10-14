@@ -72,6 +72,7 @@ spec:
                 repeat_interval: 12h
 
               receivers:
+                - name: "null"
                 - name: "telegram"
                   telegram_configs:
                     - bot_token: <path:k8s/data/argocd/grafana#telegram_api_token>
