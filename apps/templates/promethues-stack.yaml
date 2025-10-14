@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
   labels:
     apps: utilities 
+  annotations:
+     avp.kubernetes.io/path: "k8s/data/argocd/grafana"
 
 spec:
   project: default
@@ -60,6 +62,33 @@ spec:
                         operator: In
                         values: 
                         - "true"
+            config:
+              global:
+                resolve_timeout: 5m
+
+              route:
+                receiver: "telegram"
+                group_by: ["alertname", "namespace"]
+                group_wait: 30s
+                group_interval: 5m
+                repeat_interval: 12h
+
+              receivers:
+                - name: "telegram"
+                  telegram_configs:
+                    - bot_token: "<telegram_api_token>"
+                      chat_id: "<telegram_chat_id>"
+                      parse_mode: "HTML"
+                      message: |
+                        🚨 <b>{{ .CommonAnnotations.summary }}</b>
+                        {{ range .Alerts }}
+                        Namespace: {{ .Labels.namespace }}
+                        Pod: {{ .Labels.pod }}
+                        Severity: {{ .Labels.severity }}
+                        Description: {{ .Annotations.description }}
+                        {{ end }}
+                      send_resolved: true
+
           grafana:
             additionalDataSources:
               - name: loki
