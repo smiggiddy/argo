@@ -5,8 +5,6 @@ metadata:
   namespace: argocd
   labels:
     apps: utilities 
-  annotations:
-     avp.kubernetes.io/path: "k8s/data/argocd/grafana"
 
 spec:
   project: default
@@ -76,8 +74,8 @@ spec:
               receivers:
                 - name: "telegram"
                   telegram_configs:
-                    - bot_token: "<telegram_api_token>"
-                      chat_id: "<telegram_chat_id>"
+                    - bot_token: "<path:k8s/data/argocd/grafana#telegram_api_token>"
+                      chat_id: "<path:k8s/data/argocd/grafana#telegram_chat_id>"
                       parse_mode: "HTML"
                       message: |
                         🚨 <b>{{ .CommonAnnotations.summary }}</b>
