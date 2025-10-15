@@ -17,6 +17,7 @@ spec:
 
     helm:     
       valuesObject:
+        registry: noop
         provider:
           name: pihole
           pihole:
@@ -24,9 +25,6 @@ spec:
         extraArgs:
           source: service
           source: ingress
-          registry: noop
-          policy: upsert-only
-          provider: pihole
           pihole-api-version: 6
           pihole-server: http://rpi3-ubuntu.lab.smig.tech
         
