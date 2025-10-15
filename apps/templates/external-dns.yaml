@@ -28,7 +28,6 @@ spec:
           - ingress
           pihole-api-version: 6
           pihole-server: http://rpi3-ubuntu.lab.smig.tech:8080
-          target: "k3s.lab.smig.tech"
         
   destination:
     server: https://kubernetes.default.svc
