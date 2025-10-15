@@ -21,22 +21,8 @@ spec:
           name: pihole
             # env:
             #   EXTERNAL_DNS_PIHOLE_PASSWORD: <path:k8s/data/argocd/external-dns#pihole_password>
-          extraArgs:
-            args:
-            - --source=service
-            - --source=ingress
-            # Pihole only supports A/AAAA/CNAME records so there is no mechanism to track ownership.
-            # You don't need to set this flag, but if you leave it unset, you will receive warning
-            # logs when ExternalDNS attempts to create TXT records.
-            - --registry=noop
-            # IMPORTANT: If you have records that you manage manually in Pi-hole, set
-            # the policy to upsert-only so they do not get deleted.
-            - --policy=upsert-only
-            - --provider=pihole
-            # Switch to pihole V6 API
-            - --pihole-api-version=6
-            # Change this to the actual address of your Pi-hole web server
-            - --pihole-server=http://rpi3-ubuntu.lab.smig.tech
+          pihole:
+            server: http://rpi3-ubuntu.lab.smig.tech
         
   destination:
     server: https://kubernetes.default.svc
