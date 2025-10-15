@@ -26,7 +26,7 @@ spec:
           source: service
           source: ingress
           pihole-api-version: 6
-          pihole-server: https://rpi3-ubuntu.lab.smig.tech
+          pihole-server: http://rpi3-ubuntu.lab.smig.tech:8080
         
   destination:
     server: https://kubernetes.default.svc
