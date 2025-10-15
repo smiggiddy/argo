@@ -17,7 +17,7 @@ spec:
         - name: "storageClassName"
           value: longhorn
         - name: "storageSize"
-          value: 2Gi
+          value: 3Gi
         - name: "image.tag"
           value: "1.23.16"
         - name: "tailscale.authSecretName"
