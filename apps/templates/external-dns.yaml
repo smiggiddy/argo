@@ -18,7 +18,7 @@ spec:
     helm:     
       valuesObject:
         provider:
-          name: pi-hole
+          name: pihole
           # env:
           #   EXTERNAL_DNS_PIHOLE_PASSWORD: <path:k8s/data/argocd/external-dns#pihole_password>
           args:
