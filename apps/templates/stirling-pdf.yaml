@@ -21,6 +21,7 @@ spec:
             enabled: true
             ingressClassName: traefik
             annotations:
+              external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
               cert-manager.io/cluster-issuer: cluster-ca-issuer
               traefik.ingress.kubernetes.io/router.entrypoints: websecure
             hosts:

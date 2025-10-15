@@ -128,6 +128,7 @@ spec:
               cert-manager.io/cluster-issuer: cluster-ca-issuer
               traefik.ingress.kubernetes.io/router.entrypoints: websecure
               traefik.ingress.kubernetes.io/router.middlewares: nextcloud-nextcloud-middleware@kubernetescrd,nextcloud-nextcloud-middleware-sts@kubernetescrd
+              external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
 
             enabled: true
             className: traefik

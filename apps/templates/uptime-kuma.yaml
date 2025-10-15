@@ -28,6 +28,7 @@ spec:
           className: "traefik"
           annotations: 
             cert-manager.io/cluster-issuer: cluster-ca-issuer
+            external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
           hosts:
             - host: up-k.lab.smig.tech
               paths:
