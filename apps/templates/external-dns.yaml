@@ -28,7 +28,6 @@ spec:
           - ingress
           pihole-api-version: 6
           pihole-server: http://rpi3-ubuntu.lab.smig.tech:8080
-          set-identifier: "k3s.lab.smig.tech"
           target: "k3s.lab.smig.tech"
         
   destination:
