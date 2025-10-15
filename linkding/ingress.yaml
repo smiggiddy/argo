@@ -6,19 +6,20 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: cluster-ca-issuer
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
 spec:
   tls:
-  - hosts:
-      - linkding.lab.smig.tech
-    secretName: testsecret-tls
+    - hosts:
+        - linkding.lab.smig.tech
+      secretName: testsecret-tls
   rules:
-  - host: linkding.lab.smig.tech
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: linkding-svc
-            port:
-              number: 80
+    - host: linkding.lab.smig.tech
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: linkding-svc
+                port:
+                  number: 80
