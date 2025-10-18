@@ -1,0 +1,13 @@
+resources:
+  - ../../base/
+namePrefix: authentik-
+namespace: authentik
+patches:
+  - path: ./deploy-resources.yaml
+  - path: ./pvc-name.yaml
+
+commonLabels:
+  app.kubernetes.io/name: redis
+  app.kubernetes.io/component: cache
+  app.kubernetes.io/part-of: authentik
+  app.kubernetes.io/managed-by: kustomize
