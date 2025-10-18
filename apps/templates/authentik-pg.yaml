@@ -1,7 +1,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: authentik-pg
+  name: authentik
   namespace: authentik
 spec:
   bootstrap:
@@ -21,4 +21,3 @@ spec:
       name: barman-cloud.cloudnative-pg.io
       parameters:
         barmanObjectName: authentik
-        serverName: authentik
