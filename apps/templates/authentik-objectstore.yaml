@@ -1,0 +1,18 @@
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: authentik
+  namespace: authentik
+spec:
+  configuration:
+    destinationPath: s3://backup/
+    endpointURL: https://ce0609b283aea72c73a987ffde6b7dfd.r2.cloudflarestorage.com
+    s3Credentials:
+      accessKeyId:
+        name: r2
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: r2
+        key: ACCESS_SECRET_KEY
+    wal:
+      compression: gzip

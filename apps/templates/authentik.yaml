@@ -1,0 +1,65 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: authentik
+  namespace: argocd
+  labels:
+    apps: authentik 
+spec:
+  project: default
+  source:
+    repoURL: https://charts.goauthentik.io
+    targetRevision: 2025.8.4
+    chart: authentik 
+    helm:
+      valuesObject:
+        authentik:
+          redis: 
+            host: authentik-redis
+          secret_key: <k8s/data/argocd/authentik#secret_key>
+          error_reporting:
+              enabled: false
+          postgresql:
+              host: authentik-rw
+              user: file:///postgres-creds/username
+              password: file:///postgres-creds/password
+        redis:
+          enabled: false
+
+        server:
+            volumes:
+              - name: postgres-creds
+                secret:
+                  secretName: authentik-postgres-credentials
+            volumeMounts:
+              - name: postgres-creds
+                mountPath: /postgres-creds
+                readOnly: true
+
+        worker:
+          volumes:
+            - name: postgres-creds
+              secret:
+                secretName: authentik-postgres-credentials
+          volumeMounts:
+            - name: postgres-creds
+              mountPath: /postgres-creds
+              readOnly: true
+
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: authentik
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+
+
+
+
+
+

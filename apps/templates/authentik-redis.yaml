@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis
+  namespace: argocd
+  annotations:
+   avp.kubernetes.io/ignore: "true"
+spec:
+  project: default
+  source:
+    repoURL: https://git.thecodedom.com/thecodedom/infra.git
+    targetRevision: HEAD
+    path: ./redis/overlays/authentik
+
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: authentik
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
