@@ -5,11 +5,11 @@ metadata:
   namespace: authentik
 spec:
   bootstrap:
-    initdb:
-      database: authentik
-      owner: authentik
-      secret:
-        name: authentik-postgres-credentials
+    # initdb:
+    #   database: authentik
+    #   owner: authentik
+    #   secret:
+    #     name: authentik-postgres-credentials
     recovery:
       source: source
   storage:
