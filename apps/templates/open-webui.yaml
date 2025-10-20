@@ -17,7 +17,7 @@ spec:
             enabled: true
           ollama:
             enabled: false
-          # databaseUrl: <to fill out>
+          databaseUrl: <path:k8s/data/argocd/openwebui#postgresql>
 
           ingress:
             enabled: true
