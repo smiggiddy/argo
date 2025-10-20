@@ -25,15 +25,9 @@ spec:
             annotations: 
               cert-manager.io/cluster-issuer: cluster-ca-issuer
               external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
-            hosts:
-            - host: chat.lab.smig.tech
-              paths:
-              - path: /
-                pathType: Prefix
-            tls: 
-            - secretName: open-webui-tls
-              hosts:
-              - chat.lab.smig.tech
+            host: chat.lab.smig.tech
+            tls: true
+            existingSecret: open-webui-tls
 
 
 
