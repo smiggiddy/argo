@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: open-webui
+  namespace: argocd
+  labels:
+    apps: llm
+spec:
+  project: default
+  source:
+    repoURL: https://helm.openwebui.com/
+    targetRevision: 8.12.2
+    chart: open-webui
+    helm:
+      valuesObject:
+          websocket:
+            enabled: true
+          ollama:
+            enabled: false
+          # databaseUrl: <to fill out>
+
+          ingress:
+            enabled: true
+            className: "traefik"
+            annotations: 
+              cert-manager.io/cluster-issuer: cluster-ca-issuer
+              external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+            hosts:
+            - host: chat.lab.smig.tech
+              paths:
+              - path: /
+                pathType: Prefix
+            tls: 
+            - secretName: open-webui-tls
+              hosts:
+              - chat.lab.smig.tech
+
+
+
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
