@@ -26,11 +26,11 @@ spec:
               traefik.ingress.kubernetes.io/router.entrypoints: websecure
               external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
             hosts:
-            - host: https://vault.lab.smig.tech
+            - host: vault.lab.smig.tech
             tls:
             - secretName: vault-tls 
               hosts: 
-              - https://vault.lab.smig.tech
+              - vault.lab.smig.tech
 
 
   destination:
