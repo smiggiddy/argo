@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://charts.goauthentik.io
-    targetRevision: 2025.8.4
+    targetRevision: 2025.10.0
     chart: authentik 
     helm:
       valuesObject:
