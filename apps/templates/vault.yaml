@@ -20,7 +20,7 @@ spec:
         server:
           standalone:
             config: |-
-                ui = true
+                ui = false
 
                 listener "tcp" {
                   tls_disable = 1
