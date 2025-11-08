@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: https://localstack.github.io/helm-charts
-    targetRevision: 0.6.26
+    targetRevision: 0.6.27
     chart: localstack
 
     helm:
