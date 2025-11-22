@@ -96,13 +96,16 @@ spec:
                   token: ""
                   curlOptions: "-sLf"
             dashboardProviders:
-              - name: "default"
-                orgId: 1
-                folder: "custom-dashboards"  
-                type: file
-                disableDeletion: false
-                options:
-                  path: /etc/grafana/provisioning/dashboards
+              dashboardproviders.yaml:
+                apiVersion: 1
+                providers:
+                - name: "default"
+                  orgId: 1
+                  folder: "custom-dashboards"  
+                  type: file
+                  disableDeletion: false
+                  options:
+                    path: /etc/grafana/provisioning/dashboards
             additionalDataSources:
               - name: loki
                 type: loki
