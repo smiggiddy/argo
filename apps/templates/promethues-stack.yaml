@@ -101,11 +101,12 @@ spec:
                 providers:
                 - name: "default"
                   orgId: 1
-                  folder: "custom-dashboards"  
+                  folder: ""  
                   type: file
                   disableDeletion: false
+                  editable: true
                   options:
-                    path: /etc/grafana/provisioning/dashboards
+                    path: /var/lib/grafana/dashboards/default
             additionalDataSources:
               - name: loki
                 type: loki
