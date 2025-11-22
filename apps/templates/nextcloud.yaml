@@ -12,7 +12,7 @@ spec:
   project: default
   source:
     repoURL: https://nextcloud.github.io/helm/
-    targetRevision: 8.5.7
+    targetRevision: 8.5.9
     chart: nextcloud
     
     helm:
