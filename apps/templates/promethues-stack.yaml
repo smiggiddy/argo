@@ -89,6 +89,10 @@ spec:
                       send_resolved: true
 
           grafana:
+            dashboards:
+              default:
+                argocd:
+                  url: https://raw.githubusercontent.com/argoproj/argo-cd/master/examples/dashboard.json
             additionalDataSources:
               - name: loki
                 type: loki
