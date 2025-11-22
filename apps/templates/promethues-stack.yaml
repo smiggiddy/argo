@@ -93,6 +93,8 @@ spec:
               default:
                 argocd:
                   url: https://raw.githubusercontent.com/argoproj/argo-cd/master/examples/dashboard.json
+                  token: ""
+                  curlOptions: "-sLf"
             additionalDataSources:
               - name: loki
                 type: loki
