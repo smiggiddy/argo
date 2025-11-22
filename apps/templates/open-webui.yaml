@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://helm.openwebui.com/
-    targetRevision: 8.12.2
+    targetRevision: 8.14.0
     chart: open-webui
     helm:
       valuesObject:
