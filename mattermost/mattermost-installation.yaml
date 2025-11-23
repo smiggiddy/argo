@@ -32,3 +32,9 @@ spec:
       url: minio.minio-tenant.svc.cluster.local
       bucket: mattermost
       secret: file-store-credentials
+  probe:
+    livenessProbe:
+      timeoutSeconds: 60
+      initialDelaySeconds: 120
+    readinessProbe:
+      initialDelaySeconds: 30
