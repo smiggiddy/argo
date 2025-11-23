@@ -9,9 +9,14 @@ spec:
   imagePullPolicy: IfNotPresent
   version: 11.1.1
   size: 100users
+  licenseSecret: ""
   mattermostEnv:
     - name: MM_SERVICESETTINGS_SITEURL
       value: https://mattermost.thecodedom.com
+    - name: MM_EMAILSETTINGS_SMTPSERVER
+      value: "192.168.101.49"
+    - name: MM_EMAILSETTINGS_SMTPPORT
+      value: "25"
   ingress:
     enabled: false
   database:
