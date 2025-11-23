@@ -6,7 +6,10 @@ metadata:
   labels:
     apps: homelab 
   annotations:
-     avp.kubernetes.io/path: "k8s/data/argocd/test"
+    avp.kubernetes.io/path: "k8s/data/argocd/test"
+    notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
 
 spec:
   project: default
