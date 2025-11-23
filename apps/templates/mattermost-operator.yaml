@@ -7,7 +7,6 @@ metadata:
     apps: utilities
   annotations:
     avp.kubernetes.io/ignore: "true"
-    argocd.argoproj.io/sync-wave: "1"
 spec:
   destination:
     namespace: mattermost-operator
