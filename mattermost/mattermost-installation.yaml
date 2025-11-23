@@ -22,4 +22,3 @@ spec:
       url: minio.minio-tenant.svc.cluster.local
       bucket: mattermost
       secret: file-store-credentials
-  licenseSecret: ""
