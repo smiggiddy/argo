@@ -5,16 +5,15 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "4"
 spec:
-  mattermostApp:
-    config:
-      ClusterSettings:
-        Enable: false
-        ClusterName: ""
   image: docker.io/smiggiddy/mattermost
   imagePullPolicy: IfNotPresent
   version: 11.1.1
   replicas: 1
   mattermostEnv:
+    - name: MM_CLUSTERSETTINGS_ENABLE
+      value: "false"
+    - name: MM_CLUSTERSETTINGS_CLUSTERNAME
+      value: ""
     - name: MM_SERVICESETTINGS_SITEURL
       value: https://mattermost.thecodedom.com
     - name: MM_EMAILSETTINGS_SMTPSERVER
