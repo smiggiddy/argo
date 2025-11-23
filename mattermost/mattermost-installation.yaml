@@ -20,7 +20,7 @@ spec:
       value: "false"
     - name: MM_FILESETTINGS_AMAZONS3S3SIGNATUREVERSION
       value: "s3v4"
-    - name: MM_ENABLEBOTACCOUNTCREATION
+    - name: MM_SERVICESETTINGS_ENABLEBOTACCOUNTCREATION
       value: "true"
   ingress:
     enabled: false
