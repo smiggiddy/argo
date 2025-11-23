@@ -16,6 +16,8 @@ spec:
       value: "192.168.101.49"
     - name: MM_EMAILSETTINGS_SMTPPORT
       value: "25"
+    - name: MM_FILESETTINGS_AMAZONS3SS
+      value: "false"
   ingress:
     enabled: false
   database:
