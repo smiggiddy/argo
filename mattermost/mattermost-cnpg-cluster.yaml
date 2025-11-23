@@ -1,0 +1,18 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: mattermost-db
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  instances: 3
+  bootstrap:
+    initdb:
+      database: mattermost
+      owner: mattermost
+      secret:
+        name: mm-db-cnpg
+
+  storage:
+    size: 5Gi
+    storageClass: longhorn

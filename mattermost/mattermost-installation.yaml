@@ -1,0 +1,20 @@
+apiVersion: installation.mattermost.com/v1beta1
+kind: Mattermost
+metadata:
+  name: smigtech
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  size: 100users
+  ingress:
+    enabled: false
+  database:
+    external:
+      secret: mm-db-credentials
+  fileStore:
+    external:
+      url: minio.minio.svc.cluster.local
+      bucket: mattermost
+      secret: file-store-credentials
+version: 11.1.1
+licenseSecret: ""
