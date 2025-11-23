@@ -18,6 +18,10 @@ spec:
       value: "25"
     - name: MM_FILESETTINGS_AMAZONS3SS
       value: "false"
+    - name: MM_CLUSTERSETTINGS_ENABLE
+      value: "false"
+    - name: MM_CLUSTERSETTINGS_CLUSTERNAME
+      value: ""
   ingress:
     enabled: false
   database:
