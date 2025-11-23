@@ -5,7 +5,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
-  instances: 3
+  instances: 1
   bootstrap:
     initdb:
       database: mattermost
