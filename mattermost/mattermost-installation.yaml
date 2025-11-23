@@ -11,13 +11,15 @@ spec:
   replicas: 1
   mattermostEnv:
     - name: MM_SERVICESETTINGS_SITEURL
-      value: https://mattermost.thecodedom.com
+      value: "https://mattermost.thecodedom.com"
     - name: MM_EMAILSETTINGS_SMTPSERVER
       value: "192.168.101.49"
     - name: MM_EMAILSETTINGS_SMTPPORT
       value: "25"
-    - name: MM_FILESETTINGS_AMAZONS3SS
+    - name: MM_FILESETTINGS_AMAZONS3SSL
       value: "false"
+    - name: MM_FILESETTINGS_AMAZONS3S3SIGNATUREVERSION
+      value: "s3v4"
   ingress:
     enabled: false
   database:
@@ -25,6 +27,6 @@ spec:
       secret: mm-db-credentials
   fileStore:
     external:
-      url: minio.minio-tenant.svc.cluster.local
+      url: minio.minio-tenant.svc.cluster.local:80
       bucket: mattermost
       secret: file-store-credentials
