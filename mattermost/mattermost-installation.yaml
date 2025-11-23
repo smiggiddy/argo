@@ -9,6 +9,9 @@ spec:
   imagePullPolicy: IfNotPresent
   version: 11.1.1
   size: 100users
+  mattermostEnv:
+    - name: MM_SERVICESETTINGS_SITEURL
+      value: https://mattermost.thecodedom.com
   ingress:
     enabled: false
   database:
