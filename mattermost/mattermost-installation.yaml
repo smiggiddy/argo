@@ -27,6 +27,6 @@ spec:
       secret: mm-db-credentials
   fileStore:
     external:
-      url: minio.minio-tenant.svc.cluster.local:80
+      url: http://minio.minio-tenant.svc.cluster.local:80
       bucket: mattermost
       secret: file-store-credentials
