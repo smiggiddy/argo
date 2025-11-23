@@ -6,14 +6,10 @@ metadata:
     argocd.argoproj.io/sync-wave: "4"
 spec:
   image: docker.io/smiggiddy/mattermost
-  imagePullPolicy: IfNotPresent
+  imagePullPolicy: Always
   version: 11.1.1
   replicas: 1
   mattermostEnv:
-    - name: MM_CLUSTERSETTINGS_ENABLE
-      value: "false"
-    - name: MM_CLUSTERSETTINGS_CLUSTERNAME
-      value: ""
     - name: MM_SERVICESETTINGS_SITEURL
       value: https://mattermost.thecodedom.com
     - name: MM_EMAILSETTINGS_SMTPSERVER
