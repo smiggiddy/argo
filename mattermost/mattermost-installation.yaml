@@ -18,10 +18,6 @@ spec:
       value: "25"
     - name: MM_FILESETTINGS_AMAZONS3SS
       value: "false"
-    - name: MM_CLUSTERSETTINGS_ENABLE
-      value: "false"
-    - name: MM_CLUSTERSETTINGS_CLUSTERNAME
-      value: ""
   ingress:
     enabled: false
   database:
@@ -32,9 +28,3 @@ spec:
       url: minio.minio-tenant.svc.cluster.local
       bucket: mattermost
       secret: file-store-credentials
-  probe:
-    livenessProbe:
-      timeoutSeconds: 60
-      initialDelaySeconds: 120
-    readinessProbe:
-      initialDelaySeconds: 30
