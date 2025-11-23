@@ -32,6 +32,3 @@ spec:
       url: minio.minio-tenant.svc.cluster.local
       bucket: mattermost
       secret: file-store-credentials
-      useSSL: false
-      signV2: false
-      s3ForcePathStyle: true
