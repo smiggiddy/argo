@@ -49,6 +49,9 @@ spec:
                 main:
                   image: 
                     tag: v1.143.1-armnn
+                  resources:
+                    limits:
+                      squat.ai/mali: 1
           persistence:
             cache:
               type: persistentVolumeClaim
@@ -66,9 +69,6 @@ spec:
               hostPathType: File
               readOnly: true
                   
-          resources:
-            limits:
-              squat.ai/mali: 1
         server:
           controllers:
             main:
@@ -79,6 +79,14 @@ spec:
                     DB_USERNAME: immich
                     DB_DATABASE_NAME: immich
                     DB_PASSWORD: <path:k8s/data/argocd/immich#password>
+                  resources:
+                    limits:
+                      squat.ai/video: 1
+                      cpu: "4"
+                      memory: "7Gi"
+                    requests:
+                      cpu: "2"
+                      memory: "4Gi"
           ingress:
             main:
               enabled: true
@@ -94,14 +102,6 @@ spec:
                - secretName: immich-tls
                  hosts:
                  - immich.lab.smig.tech
-          resources:
-            limits:
-              squat.ai/video: 1
-              cpu: "4"
-              memory: "7Gi"
-            requests:
-              cpu: "2"
-              memory: "4Gi"
             
           persistence:
             driver:
