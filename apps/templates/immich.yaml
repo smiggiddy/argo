@@ -7,8 +7,6 @@ metadata:
     notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
     notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
     notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
-    
-
 spec:
   destination: 
     server: https://kubernetes.default.svc
@@ -58,8 +56,9 @@ spec:
           controllers:
             main:
               containers:
-                image: 
-                  tag: v1.143.1-armnn
+                main:
+                  image: 
+                    tag: v1.143.1-armnn
           persistence:
             cache:
               type: pvc
