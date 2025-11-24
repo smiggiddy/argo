@@ -22,11 +22,11 @@ spec:
     helm:     
       valueFiles:
       - $values/argocd/values.yaml
-      # valuesObject:
-    # notifications:
-    #   secret:
-    #     items:
-    #       mattermost-token: <path:k8s/data/argocd/argo-notifications#mattermost-token>
+      valuesObject:
+        notifications:
+          secret:
+            items:
+              mattermost-token: <path:k8s/data/argocd/argo-notifications#mattermost-token>
 
   - repoURL: 'https://gitea.smigz.com/smiggiddy/argocd-values.git'
     targetRevision: HEAD
