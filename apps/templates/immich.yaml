@@ -43,14 +43,6 @@ spec:
           persistence:
             library:
               existingClaim: immich
-        redis:
-          enabled: false
-        postgresql:
-          enabled: false
-          global:
-            postgresql:
-              auth:
-                password: <path:k8s/data/argocd/immich#password>
 
         machine-learning:
           controllers:
