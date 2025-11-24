@@ -61,7 +61,7 @@ spec:
                     tag: v1.143.1-armnn
           persistence:
             cache:
-              type: pvc
+              type: persistentVolumeClaim
               storageClass: longhorn
             fw:
               enabled: true
