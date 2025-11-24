@@ -47,6 +47,8 @@ spec:
             main:
               containers:
                 main:
+                  env:
+                    MACHINE_LEARNING_MODEL_ARENA: 2
                   image: 
                     tag: v2.3.1-armnn
                   resources:
