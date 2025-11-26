@@ -7,3 +7,10 @@ spec:
   instances: 2
   storage:
     size: 2Gi
+  resources:
+    requests:
+      memory: "384Mi"
+      cpu: "250m"
+    limits:
+      memory: "384Mi"
+      cpu: "250m"
