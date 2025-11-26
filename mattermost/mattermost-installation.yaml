@@ -22,6 +22,10 @@ spec:
       value: "s3v4"
     - name: MM_SERVICESETTINGS_ENABLEBOTACCOUNTCREATION
       value: "true"
+    - name: MM_SERVICESETTINGS_ENABLEPOSTUSERNAMEOVERRIDE
+      value: "true"
+    - name: MM_SERVICESETTINGS_ENABLEPOSTICONOVERRIDE
+      value: "true"
   ingress:
     enabled: false
   database:
