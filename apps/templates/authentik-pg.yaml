@@ -4,9 +4,6 @@ metadata:
   name: authentik
   namespace: authentik
 spec:
-  serviceAccountTemplate:
-    metadata:
-      name: authentik-cnpg
   storage:
     size: 2Gi
     storageClass: longhorn

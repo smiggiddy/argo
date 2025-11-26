@@ -1,0 +1,29 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik-pg
+  namespace: authentik
+spec:
+  instances: 2
+
+  bootstrap:
+    initdb:
+      import:
+        type: microservice
+        databases:
+          - authentik
+        source:
+          externalCluster: cluster-pg96
+  
+  externalClusters:
+    - name: cluster-pg96
+      connectionParameters:
+        host: authentik-rw
+        user: authentik
+        dbname: authentik
+      password:
+        name: authentik-postgres-credentials
+        key: password
+
+  storage:
+    size: 2Gi
