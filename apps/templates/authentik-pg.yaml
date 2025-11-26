@@ -4,16 +4,9 @@ metadata:
   name: authentik
   namespace: authentik
 spec:
-  bootstrap:
-    recovery:
-      source: source
+  serviceAccountTemplate:
+    metadata:
+      name: authentik-cnpg
   storage:
     size: 2Gi
     storageClass: longhorn
-  externalClusters:
-  - name: source
-    plugin:
-      name: barman-cloud.cloudnative-pg.io
-      parameters:
-        barmanObjectName: authentik
-        serverName: authentik
