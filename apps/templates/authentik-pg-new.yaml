@@ -9,8 +9,10 @@ spec:
   bootstrap:
     initdb:
       import:
-        type: microservice
+        type: monolith
         databases:
+          - authentik
+        roles:
           - authentik
         source:
           externalCluster: cluster-pg96
