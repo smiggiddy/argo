@@ -13,12 +13,12 @@ spec:
     path: ./kustomizations/rabbitmq-operator
     kustomize:
       patches:
-        - target:
+        - patch: |-
+            $patch: delete
+            apiVersion: v1
             kind: Namespace
-            name: rabbitmq-system
-          patch: |
-            - op: remove
-              path: /
+            metadata:
+              name: rabbitmq-system
 
 
   destination:
