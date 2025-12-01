@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rabbitmq-operator
+  namespace: argocd
+  annotations:
+   avp.kubernetes.io/ignore: "true"
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/smiggiddy/argo'
+    targetRevision: HEAD
+    path: ./kustomizations/rabbitmq-operator
+
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: rabbitmq-system
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
