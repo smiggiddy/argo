@@ -11,6 +11,14 @@ spec:
     repoURL: 'https://github.com/smiggiddy/argo'
     targetRevision: HEAD
     path: ./kustomizations/rabbitmq-operator
+    kustomize:
+      patches:
+        - target:
+            kind: Namespace
+            name: rabbitmq-system
+          patch: |
+            - op: remove
+              path: /
 
 
   destination:
