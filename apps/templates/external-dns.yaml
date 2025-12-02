@@ -31,6 +31,10 @@ spec:
           source: 
           - service
           - ingress
+          - gateway-httproute
+          - gateway-tlsroute
+          - gateway-tcproute
+          - gateway-udproute
           pihole-api-version: 6
           pihole-server: http://rpi3-ubuntu.lab.smig.tech:8080
         
