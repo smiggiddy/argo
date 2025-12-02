@@ -1,0 +1,17 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: httproute-rabbitmq
+spec:
+  parentRefs:
+    - name: traefik-gateway
+  hostnames:
+    - rabbitmq-bootdev.lab.smig.tech
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: bootdev
+          port: 5672
