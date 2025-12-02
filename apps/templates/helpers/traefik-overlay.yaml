@@ -5,6 +5,9 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
+    providers:
+      kubernetesGateway:
+        enabled: true
     experimental:
       kubernetesGateway:
         enabled: true
