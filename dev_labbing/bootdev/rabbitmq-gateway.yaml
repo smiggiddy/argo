@@ -5,7 +5,7 @@ metadata:
 spec:
   gatewayClassName: traefik
   listeners:
-    - protocol: HTTP
+    - protocol: TCP
       port: 5672
       name: rabbitmq
       allowedRoutes:
