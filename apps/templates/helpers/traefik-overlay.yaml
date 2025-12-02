@@ -23,8 +23,6 @@ spec:
         expose:
           default: true
 
-    additionalArguments:
-      - "--entryPoints.cloudflare.address=:5672"
 
 
 
