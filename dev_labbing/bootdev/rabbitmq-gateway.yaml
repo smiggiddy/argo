@@ -1,0 +1,13 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: bootdev
+spec:
+  gatewayClassName: traefik
+  listeners:
+    - protocol: HTTP
+      port: 8000
+      name: web
+      allowedRoutes:
+        namespaces:
+          from: Same
