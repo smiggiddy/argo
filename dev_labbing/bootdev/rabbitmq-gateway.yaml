@@ -6,8 +6,8 @@ spec:
   gatewayClassName: traefik
   listeners:
     - protocol: HTTP
-      port: 8000
-      name: web
+      port: 5672
+      name: rabbitmq
       allowedRoutes:
         namespaces:
           from: Same
