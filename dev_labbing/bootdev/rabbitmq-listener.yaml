@@ -6,7 +6,7 @@ metadata:
     external-dns.alpha.kubernetes.io/target: k3s.lab.smig.tech.
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: bootdev
   hostnames:
     - rabbitmq-bootdev.lab.smig.tech
   rules:
