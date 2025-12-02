@@ -1,2 +1,3 @@
 resources:
   - ./rabbitmq-cluster.yaml
+  - ./rabbitmq-listener.yaml
