@@ -1,5 +1,5 @@
 apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
+kind: TCPRoute
 metadata:
   name: httproute-rabbitmq
   annotations:
@@ -10,10 +10,6 @@ spec:
   hostnames:
     - rabbitmq-bootdev.lab.smig.tech
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
-      backendRefs:
+    - backendRefs:
         - name: bootdev
           port: 5672
