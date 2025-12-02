@@ -37,6 +37,11 @@ spec:
           - gateway-udproute
           pihole-api-version: 6
           pihole-server: http://rpi3-ubuntu.lab.smig.tech:8080
+        rbac:  
+        additionalPermissions: 
+        - apiGroups: ["gateway.networking.k8s.io"]
+          resources: ["gateways","httproutes","tlsroutes","tcproutes","udproutes"] 
+          verbs: ["get","watch","list"]
         
   destination:
     server: https://kubernetes.default.svc
