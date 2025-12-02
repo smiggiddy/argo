@@ -7,8 +7,6 @@ metadata:
 spec:
   parentRefs:
     - name: bootdev
-  hostnames:
-    - rabbitmq-bootdev.lab.smig.tech
   rules:
     - backendRefs:
         - name: bootdev
