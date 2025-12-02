@@ -1,7 +1,7 @@
-apiVersion: gateway.networking.k8s.io/v1
+apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: TCPRoute
 metadata:
-  name: httproute-rabbitmq
+  name: tcproute-rabbitmq
   annotations:
     external-dns.alpha.kubernetes.io/target: k3s.lab.smig.tech.
 spec:
