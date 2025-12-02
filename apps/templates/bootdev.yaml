@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/smiggiddy/argo'
     targetRevision: HEAD
-    path: ./dev_labbing/bootdev
+    path: dev_labbing/bootdev
 
 
   destination:
