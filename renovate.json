@@ -6,7 +6,7 @@
   ],
   "argocd": {
     "managerFilePatterns": [
-      "/apps/.+\\.yaml$/",
+      "/apps/.+\\.ya?ml$/",
       "/awx/.+\\.yaml$/"
     ]
   },
@@ -33,7 +33,18 @@
       "depNameTemplate": "k3s",
       "versioningTemplate": "semver-coerced",
       "datasourceTemplate": "custom.k3s"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["kustomization\\.ya?ml$"],
+      "matchStrings": [
+        "cluster-operator/releases/download/v(?<currentValue>\\S+)/cluster-operator.yml"
+      ],
+      "depNameTemplate": "rabbitmq-cluster-operator",
+      "datasourceTemplate": "github-releases",
+      "lookupNameTemplate": "rabbitmq/cluster-operator"
     }
+
   ],
   "customDatasources": {
     "k3s": {
