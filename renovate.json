@@ -1,11 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":dependencyDashboard"],
+  "extends": ["config:best-practices", ":dependencyDashboard"],
   "argocd": {
     "managerFilePatterns": ["/apps/.+\\.yaml$/", "/awx/.+\\.yaml$/"]
   },
   "helm-values": {
     "managerFilePatterns": ["/apps/.+\\.yaml$/"]
+  },
+  "kustomize": {
+    "managerFilePatterns": ["/(^|/)kustomization\\.ya?ml$/"],
+    "pinDigests": false
   },
   "regexManagers": [
     {
