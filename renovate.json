@@ -1,29 +1,35 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:best-practices", ":dependencyDashboard"],
+  "extends": [
+    "config:best-practices",
+    ":dependencyDashboard"
+  ],
   "argocd": {
-    "managerFilePatterns": ["/apps/.+\\.yaml$/", "/awx/.+\\.yaml$/"]
+    "managerFilePatterns": [
+      "/apps/.+\\.yaml$/",
+      "/awx/.+\\.yaml$/"
+    ]
   },
   "helm-values": {
-    "managerFilePatterns": ["/apps/.+\\.yaml$/"]
+    "managerFilePatterns": [
+      "/apps/.+\\.yaml$/"
+    ]
   },
   "kustomize": {
-    "managerFilePatterns": ["/(^|/)kustomization\\.ya?ml$/"],
+    "managerFilePatterns": [
+      "/(^|/)kustomization\\.ya?ml$/"
+    ],
     "pinDigests": false
   },
-  "regexManagers": [
-    {
-      "description": "Update docker image references",
-      "managerFilePatterns": ["/apps/.+\\.yaml$/"],
-      "matchStrings": ["image: (?<depName>.*?):(?<currentValue>.*?)\\s+"],
-      "datasourceTemplate": "docker"
-    }
-  ],
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["/auto_upgrades/.+\\.yaml$/"],
-      "matchStrings": ["version: (?<currentValue>\\S+)"],
+      "managerFilePatterns": [
+        "/auto_upgrades/.+\\.yaml$/"
+      ],
+      "matchStrings": [
+        "version: (?<currentValue>\\S+)"
+      ],
       "depNameTemplate": "k3s",
       "versioningTemplate": "semver-coerced",
       "datasourceTemplate": "custom.k3s"
