@@ -12,7 +12,7 @@
   },
   "helm-values": {
     "managerFilePatterns": [
-      "/apps/.+\\.yaml$/"
+      "/apps/.+\\.ya?ml$/"
     ]
   },
   "kustomize": {
