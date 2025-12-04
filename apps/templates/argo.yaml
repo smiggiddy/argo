@@ -11,6 +11,11 @@ metadata:
     notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
     notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
 spec:
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+
   destination:
     namespace: argocd
     server: https://kubernetes.default.svc 
