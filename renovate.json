@@ -36,15 +36,16 @@
     },
     {
       "customType": "regex",
-      "fileMatch": ["kustomization\\.ya?ml$"],
+      "managerFilePatterns": [
+        "/kustomization\\.ya?ml$/"
+      ],
       "matchStrings": [
         "cluster-operator/releases/download/v(?<currentValue>\\S+)/cluster-operator.yml"
       ],
       "depNameTemplate": "rabbitmq-cluster-operator",
       "datasourceTemplate": "github-releases",
-      "lookupNameTemplate": "rabbitmq/cluster-operator"
+      "packageNameTemplate": "rabbitmq/cluster-operator"
     }
-
   ],
   "customDatasources": {
     "k3s": {
