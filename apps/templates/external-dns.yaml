@@ -42,6 +42,10 @@ spec:
           - apiGroups: ["gateway.networking.k8s.io"]
             resources: ["gateways","httproutes","tlsroutes","tcproutes","udproutes"] 
             verbs: ["get","watch","list"]
+          - apiGroups: [""]
+            resources: ["namespaces"] 
+            verbs: ["get","watch","list"]
+
         
   destination:
     server: https://kubernetes.default.svc
