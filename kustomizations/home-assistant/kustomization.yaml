@@ -4,7 +4,6 @@ resources:
   - service-homekit.yaml
   - ingress.yaml
   - ingressroute-tcp.yaml
-  - configmap.yaml
 
 images:
   - name: ghcr.io/home-assistant/home-assistant
