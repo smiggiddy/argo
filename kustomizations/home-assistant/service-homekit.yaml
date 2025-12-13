@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: home-assistant-homekit
+  labels:
+    app.kubernetes.io/component: homekit-bridge
+spec:
+  type: ClusterIP
+  ports:
+    - port: 51827
+      targetPort: homekit
+      protocol: TCP
+      name: homekit
+  selector:
+    app.kubernetes.io/name: home-assistant

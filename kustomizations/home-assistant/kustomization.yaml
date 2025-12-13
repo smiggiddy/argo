@@ -1,0 +1,24 @@
+resources:
+  - deployment.yaml
+  - service.yaml
+  - service-homekit.yaml
+  - ingress.yaml
+  - ingressroute-tcp.yaml
+  - configmap.yaml
+
+images:
+  - name: ghcr.io/home-assistant/home-assistant
+    newTag: stable
+
+configMapGenerator:
+  - name: home-assistant-config
+    behavior: create
+    envs:
+      - config.env
+
+generatorOptions:
+  disableNameSuffixHash: false
+
+commonLabels:
+  app.kubernetes.io/name: home-assistant
+  app.kubernetes.io/part-of: home-automation

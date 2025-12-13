@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: home-assistant
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-ca-issuer
+    external-dns.alpha.kubernetes.io/target: k3s.lab.smig.tech.
+  labels:
+    app.kubernetes.io/component: application
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - home-assistant.lab.smig.tech
+      secretName: home-assistant-tls
+  rules:
+    - host: home-assistant.lab.smig.tech
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: home-assistant
+                port:
+                  name: http
