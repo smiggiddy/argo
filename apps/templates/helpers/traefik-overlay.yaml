@@ -24,8 +24,8 @@ spec:
           default: true
       # HomeKit Bridge entrypoint
       homekit:              
-        port: 51827
-        exposedPort: 51827
+        port: 21063
+        exposedPort: 21063
         protocol: TCP
         expose:
           default: true
