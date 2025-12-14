@@ -11,4 +11,4 @@ spec:
     - match: HostSNI(`*`)
       services:
         - name: home-assistant-homekit
-          port: 21063
+          port: 21064

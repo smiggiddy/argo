@@ -7,7 +7,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: 21063
+    - port: 21064
       targetPort: homekit
       protocol: TCP
       name: homekit

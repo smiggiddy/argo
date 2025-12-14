@@ -27,7 +27,7 @@ spec:
               containerPort: 8123
               protocol: TCP
             - name: homekit
-              containerPort: 21063
+              containerPort: 21064
               protocol: TCP
           envFrom:
             - configMapRef:
