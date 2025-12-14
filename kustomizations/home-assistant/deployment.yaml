@@ -23,6 +23,9 @@ spec:
         - name: home-assistant
           image: ghcr.io/home-assistant/home-assistant:stable
           ports:
+            - name: mdns
+              containerPort: 5353
+              protocol: UDP
             - name: http
               containerPort: 8123
               protocol: TCP
