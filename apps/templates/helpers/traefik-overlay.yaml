@@ -5,6 +5,18 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
+    gateway:
+      listeners:
+         homekit:
+           port: 21064
+           protocol: TCP
+           namespacePolicy:
+             from: All
+         mdns:
+           port: 5353
+           protocol: UDP
+           namespacePolicy:
+             from: All 
     providers:
       kubernetesGateway:
         enabled: true
@@ -27,6 +39,12 @@ spec:
         port: 21064
         exposedPort: 21064
         protocol: TCP
+        expose:
+          default: true
+      mdns:              
+        port: 5353
+        exposedPort: 5353
+        protocol: UDP
         expose:
           default: true
 
