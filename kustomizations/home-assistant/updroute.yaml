@@ -1,0 +1,13 @@
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: UDPRoute
+metadata:
+  name: home-assistant-mdns
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: kube-system
+      sectionName: mdns
+  rules:
+    - backendRefs:
+        - name: home-assistant-mdns
+          port: 5353
