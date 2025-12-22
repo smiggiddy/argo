@@ -20,7 +20,7 @@ spec:
     helm:
       valuesObject: 
         certsSecretName: certs
-        gitlabUrl: https://gitlab.lab.smig.tech:8929
+        gitlabUrl: https://gitlab.lab.smig.tech
         secrets:
           - name: smigtech-cert
         rbac:
