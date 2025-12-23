@@ -24,7 +24,7 @@ metadata:
   name: authentik-pg
   namespace: authentik
 spec:
-  schedule: "0 0 7 * * 5"
+  schedule: "0 0 * * *"
   backupOwnerReference: self
   cluster:
     name: authentik-pg
