@@ -52,8 +52,20 @@ spec:
         runners:
           secret: gitlab-runner
           name: k8s-runner
+          cache:
+            secretName: gitlab-runner
           config: |
                 [[runners]]
+                  [runners.cache]
+                    Type = "s3"
+                    Path = "gl-runners"
+                    Shared = false
+                    [runners.cache.s3]
+                      ServerAddress = "smig-zima.lab.smig.tech:9000"
+                      BucketName = "gitlab-cache"
+                      BucketLocation = "us-east-1"
+                      Insecure = true
+                      AuthenticationType = "access-key"
                   [runners.kubernetes]
                       namespace = "{{.Release.Namespace}}"
                       image = "arm64v8/alpine"
