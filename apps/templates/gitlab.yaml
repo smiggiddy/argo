@@ -19,6 +19,9 @@ spec:
 
     helm:
       valuesObject: 
+        envVars:
+        - name: FF_USE_ADAPTIVE_REQUEST_CONCURRENCY
+          value: "true"
         certsSecretName: certs
         gitlabUrl: https://gitlab.lab.smig.tech
         secrets:
@@ -94,3 +97,6 @@ spec:
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
