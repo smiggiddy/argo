@@ -59,6 +59,7 @@ spec:
             secretName: gitlab-runner
           config: |
                 [[runners]]
+                  request_concurrency = 10
                   [runners.cache]
                     Type = "s3"
                     Path = "gl-runners"
