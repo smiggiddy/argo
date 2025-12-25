@@ -19,6 +19,8 @@ spec:
 
     helm:
       valuesObject: 
+        image:
+          tag: alpine-v18.7.1
         certsSecretName: certs
         gitlabUrl: https://gitlab.lab.smig.tech
         secrets:
