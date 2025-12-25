@@ -19,9 +19,6 @@ spec:
 
     helm:
       valuesObject: 
-        envVars:
-        - name: FF_USE_ADAPTIVE_REQUEST_CONCURRENCY
-          value: "true"
         certsSecretName: certs
         gitlabUrl: https://gitlab.lab.smig.tech
         secrets:
@@ -46,12 +43,6 @@ spec:
               - resources: ["services"]
                 verbs: ["create","get"]
 
-            # - resources: ["configmaps", "pods", "pods/attach", "secrets", "services", "events"]
-            #   verbs: ["get", "list", "watch", "create", "patch", "update", "delete"]
-            # - apiGroups: [""]
-            #   resources: ["pods/exec"]
-            #   verbs: ["create", "patch", "delete"]
-
         runners:
           secret: gitlab-runner
           name: k8s-runner
@@ -59,7 +50,6 @@ spec:
             secretName: gitlab-runner
           config: |
                 [[runners]]
-                  request_concurrency = 10
                   [runners.cache]
                     Type = "s3"
                     Path = "gl-runners"
@@ -75,7 +65,6 @@ spec:
                       image = "arm64v8/alpine"
                       privileged = true
                       pull_policy = "if-not-present"
-                      # helper_image = "gitlab/gitlab-runner-helper:arm64-21da6177"
                       helper_image = "registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:ubuntu-arm64-bleeding"
                   [runners.kubernetes.pod_resources]
                       cpu_limit = "4"
