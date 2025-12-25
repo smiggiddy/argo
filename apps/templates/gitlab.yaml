@@ -29,7 +29,7 @@ spec:
               - resources: ["events"]
                 verbs: ["list", "watch"]
               - resources: ["pods"]
-                verbs: ["create","delete","get"]
+                verbs: ["create","delete","get", "list", "watch"]
               - apiGroups: [""]
                 resources: ["pods/attach","pods/exec"]
                 verbs: ["get","create","patch","delete"]
