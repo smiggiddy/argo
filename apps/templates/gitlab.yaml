@@ -50,6 +50,8 @@ spec:
             secretName: gitlab-runner
           config: |
                 [[runners]]
+                  executor = "kubernetes"
+                  request_concurrency = 10
                   [runners.cache]
                     Type = "s3"
                     Path = "gl-runners"
