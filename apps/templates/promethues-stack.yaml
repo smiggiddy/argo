@@ -157,15 +157,15 @@ spec:
               server:
                 root_url: "https://grafana-k3s.lab.smig.tech"
           prometheus:
-            storageSpec: 
-              volumeClaimTemplate:
-                spec:
-                  storageClassName: nfs-client
-                  accessModes: ["ReadWriteOnce"]
-                  resources:
-                    requests:
-                      storage: 50Gi
             prometheusSpec:
+              storageSpec: 
+                volumeClaimTemplate:
+                  spec:
+                    storageClassName: nfs-client
+                    accessModes: ["ReadWriteOnce"]
+                    resources:
+                      requests:
+                        storage: 50Gi
               podMonitorSelectorNilUsesHelmValues: false
               serviceMonitorSelectorNilUsesHelmValues: false
               tolerations:
