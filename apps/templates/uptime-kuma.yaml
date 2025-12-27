@@ -18,16 +18,13 @@ spec:
     targetRevision: 0.0.20
     chart: uptime-kuma
     helm:
-      parameters: 
-        - name: "storageClassName"
-          value: longhorn
-        - name: "storageSize"
-          value: 3Gi
-        - name: "image.tag"
-          value: "1.23.16"
-        - name: "tailscale.authSecretName"
-          value: "tailscale-auth"
       valuesObject:
+        image:
+          tag: 1.23.16
+        storageSize: "5Gi"
+        storageClassName: "longhorn"
+        tailscale:
+          authSecretName: "tailscale-auth"
         ingress:
           enabled: true
           className: "traefik"
@@ -35,14 +32,14 @@ spec:
             cert-manager.io/cluster-issuer: cluster-ca-issuer
             external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
           hosts:
-            - host: up-k.lab.smig.tech
+            - host: uptimekuma.lab.smig.tech
               paths:
                 - path: /
                   pathType: Prefix
           tls:
             - secretName: uptime-kuma-tls
               hosts:
-                - up-k.lab.smig.tech
+                - uptimekuma.lab.smig.tech
 
 
   destination:
