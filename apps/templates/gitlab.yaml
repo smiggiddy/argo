@@ -64,7 +64,7 @@ spec:
                       AuthenticationType = "access-key"
                   [runners.kubernetes]
                       namespace = "{{.Release.Namespace}}"
-                      image = "arm64v8/alpine"
+                      image = "registry.lab.smig.tech/smig/ci-templates/alpine:latest"
                       privileged = true
                       pull_policy = "if-not-present"
                       helper_image = "registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:ubuntu-arm64-bleeding"
