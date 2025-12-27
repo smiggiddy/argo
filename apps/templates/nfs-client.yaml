@@ -27,7 +27,8 @@ spec:
       values: |
             nfs:
               mountOptions:
-                - fsc
+                - vers=4.1
+                - proto=tcp
                 - rsize=1048576
                 - wsize=1048576
                 - timeo=600
