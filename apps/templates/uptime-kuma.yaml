@@ -20,7 +20,7 @@ spec:
     helm:
       valuesObject:
         image:
-          tag: 1.23.16
+          tag: 2.0.2
         storageSize: "5Gi"
         storageClassName: "longhorn"
         tailscale:
