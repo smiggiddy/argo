@@ -4,6 +4,13 @@
     "config:best-practices",
     ":dependencyDashboard"
   ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
+    }
+  ],
   "argocd": {
     "managerFilePatterns": [
       "/apps/.+\\.ya?ml$/",
