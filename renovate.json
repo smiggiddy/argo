@@ -12,6 +12,10 @@
       "groupSlug": "all-digest",
       "matchPackageNames": ["*"],
       "matchUpdateTypes": ["digest"]
+    },
+    {
+      "matchPackageNames": ["/argo/"],
+      "groupName": "argocd"
     }
   ],
   "argocd": {
