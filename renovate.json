@@ -1,51 +1,41 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:best-practices",
-    ":dependencyDashboard"
-  ],
+  "extends": ["config:best-practices", ":dependencyDashboard"],
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
+    },
+    {
+      "groupName": "all digest updates",
+      "groupSlug": "all-digest",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["digest"]
     }
   ],
   "argocd": {
-    "managerFilePatterns": [
-      "/apps/.+\\.ya?ml$/",
-      "/awx/.+\\.yaml$/"
-    ]
+    "managerFilePatterns": ["/apps/.+\\.ya?ml$/", "/awx/.+\\.yaml$/"]
   },
   "helm-values": {
-    "managerFilePatterns": [
-      "/apps/.+\\.ya?ml$/"
-    ]
+    "managerFilePatterns": ["/apps/.+\\.ya?ml$/"]
   },
   "kustomize": {
-    "managerFilePatterns": [
-      "/(^|/)kustomization\\.ya?ml$/"
-    ],
+    "managerFilePatterns": ["/(^|/)kustomization\\.ya?ml$/"],
     "pinDigests": false
   },
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": [
-        "/auto_upgrades/.+\\.yaml$/"
-      ],
-      "matchStrings": [
-        "version: (?<currentValue>\\S+)"
-      ],
+      "managerFilePatterns": ["/auto_upgrades/.+\\.yaml$/"],
+      "matchStrings": ["version: (?<currentValue>\\S+)"],
       "depNameTemplate": "k3s",
       "versioningTemplate": "semver-coerced",
       "datasourceTemplate": "custom.k3s"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": [
-        "/kustomization\\.ya?ml$/"
-      ],
+      "managerFilePatterns": ["/kustomization\\.ya?ml$/"],
       "matchStrings": [
         "cluster-operator/releases/download/v(?<currentValue>\\S+)/cluster-operator.yml"
       ],
