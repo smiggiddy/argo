@@ -1,4 +1,2 @@
 resources:
   - https://github.com/shipwright-io/build/releases/latest/download/release.yaml
-
-namespace: shipwright-build
