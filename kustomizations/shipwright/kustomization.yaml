@@ -1,2 +1,3 @@
 resources:
   - https://github.com/shipwright-io/build/releases/latest/download/release.yaml
+  - https://github.com/shipwright-io/build/releases/latest/download/sample-strategies.yaml
