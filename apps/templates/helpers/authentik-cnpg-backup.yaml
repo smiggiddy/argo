@@ -16,7 +16,7 @@ spec:
         key: ACCESS_SECRET_KEY
     wal:
       compression: gzip
-  retentionPolicy: "30d"
+  retentionPolicy: "7d"
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
@@ -24,7 +24,7 @@ metadata:
   name: authentik-pg
   namespace: authentik
 spec:
-  schedule: "0 0 * * *"
+  schedule: "0 0 * * 5"
   backupOwnerReference: self
   cluster:
     name: authentik-pg
