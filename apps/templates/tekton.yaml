@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nextcloud-redis
+  name: tekton
   namespace: argocd
   annotations:
     notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
@@ -11,15 +11,23 @@ metadata:
 spec:
   project: default
   source:
-    path: './redis/overlays/nextcloud'
+    path: './kustomizations/tekton'
     repoURL: 'https://github.com/smiggiddy/argo'
     targetRevision: HEAD
   destination:
-    namespace: nextcloud
+    namespace: 
     server: 'https://kubernetes.default.svc'
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
+    - ServerSideApply=true
+    - RespectIgnoreDifferences=true
     automated:
       selfHeal: true
       prune: true
+  ignoreDifferences:
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    jsonPointers:
+    - /spec/preserveUnknownFields
+

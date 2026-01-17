@@ -1,0 +1,2 @@
+resources:
+  - https://infra.tekton.dev/tekton-releases/pipeline/previous/v1.7.0/release.yaml

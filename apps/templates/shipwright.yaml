@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nextcloud-redis
+  name: shipwright
   namespace: argocd
   annotations:
     notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
@@ -11,15 +11,13 @@ metadata:
 spec:
   project: default
   source:
-    path: './redis/overlays/nextcloud'
+    path: './kustomizations/shipwright'
     repoURL: 'https://github.com/smiggiddy/argo'
     targetRevision: HEAD
   destination:
-    namespace: nextcloud
+    namespace: shipwright-build
     server: 'https://kubernetes.default.svc'
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
-    automated:
-      selfHeal: true
-      prune: true
+    - ServerSideApply=true
