@@ -4,7 +4,7 @@ metadata:
   name: authentik-pg
   namespace: authentik
 spec:
-  instances: 2
+  instances: 3
   storage:
     size: 2Gi
   resources:
