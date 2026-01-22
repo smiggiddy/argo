@@ -10,10 +10,10 @@ spec:
   resources:
     requests:
       memory: "384Mi"
-      cpu: "250m"
+      cpu: "500m"
     limits:
       memory: "384Mi"
-      cpu: "250m"
+      cpu: "500m"
 
   plugins:
   - name: barman-cloud.cloudnative-pg.io
