@@ -26,7 +26,10 @@ spec:
               mountPath: /var/cache/searxng
             - name: config
               mountPath: /etc/searxng
-
+            - name: searxng-limiter
+              mountPath: /etc/searxng/limiter.toml
+              subPath: limiter.toml
+              readOnly: true
           resources: {}
           securityContext:
             allowPrivilegeEscalation: false
@@ -41,4 +44,7 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: searxng-config
+        - name: searxng-limiter
+          configMap:
+            name: searxng-limiter
 status: {}

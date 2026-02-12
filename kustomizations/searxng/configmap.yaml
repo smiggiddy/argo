@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: searxng-limiter
+data:
+  limiter.toml: |
+    [real_ip]
+    trusted_proxies = ["10.42.0.0/16"]
+
+    [botdetection.ip_limit]
+    link_token = true
+
+    [botdetection.ip_limit.api]
+    enabled = true
+    burst = 5
+    rate = 1
+
+    [botdetection.ip_limit.html]
+    enabled = true
+    burst = 20
+    rate = 2
