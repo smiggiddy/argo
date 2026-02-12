@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bentopdf
+  namespace: argocd
+  labels:
+    apps: utilities 
+  annotations:
+    notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/smiggiddy/argo'
+    targetRevision: HEAD
+    path: ./kustomizations/bentopdf
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    - ApplyOutOfSyncOnly=true
+    automated:
+      selfHeal: true
+      prune: true

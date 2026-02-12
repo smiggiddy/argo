@@ -12,8 +12,6 @@ spec:
       labels:
         app: perplexica
     spec:
-      securityContext:
-        runAsUser: 1000
       containers:
         - name: perplexica
           image: itzcrazykns1337/perplexica:slim-latest

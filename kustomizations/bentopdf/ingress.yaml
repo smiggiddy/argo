@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-ca-issuer
+    external-dns.alpha.kubernetes.io/target: k3s.lab.smig.tech.
+  name: bentopdf
+spec:
+  rules:
+    - host: bentopdf.lab.smig.tech
+      http:
+        paths:
+          - backend:
+              service:
+                name: bentopdf
+                port:
+                  number: 8080
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - bentopdf.lab.smig.tech
+      secretName: bentopdf-tls
+status:
+  loadBalancer: {}
