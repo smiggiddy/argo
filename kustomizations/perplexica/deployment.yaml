@@ -12,6 +12,8 @@ spec:
       labels:
         app: perplexica
     spec:
+      securityContext:
+        runAsUser: 1000
       containers:
         - name: perplexica
           image: itzcrazykns1337/perplexica:slim-latest
@@ -25,6 +27,8 @@ spec:
           volumeMounts:
             - name: perplexica-data
               mountPath: /home/perplexica/data
+          securityContext:
+            allowPrivilegeEscalation: false
       volumes:
         - name: perplexica-data
           persistentVolumeClaim:
