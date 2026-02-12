@@ -28,6 +28,12 @@ spec:
               mountPath: /etc/searxng
 
           resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+      securityContext:
+        runAsUser: 977
+        runAsGroup: 977
+
       volumes:
         - name: data
           persistentVolumeClaim:
