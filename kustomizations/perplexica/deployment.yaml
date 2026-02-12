@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: perplexica
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: perplexica
+  template:
+    metadata:
+      labels:
+        app: perplexica
+    spec:
+      containers:
+        - name: perplexica
+          image: itzcrazykns1337/perplexica:slim-latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: SEARXNG_API_URL
+              value: "http://searng.ai.svc.cluster.local:8080"
+          volumeMounts:
+            - name: perplexica-data
+              mountPath: /home/perplexica/data
+      volumes:
+        - name: perplexica-data
+          persistentVolumeClaim:
+            claimName: perplexica-data
