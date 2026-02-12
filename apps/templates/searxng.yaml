@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: searxng
+  namespace: argocd
+  annotations:
+   avp.kubernetes.io/ignore: "true"
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/smiggiddy/argo'
+    targetRevision: HEAD
+    path: ./kustomizations/searxng
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ai
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    - ApplyOutOfSyncOnly=true
+    automated:
+      prune: true
+      selfHeal: true

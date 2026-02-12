@@ -16,6 +16,7 @@ spec:
       selfHeal: true
       prune: true
 
+
   destination:
     namespace: argocd
     server: https://kubernetes.default.svc 
@@ -24,16 +25,12 @@ spec:
   - repoURL: https://argoproj.github.io/argo-helm 
     targetRevision: 9.3.4
     chart: argo-cd
-
-    helm:     
+    helm:
       valueFiles:
       - $values/argocd/values.yaml
-
   - repoURL: 'https://gitea.smigz.com/smiggiddy/argocd-values.git'
     targetRevision: HEAD
     ref: values
-            
-          
 
 
 

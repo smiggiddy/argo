@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-ca-issuer
+    external-dns.alpha.kubernetes.io/target: k3s.lab.smig.tech.
+  name: searxng
+spec:
+  rules:
+  - host: searxng.lab.smig.tech
+    http:
+      paths:
+      - backend:
+          service:
+            name: searxng
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - searxng.lab.smig.tech
+    secretName: searxng-tls
+status:
+  loadBalancer: {}

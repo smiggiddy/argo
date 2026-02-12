@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: searxng
+  name: searxng
+  namespace: ai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: searxng
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: searxng
+    spec:
+      containers:
+        - image: searxng/searxng:2025.8.1-3d96414
+          name: searxng
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: data
+              mountPath: /var/cache/searxng
+            - name: config
+              mountPath: /etc/searxng
+
+          resources: {}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: searxng-data
+        - name: config
+          persistentVolumeClaim:
+            claimName: searxng-config
+status: {}
