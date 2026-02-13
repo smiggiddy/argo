@@ -1,0 +1,6 @@
+resources:
+  - ./admin-secret.yaml
+  - ./deployment.yaml
+  - ./ingress.yaml
+  - ./pvc.yaml
+  - ./service.yaml
