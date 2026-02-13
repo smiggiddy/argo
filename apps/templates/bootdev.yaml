@@ -8,8 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/smiggiddy/argo'
     targetRevision: HEAD
-    path: dev_labbing/bootdev
-
+    path: kustomizations/bootdev
 
   destination:
     server: https://kubernetes.default.svc
