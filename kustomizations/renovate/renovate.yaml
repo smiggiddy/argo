@@ -35,7 +35,7 @@ metadata:
   name: renovate-bot
   namespace: renovate
 spec:
-  schedule: '@hourly'
+  schedule: "@hourly"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
@@ -44,9 +44,9 @@ spec:
           containers:
             - image: renovate/renovate:full
               name: renovate-bot
-              env: 
+              env:
                 - name: RENOVATE_PLATFORM
-                  value: 'gitea'
+                  value: "gitea"
                 - name: GITHUB_COM_TOKEN
                   valueFrom:
                     secretKeyRef:
@@ -58,11 +58,11 @@ spec:
                       name: renovate-secrets
                       key: RENOVATE_TOKEN
                 - name: RENOVATE_AUTODISCOVER
-                  value: 'true'
+                  value: "true"
                 - name: RENOVATE_BASE_DIR
-                  value: '/tmp/renovate/'
+                  value: "/tmp/renovate/"
                 - name: RENOVATE_CONFIG_FILE
-                  value: '/opt/renovate/config.json'
+                  value: "/opt/renovate/config.json"
                 - name: LOG_LEVEL
                   value: debug
               volumeMounts:
