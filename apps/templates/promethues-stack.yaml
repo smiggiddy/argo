@@ -100,6 +100,10 @@ spec:
                   url: https://raw.githubusercontent.com/argoproj/argo-cd/master/examples/dashboard.json
                   token: ""
                   curlOptions: "-sLf"
+                nvidia:
+                  url: https://raw.githubusercontent.com/NVIDIA/dcgm-exporter/refs/heads/main/grafana/dcgm-exporter-dashboard.json
+                  token: ""
+                  curlOptions: "-sLf"
             dashboardProviders:
               dashboardproviders.yaml:
                 apiVersion: 1
