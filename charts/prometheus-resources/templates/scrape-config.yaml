@@ -15,6 +15,7 @@ spec:
   {{- if .customPath }}
   metricsPath: {{ .customPath | quote }}
   {{- end }}
+
   {{- if .secure }}
   scheme: HTTPS
   basicAuth:
@@ -24,5 +25,7 @@ spec:
     password:
       name: mySecretName
       key: password
-    {{- end }}
+  {{ else }}
+  scheme: http
+  {{- end }}
 {{- end }}
