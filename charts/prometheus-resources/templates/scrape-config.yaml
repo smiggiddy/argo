@@ -9,7 +9,7 @@ metadata:
 spec:
   staticConfigs:
     - labels:
-        job: external
+        job: {{ .job }}
       targets:
         - {{ .host }}:{{ .port }}
   {{- if .customPath }}
