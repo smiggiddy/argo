@@ -13,4 +13,5 @@ spec:
       protocol: TCP
       port: {{ .port }}
   type: ExternalName
+  externalName: {{ .host }}
 {{- end }}
