@@ -1,0 +1,27 @@
+{{- range .Values.serviceMonitors }}
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: {{ .name }}
+  labels:
+    release: kube-prometheus-stack 
+spec:
+  staticConfigs:
+    - labels:
+        job: external
+      targets:
+        - {{ .host }}:{{ .port }}
+  {{- if .customPath }}
+  metricsPath: {{ .customPath | quote }}
+  {{- end }}
+  {{- if .secure }}
+  scheme: HTTPS
+  basicAuth:
+    username:
+      name: mySecretName
+      key: username
+    password:
+      name: mySecretName
+      key: password
+    {{- end }}
+{{- end }}
