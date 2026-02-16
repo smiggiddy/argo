@@ -7,8 +7,8 @@ metadata:
 spec:
   jobLabel: external-apps
   selector:
-    matchExpressions:
-    - {key: "external-prometheus", operator: Exists}
+    matchLabels:
+      external-prometheus: "true"
   namespaceSelector:
     matchNames:
     - monitoring
