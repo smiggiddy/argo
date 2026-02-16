@@ -1,0 +1,7 @@
+apiVersion: v2
+name: prometheus-resources
+version: 0.1.0
+description: Prometheus Operator Resources in my environment
+maintainers: # (optional)
+  - name: smigz
+    email: smigggz@deez.com

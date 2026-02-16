@@ -1,0 +1,29 @@
+{{- range .Values.serviceMonitors }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: ext-{{ .name }}
+  labels:
+    app: ext-{{ .name }}
+    external-prometheus: "true"
+spec:
+  ports:
+    - name: metrics
+      protocol: TCP
+      port: {{ .port }}
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: {{ .name }}-1 
+  labels:
+    kubernetes.io/service-name: ext-{{ .name }}
+addressType: IPv4
+ports:
+  - name: metrics
+    protocol: TCP
+    port: {{ .port }}
+endpoints:
+  - addresses:
+      - {{ .host | quote }}
+{{- end }}

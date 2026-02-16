@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: external-resoures
+  labels:
+    external-prometheus: "true"
+spec:
+  jobLabel: external-apps
+  selector:
+    matchExpressions:
+    - {key: "external-prometheus", operator: Exists}
+  namespaceSelector:
+    matchNames:
+    - monitoring
+  endpoints:
+  - port: metrics
+    interval: 15s

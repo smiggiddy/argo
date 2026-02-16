@@ -1,0 +1,7 @@
+serviceMonitors:
+  - name: smig-inference-gpu
+    port: 9400
+    host: smig-inference.lab.smig.tech
+  - name: smig-inference-node-exporter
+    port: 9100
+    host: smig-inference.lab.smig.tech
