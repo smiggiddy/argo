@@ -13,3 +13,23 @@ serviceMonitors:
     host: smig-inference.lab.smig.tech
     customPath: *defaultpath
     job: *job
+  - name: opnsense
+    host: 192.168.100.1
+    port: 9100
+    customPath: *defaultpath
+  - name: pve-apps1
+    host: pve-apps1.lab.smig.tech
+    port: 9100
+    customPath: *defaultpath
+  - name: smig-lab-proxmox
+    host: smig-lab-proxmox.lab.smig.tech
+    port: 9100
+    customPath: *defaultpath
+  - name: pi-hole
+    host: rpi3-ubuntu
+    port: 9100
+    customPath: *defaultpath
+  - name: smig-zima
+    host: smig-zima.lab.smig.tech
+    port: 9100
+    customPath: *defaultpath
