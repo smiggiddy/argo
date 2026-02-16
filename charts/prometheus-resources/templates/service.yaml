@@ -12,5 +12,5 @@ spec:
     - name: metrics
       protocol: TCP
       port: {{ .port }}
-  clusterIP: None
+  type: ExternalName
 {{- end }}
