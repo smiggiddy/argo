@@ -14,7 +14,7 @@ spec:
   project: default
   source:
     repoURL: https://helm.openwebui.com/
-    targetRevision: 10.2.1
+    targetRevision: 12.3.0
     chart: open-webui
     helm:
       valuesObject:
