@@ -1,0 +1,32 @@
+# {{- if .Values.gpuAlerts.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: gpu-health-alerts
+  labels:
+    release: prometheus
+spec:
+  groups:
+    - name: gpu.health.rules
+      rules:
+        - alert: GPUHighTemperature
+          expr: >-
+            {{- printf "max by (instance, gpu, modelName) (DCGM_FI_DEV_GPU_TEMP{job=%q}) > %v" .Values.gpuAlerts.job .Values.gpuAlerts.tempThresholdC }}
+          for: {{ .Values.gpuAlerts.tempFor | quote }}
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU temperature high"
+            description: "GPU {{ $labels.gpu }} on {{ $labels.instance }} ({{ $labels.modelName }}) is above {{ .Values.gpuAlerts.tempThresholdC }}C for {{ .Values.gpuAlerts.tempFor }}. Current value: {{ `{{ $value }}` }}C."
+
+        - alert: GPUMetricsMissing
+          expr: >-
+            {{- printf "absent(DCGM_FI_DEV_GPU_TEMP{job=%q})" .Values.gpuAlerts.job }}
+          for: {{ .Values.gpuAlerts.metricsMissingFor | quote }}
+          labels:
+            severity: critical
+          annotations:
+            summary: "GPU metrics missing"
+            description: "No GPU temperature metrics for job={{ .Values.gpuAlerts.job }} for {{ .Values.gpuAlerts.metricsMissingFor }}. Check dcgm-exporter and scrape target."
+# {{- end }}
