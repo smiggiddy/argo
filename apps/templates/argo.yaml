@@ -15,10 +15,10 @@ spec:
     automated:
       selfHeal: true
       prune: true
-  syncOptions:
-    - CreateNamespace=true
-    - ApplyOutOfSyncOnly=true
-    - ServerSideApply=true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
 
   destination:
     namespace: argocd
