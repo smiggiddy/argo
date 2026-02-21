@@ -1,11 +1,7 @@
 resources:
   - deployment.yaml
   - service.yaml
-  - service-homekit.yaml
   - ingress.yaml
-  - ingressroute-tcp.yaml
-  - udproute.yaml
-  - service-mdns.yaml
 
 images:
   - name: ghcr.io/home-assistant/home-assistant
