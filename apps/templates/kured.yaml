@@ -20,7 +20,7 @@ spec:
         configuration:
           lockTtl: "30m"
           lockReleaseDelay: "5m" 
-          notifyUrl: <k8s/data/argocd/kured#notifyUrl>
+          notifyUrl: <k8s/data/argocd/kured#notify_url>
         metrics:
           create: true
           labels:
