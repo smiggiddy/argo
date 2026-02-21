@@ -19,6 +19,9 @@ spec:
       valuesObject:
         metrics:
           create: true
+        configuration:
+          rebootSentinel: "/var/run/reboot-required"
+        tolerations: [{"key": "node-role.kubernetes.io/control-plane", "effect": "NoSchedule"}]
 
   destination:
     server: 'https://kubernetes.default.svc'
