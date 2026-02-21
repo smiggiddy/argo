@@ -13,9 +13,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
-    targetRevision: 4.0.18
-    chart: nfs-subdir-external-provisioner
+    repoURL: https://github.com/smiggiddy/argo
+    path: charts/nfs-subdir-external-provisioner
+    targetRevision: HEAD
     helm:
       parameters:
         - name: nfs.server
@@ -23,7 +23,7 @@ spec:
         - name: nfs.path
           value: /volume1/kubernetes
         - name: storageClass.defaultClass
-          value: "true"
+          value: "false"
       values: |
             nfs:
               mountOptions:
@@ -32,6 +32,7 @@ spec:
                 - rsize=1048576
                 - wsize=1048576
                 - timeo=600
+            storageClassName: nfs-client 
 
   destination:
     server: https://kubernetes.default.svc
