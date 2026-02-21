@@ -21,9 +21,6 @@ spec:
       kubernetesGateway:
         enabled: true
         experimentalChannel: true
-    experimental:
-      kubernetesGateway:
-        enabled: true
     service:
       annotations: 
         external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
