@@ -17,6 +17,9 @@ spec:
     chart: kured
     helm:
       valuesObject:
+        configuration:
+          lockTtl: "30m"
+          lockReleaseDelay: "5m" 
         metrics:
           create: true
           labels:
