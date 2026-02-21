@@ -5,6 +5,8 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
+    log:
+      level: DEBUG
     providers:
       kubernetesGateway:
         enabled: true
