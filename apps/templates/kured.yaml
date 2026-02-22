@@ -18,8 +18,14 @@ spec:
     helm:
       valuesObject:
         configuration:
-          lockTtl: "30m"
-          lockReleaseDelay: "5m" 
+          concurrency: 1
+          rebootDays: ["fri"]
+          startTime: "07:00"
+          endTime: "11:00"
+          timeZone: "America/New_York"
+          drainTimeout: "15m"
+          lockTtl: "120m"
+          lockReleaseDelay: "15m"
           notifyUrl: <path:k8s/data/argocd/kured#notify_url>
         metrics:
           create: true
