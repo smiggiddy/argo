@@ -32,7 +32,12 @@ spec:
                 paths:
                 - path:  "/"
                   pathType: "ImplementationSpecific"
-            customAnnotations:
+            traefikAnnotations:
+              traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+              traefik.ingress.kubernetes.io/service.sticky.cookie.httponly: "true"
+              traefik.ingress.kubernetes.io/service.sticky.cookie.name: rustfs
+              traefik.ingress.kubernetes.io/service.sticky.cookie.samesite: none
+              traefik.ingress.kubernetes.io/service.sticky.cookie.secure: "true"
               cert-manager.io/cluster-issuer: cluster-ca-issuer
               traefik.ingress.kubernetes.io/router.entrypoints: websecure
               external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
