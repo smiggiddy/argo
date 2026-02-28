@@ -24,7 +24,6 @@ spec:
             enabled: true
             className: traefik
             tls:
-              enabled: true
               certManager:
                 enabled: true
             hosts: 
