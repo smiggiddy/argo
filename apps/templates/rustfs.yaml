@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rustfs
+  namespace: argocd
+  labels:
+    apps: storage 
+  annotations:
+    notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+spec:
+  destination:
+    namespace: rustfs
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://charts.rustfs.com
+    targetRevision: 0.0.83
+    chart: rustfs
+    helm:
+      valuesObject:
+          ingress:
+            enabled: true
+            className: traefik
+            tls:
+              enabled: true
+              certManager:
+                enabled: true
+            hosts: 
+              - s3.lab.smig.tech
+            annotations:
+              cert-manager.io/cluster-issuer: cluster-ca-issuer
+              traefik.ingress.kubernetes.io/router.entrypoints: websecure
+              external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+          storagelass:
+            name: longhorn-noreplicas
+            dataStorageSize: 1Gi
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
