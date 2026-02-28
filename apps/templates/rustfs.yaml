@@ -15,22 +15,13 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://charts.rustfs.com
-    targetRevision: 0.0.83
-    chart: rustfs
+    repoURL: https://github.com/rustfs/rustfs.git
+    path: helm/rustfs
     helm:
       valuesObject:
           ingress:
             enabled: true
-            className: traefik
-            tls:
-              certManager:
-                enabled: true
-            hosts: 
-              - host: s3.lab.smig.tech
-                paths:
-                - path:  "/"
-                  pathType: "ImplementationSpecific"
+            className: "traefik"
             traefikAnnotations:
               traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
               traefik.ingress.kubernetes.io/service.sticky.cookie.httponly: "true"
@@ -40,6 +31,14 @@ spec:
               cert-manager.io/cluster-issuer: cluster-ca-issuer
               traefik.ingress.kubernetes.io/router.entrypoints: websecure
               external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+            tls:
+              certManager:
+                enabled: true
+            hosts: 
+              - host: s3.lab.smig.tech
+                paths:
+                - path:  "/"
+                  pathType: "ImplementationSpecific"
           storageclass:
             name: longhorn-noreplicas
             dataStorageSize: 1Gi
