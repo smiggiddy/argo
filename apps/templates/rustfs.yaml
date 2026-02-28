@@ -29,8 +29,9 @@ spec:
                 enabled: true
             hosts: 
               - host: s3.lab.smig.tech
-                path: "/"
-                pathType: "ImplementationSpecific"
+                paths:
+                - path:  "/"
+                  pathType: "ImplementationSpecific"
             annotations:
               cert-manager.io/cluster-issuer: cluster-ca-issuer
               traefik.ingress.kubernetes.io/router.entrypoints: websecure
