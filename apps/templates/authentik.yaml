@@ -60,10 +60,10 @@ spec:
           resources:
             requests:
               cpu: 300m
-              memory: 512Mi
+              memory: 768Mi
             limits:
               cpu: 1000m
-              memory: 768Mi
+              memory: 1024Mi
 
 
   destination:
