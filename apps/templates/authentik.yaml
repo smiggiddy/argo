@@ -21,7 +21,7 @@ spec:
         authentik:
           redis: 
             host: authentik-redis
-          secret_key: <k8s/data/argocd/authentik#secret_key>
+          secret_key: "<path:k8s/data/argocd/authentik#secret_key>"
           error_reporting:
               enabled: false
           postgresql:
