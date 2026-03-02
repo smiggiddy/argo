@@ -18,7 +18,7 @@ spec:
             severity: warning
           annotations:
             summary: "GPU temperature high"
-            description: "GPU {{ $labels.gpu }} on {{ $labels.instance }} ({{ $labels.modelName }}) is above {{ .Values.gpuAlerts.tempThresholdC }}C for {{ .Values.gpuAlerts.tempFor }}. Current value: {{ `{{ $value }}` }}C."
+            description: "GPU {{ `{{ $labels.gpu }}` }} on {{ `{{ $labels.instance }}` }} ({{ `{{ $labels.modelName }}` }}) is above {{ .Values.gpuAlerts.tempThresholdC }}C for {{ .Values.gpuAlerts.tempFor }}. Current value: {{ `{{ $value }}` }}C."
 
         - alert: GPUMetricsMissing
           expr: >-
