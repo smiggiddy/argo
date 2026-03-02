@@ -26,6 +26,11 @@ spec:
              vault.hashicorp.com/agent-inject: "true"
              vault.hashicorp.com/role: "rustfs"
              vault.hashicorp.com/agent-inject-secret-deez: "k8s/data/argocd/rustfs"
+             vault.hashicorp.com/agent-inject-template-deez: |
+                {{- with secret "k8s/data/argocd/rustfs" -}}
+                export RUSTFS_ACCESS_KEY="{{ .Data.data.access_key }}"
+                export RUSTFS_SECRET_KEY="{{ .Data.data.secret_key }}"
+                {{- end }}
           ingress:
             enabled: true
             className: "traefik"

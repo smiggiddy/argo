@@ -108,7 +108,18 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.rustfs.repository }}:{{ .Values.image.rustfs.tag | default .Chart.AppVersion }}"
+          {{- if .Values.vaultInjected }}
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - |
+              if [ -f /vault/secrets/deez ]; then
+                source /vault/secrets/deez
+              fi
+              exec /usr/bin/rustfs
+          {{- else }}
           command: ["/usr/bin/rustfs"]
+          {{- end }}
           imagePullPolicy: {{ .Values.image.rustfs.pullPolicy }}
           securityContext:
             {{- toYaml .Values.containerSecurityContext | nindent 12 }}
@@ -120,8 +131,10 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "rustfs.fullname" . }}-config
+          {{- if .Values.secretName.create }}
             - secretRef:
                 name: {{ include "rustfs.secretName" . }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.livenessProbe.enabled }}
