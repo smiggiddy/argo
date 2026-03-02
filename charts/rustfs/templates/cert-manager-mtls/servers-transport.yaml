@@ -1,0 +1,14 @@
+{{- if and .Values.mtls.enabled (eq .Values.ingress.className "traefik")}}
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: {{ include "rustfs.fullname" . }}-transport
+  namespace: {{ .Release.Namespace }}
+spec:
+  rootcas:
+    - {{ include "rustfs.fullname" . }}-root-ca-secret
+  certificatesSecrets:
+    - {{ include "rustfs.fullname" . }}-client-tls
+  insecureSkipVerify: true
+  serverName: {{ (first .Values.ingress.hosts).host | quote }}
+{{- end }}

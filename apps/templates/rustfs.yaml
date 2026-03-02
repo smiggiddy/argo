@@ -15,15 +15,15 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://charts.rustfs.com
-    targetRevision: 0.0.84
-    chart: rustfs
+    repoURL: https://github.com/smiggiddy/argo.git
+    path: charts/rustfs
+    targetRevision: HEAD
     helm:
       valuesObject:
           ingress:
             enabled: true
             className: "traefik"
-            traefikAnnotations:
+            annotations:
               traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
               traefik.ingress.kubernetes.io/service.sticky.cookie.httponly: "true"
               traefik.ingress.kubernetes.io/service.sticky.cookie.name: rustfs

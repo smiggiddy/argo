@@ -1,0 +1,133 @@
+{{- $logDir := .Values.config.rustfs.obs_log_directory }}
+
+{{- if .Values.mode.standalone.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rustfs.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "rustfs.labels" . | nindent 4 }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: 1
+  {{- with .Values.mode.standalone.strategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "rustfs.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "rustfs.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with include "chart.imagePullSecrets" . }}
+      imagePullSecrets:
+        {{- . | nindent 8 }}
+      {{- end }}
+      {{- if and .Values.nodeSelector (not .Values.affinity.nodeAffinity) }}
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+        {{- if .Values.affinity.nodeAffinity }}
+        nodeAffinity:
+        {{- toYaml .Values.affinity.nodeAffinity | nindent 10 }}
+        {{- if .Values.affinity.podAntiAffinity.enabled }}
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - {{ include "rustfs.name" . }}
+              topologyKey: {{ .Values.affinity.podAntiAffinity.topologyKey }}
+        {{- end }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      serviceAccountName: {{ include "rustfs.serviceAccountName" . }}
+      initContainers:
+        - name: init-step
+          image: "{{ .Values.image.initImage.repository }}:{{ .Values.image.initImage.tag }}"
+          imagePullPolicy: {{ .Values.image.initImage.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /data /mnt/rustfs/logs
+              chmod 755 /mnt/rustfs/logs
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: logs
+              mountPath: /mnt/rustfs
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.rustfs.repository }}:{{ .Values.image.rustfs.tag | default .Chart.AppVersion }}"
+          command: ["/usr/bin/rustfs"]
+          imagePullPolicy: {{ .Values.image.rustfs.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          ports:
+            - name: endpoint
+              containerPort: {{ .Values.service.endpoint.port }}
+            - name: console
+              containerPort: {{ .Values.service.console.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "rustfs.fullname" . }}-config
+            - secretRef:
+                name: {{ include "rustfs.secretName" . }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: logs
+              mountPath: {{ $logDir }}
+              subPath: logs
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: logs
+          persistentVolumeClaim:
+            {{- if .Values.mode.standalone.existingClaim.logsClaim }}
+            claimName: {{ .Values.mode.standalone.existingClaim.logsClaim }}
+            {{- else }}
+            claimName: {{ include "rustfs.fullname" $ }}-logs
+            {{- end }}
+        - name: data
+          persistentVolumeClaim:
+            {{- if .Values.mode.standalone.existingClaim.dataClaim }}
+            claimName: {{ .Values.mode.standalone.existingClaim.dataClaim }}
+            {{- else }}
+            claimName: {{ include "rustfs.fullname" $ }}-data
+            {{- end }}
+{{- end }}
