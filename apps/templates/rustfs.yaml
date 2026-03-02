@@ -20,6 +20,12 @@ spec:
     targetRevision: HEAD
     helm:
       valuesObject:
+          secret:
+            existingSecret: "deez"
+          podAnnotations:
+             vault.hashicorp.com/agent-inject: "true"
+             vault.hashicorp.com/role: "rustfs"
+             vault.hashicorp.com/agent-inject-secret-deez: "k8s/data/argocd/rustfs"
           ingress:
             enabled: true
             className: "traefik"
