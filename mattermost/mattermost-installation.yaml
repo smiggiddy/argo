@@ -35,6 +35,7 @@ spec:
       secret: mm-db-credentials
   fileStore:
     external:
-      url: minio.minio-tenant.svc.cluster.local:80
+      # url: minio.minio-tenant.svc.cluster.local:80
+      url: rustfs-svc.rustfs.svc.cluster.local:9000
       bucket: mattermost
       secret: file-store-credentials
