@@ -1,0 +1,83 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: garage
+  namespace: argocd
+  labels:
+    apps: storage
+  annotations:
+    notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+spec:
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+  destination:
+    namespace: garage
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://git.deuxfleurs.fr/Deuxfleurs/garage
+    path: garage/script/helm
+    targetRevision: HEAD
+    helm:
+      valuesObject:
+        garage:
+          replicationFactor: 2
+          s3:
+            api:
+              region: "us-east-2"
+              rootDomain: "s3.lab.smig.tech"
+            web:
+              rootDomain: "s3console.lab.smig.tech"
+              index: "index.html"
+        deployment:
+          replicaCount: 4
+
+        persistence:
+          meta:
+            storageClass: "longhorn"
+            size: 100Mi
+          data:
+            storageClass: "longhorn-noreplicas"
+            size: 1Gi
+        ingress:
+          s3:
+            api:
+              enabled: true
+              className: "traefik"
+              annotations:
+                cert-manager.io/cluster-issuer: cluster-ca-issuer
+                traefik.ingress.kubernetes.io/router.entrypoints: websecure
+                external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+              hosts:
+                - host: s3.lab.smig.tech
+                  paths:
+                    - path: /
+                      pathType: Prefix
+              tls:
+                - secretName: garage-ingress-cert
+                  hosts:
+                    - s3.lab.smig.tech
+            web:
+              enabled: true
+              annotations:
+                cert-manager.io/cluster-issuer: cluster-ca-issuer
+                traefik.ingress.kubernetes.io/router.entrypoints: websecure
+                external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+              hosts:
+                - host: s3console.lab.smig.tech
+                  paths:
+                    - path: /
+                      pathType: Prefix
+              tls:
+                - secretName: garage-ingress-cert
+                  hosts:
+                    - s3console.lab.smig.tech
+        monitoring:
+          metrics:
+            enabled: true
+            serviceMonitor:
+              enabled: true
