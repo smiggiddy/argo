@@ -32,9 +32,6 @@ spec:
             api:
               region: "us-east-2"
               rootDomain: "s3.lab.smig.tech"
-            web:
-              rootDomain: "s3console.lab.smig.tech"
-              index: "index.html"
         deployment:
           replicaCount: 4
 
@@ -63,21 +60,6 @@ spec:
                 - secretName: garage-ingress-cert
                   hosts:
                     - s3.lab.smig.tech
-            web:
-              enabled: true
-              annotations:
-                cert-manager.io/cluster-issuer: cluster-ca-issuer
-                traefik.ingress.kubernetes.io/router.entrypoints: websecure
-                external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
-              hosts:
-                - host: s3console.lab.smig.tech
-                  paths:
-                    - path: /
-                      pathType: Prefix
-              tls:
-                - secretName: garage-ingress-cert
-                  hosts:
-                    - s3console.lab.smig.tech
         monitoring:
           metrics:
             enabled: true
