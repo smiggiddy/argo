@@ -12,7 +12,7 @@ spec:
       rules:
         - alert: GPUHighTemperature
           expr: >-
-            {{- printf "max by (instance, gpu, modelName) (DCGM_FI_DEV_GPU_TEMP{job=%q}) > %v" .Values.gpuAlerts.job .Values.gpuAlerts.tempThresholdC }}
+            {{ printf "max by (instance, gpu, modelName) (DCGM_FI_DEV_GPU_TEMP{job=%q}) > %v" .Values.gpuAlerts.job .Values.gpuAlerts.tempThresholdC }}
           for: {{ .Values.gpuAlerts.tempFor | quote }}
           labels:
             severity: warning
@@ -22,7 +22,7 @@ spec:
 
         - alert: GPUMetricsMissing
           expr: >-
-            {{- printf "absent(DCGM_FI_DEV_GPU_TEMP{job=%q})" .Values.gpuAlerts.job }}
+            {{ printf "absent(DCGM_FI_DEV_GPU_TEMP{job=%q})" .Values.gpuAlerts.job }}
           for: {{ .Values.gpuAlerts.metricsMissingFor | quote }}
           labels:
             severity: critical
