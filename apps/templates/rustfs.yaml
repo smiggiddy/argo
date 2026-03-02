@@ -20,6 +20,7 @@ spec:
     targetRevision: HEAD
     helm:
       valuesObject:
+          vaultInjected: true
           secret:
             create: false
             existingSecret: "deez"
