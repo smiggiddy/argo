@@ -20,7 +20,7 @@ spec:
   project: default
   source:
     repoURL: https://git.deuxfleurs.fr/Deuxfleurs/garage
-    path: garage/script/helm
+    path: script/helm/garage
     targetRevision: HEAD
     helm:
       valuesObject:
