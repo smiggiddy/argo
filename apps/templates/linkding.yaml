@@ -20,6 +20,8 @@ spec:
     repoURL: https://github.com/smiggiddy/argo
     path: ./kustomizations/linkding
     targetRevision: HEAD
+    plugin:
+          name: argocd-vault-plugin-kustomize
 
   syncPolicy:
     syncOptions:
