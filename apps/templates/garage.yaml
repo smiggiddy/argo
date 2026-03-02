@@ -24,6 +24,8 @@ spec:
     targetRevision: v2.2.0
     helm:
       valuesObject:
+        image:
+          repository: dxflrs/arm64_garage
         garage:
           replicationFactor: 2
           s3:
