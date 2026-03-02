@@ -121,14 +121,14 @@ service:
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
   enabled: true
-  className: "nginx" # Specify the classname, traefik or nginx. Different classname has different annotations for session sticky.
+  className: ""
   annotations:
-    nginx.ingress.kubernetes.io/affinity: cookie
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    nginx.ingress.kubernetes.io/session-cookie-expires: "3600"
-    nginx.ingress.kubernetes.io/session-cookie-hash: sha1
-    nginx.ingress.kubernetes.io/session-cookie-max-age: "3600"
-    nginx.ingress.kubernetes.io/session-cookie-name: rustfs
+    # nginx.ingress.kubernetes.io/affinity: cookie
+    # nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    # nginx.ingress.kubernetes.io/session-cookie-expires: "3600"
+    # nginx.ingress.kubernetes.io/session-cookie-hash: sha1
+    # nginx.ingress.kubernetes.io/session-cookie-max-age: "3600"
+    # nginx.ingress.kubernetes.io/session-cookie-name: rustfs
   hosts:
     - host: example.rustfs.com
       paths:
