@@ -17,7 +17,7 @@ spec:
   source:
     repoURL: https://charts.rustfs.com
     targetRevision: 0.0.84
-    path: helm/rustfs
+    chart: rustfs
     helm:
       valuesObject:
           ingress:
