@@ -75,6 +75,16 @@ spec:
                 group_wait: 30s
                 group_interval: 5m
                 repeat_interval: 12h
+                routes:
+                  - receiver: "null"
+                    matchers:
+                      - alertname = "InfoInhibitor"
+                  - receiver: "null"
+                    matchers:
+                      - severity = "info"
+                  - receiver: "null"
+                    matchers:
+                      - alertname = "Watchdog"
 
               receivers:
                 - name: "null"
@@ -84,7 +94,8 @@ spec:
                       chat_id: <path:k8s/data/argocd/grafana#telegram_chat_id>
                       parse_mode: "HTML"
                       message: |
-                        🚨 <b>{{ .CommonAnnotations.summary }}</b>
+                        {{ if eq .Status "resolved" }}✅ RESOLVED{{ else }}🚨 ALERT{{ end }} <b>{{ .CommonAnnotations.summary }}</b>
+                        Status: {{ .Status | toUpper }}
                         {{ range .Alerts }}
                         Namespace: {{ .Labels.namespace }}
                         Pod: {{ .Labels.pod }}
