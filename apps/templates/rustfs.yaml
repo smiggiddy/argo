@@ -15,7 +15,8 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://github.com/rustfs/rustfs.git
+    repoURL: https://charts.rustfs.com
+    targetRevision: 0.0.84
     path: helm/rustfs
     helm:
       valuesObject:
