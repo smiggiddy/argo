@@ -21,6 +21,7 @@ spec:
     helm:
       valuesObject:
           secret:
+            create: false
             existingSecret: "deez"
           podAnnotations:
              vault.hashicorp.com/agent-inject: "true"

@@ -131,7 +131,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "rustfs.fullname" . }}-config
-          {{- if .Values.secretName.create }}
+          {{- if .Values.secret.create }}
             - secretRef:
                 name: {{ include "rustfs.secretName" . }}
           {{- end }}
