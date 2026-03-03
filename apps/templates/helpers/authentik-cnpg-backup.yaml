@@ -5,8 +5,8 @@ metadata:
   namespace: authentik
 spec:
   configuration:
-    destinationPath: "s3://cnpg-backups/authentik-pg"
-    endpointURL: http://minio.minio-tenant
+    destinationPath: "s3://cnpg-backups"
+    endpointURL: http://garage.garage:3900
     s3Credentials:
       accessKeyId:
         name: authentik-backup-credentials
