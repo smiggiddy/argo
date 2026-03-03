@@ -14,6 +14,9 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ApplyOutOfSyncOnly=true
+    automated:
+      prune: true
+      selfHeal: true
   destination:
     namespace: garage
     server: https://kubernetes.default.svc
@@ -41,7 +44,7 @@ spec:
             size: 100Mi
           data:
             storageClass: "longhorn-noreplicas"
-            size: 1Gi
+            size: 12Gi
         ingress:
           s3:
             api:
