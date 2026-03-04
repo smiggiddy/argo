@@ -51,15 +51,15 @@ spec:
           querier:
             max_concurrent: 4
         read:
-          replicas: 1
+          replicas: 2
           persistence:
             storageClass: longhorn-noreplicas
         write:
-          replicas: 1
+          replicas: 2
           persistence:
             storageClass: longhorn-noreplicas
         backend:
-          replicas: 1
+          replicas: 2
         chunksCache:
           enabled: false
         resultsCache:
