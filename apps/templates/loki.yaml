@@ -49,17 +49,21 @@ spec:
           tracing:
             enabled: true
           querier:
-            max_concurrent: 12
+            max_concurrent: 4
         read:
-          replicas: 2
+          replicas: 1
           persistence:
             storageClass: longhorn-noreplicas
         write:
-          replicas: 2
+          replicas: 1
           persistence:
             storageClass: longhorn-noreplicas
         backend:
-          replicas: 2
+          replicas: 1
+        chunksCache:
+          enabled: false
+        resultsCache:
+          enabled: false
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
