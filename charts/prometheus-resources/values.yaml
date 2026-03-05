@@ -29,7 +29,7 @@ serviceMonitors:
     customPath: *defaultpath
     job: *job
   - name: pi-hole
-    host: rpi3-ubuntu
+    host: rpi3-ubuntu.lab.smig.tech
     port: 9100
     customPath: *defaultpath
     job: *job
