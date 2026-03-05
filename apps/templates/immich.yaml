@@ -31,7 +31,7 @@ spec:
             containers:
               main:
                 image:
-                  tag: v2.3.1
+                  tag: v2.5.6
                 env: 
                   DB_HOSTNAME: immich-pg-rw.immich.svc.cluster.local 
                   DB_USERNAME: immich
@@ -50,7 +50,7 @@ spec:
                   env:
                     MACHINE_LEARNING_RKNN_THREADS: 2
                   image: 
-                    tag: v2.3.1-armnn
+                    tag: v2.5.6-armnn
                   resources:
                     limits:
                       squat.ai/mali: 1
