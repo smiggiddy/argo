@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-workflows
+  namespace: argocd
+  labels:
+    apps: utilities
+  annotations:
+    avp.kubernetes.io/ignore: "true"
+    notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+spec:
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
+
+  destination:
+    namespace: argo-workflows
+    server: https://kubernetes.default.svc 
+  project: default
+  source:
+    repoURL: https://argoproj.github.io/argo-helm 
+    chart: argo-workflows
+    targetRevision: 0.47.4
+    helm:
+      valuesObject:
+        crds:
+          full: true
+        server:
+          httproute:
+            enabled: true
+            parentRefs:
+              - name: traefik-gateway
+                namespace: kube-system
+                sectionName: web
+            hostnames:
+              - argoworkflows.lab.smig.tech
