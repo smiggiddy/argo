@@ -33,6 +33,8 @@ spec:
             - name: lab-smig-tech-wildcard-tls
           mode: Terminate
           hostname: "*.lab.smig.tech"
+          port: 8443
+          protocol: HTTPS
 
 
 
