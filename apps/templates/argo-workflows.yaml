@@ -38,6 +38,6 @@ spec:
             parentRefs:
               - name: traefik-gateway
                 namespace: kube-system
-                sectionName: web
+                sectionName: websecure
             hostnames:
               - argoworkflows.lab.smig.tech

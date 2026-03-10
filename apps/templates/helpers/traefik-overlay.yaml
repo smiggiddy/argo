@@ -20,10 +20,19 @@ spec:
         expose:
           default: true
     gateway:
+      annotations:
+        cert-manager.io/cluster-issuer: cluster-ca-issuer
       listeners:
         web:
           namespacePolicy:
             from: All
+        websecure:
+          namespacePolicy:
+            from: All
+          certificateRefs:
+            - name: lab-smig-tech-wildcard-tls
+          mode: Terminate
+          hostname: "*.lab.smig.tech"
 
 
 
