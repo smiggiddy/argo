@@ -83,6 +83,9 @@ spec:
                 format = "logfmt"
               }
 
+              // ---------------------------------------------------------------
+              // Pipeline 1: systemd journal logs
+              // ---------------------------------------------------------------
               loki.source.journal "system" {
                 path       = "/var/log/journal"
                 max_age    = "12h"
@@ -109,6 +112,78 @@ spec:
                 }
               }
 
+              // ---------------------------------------------------------------
+              // Pipeline 2: Kubernetes pod logs (via API, no hostPath needed)
+              // ---------------------------------------------------------------
+              discovery.kubernetes "pods" {
+                role = "pod"
+              }
+
+              discovery.relabel "pod_logs" {
+                targets = discovery.kubernetes.pods.targets
+
+                // Only scrape pods scheduled on this node
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_node_name"]
+                  action        = "keep"
+                  regex         = env("HOSTNAME")
+                }
+
+                // Drop pods that are not running
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_phase"]
+                  action        = "drop"
+                  regex         = "Pending|Succeeded|Failed|Unknown"
+                }
+
+                rule {
+                  source_labels = ["__meta_kubernetes_namespace"]
+                  target_label  = "namespace"
+                }
+
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_name"]
+                  target_label  = "pod"
+                }
+
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_container_name"]
+                  target_label  = "container"
+                }
+
+                // Prefer app.kubernetes.io/name, fall back to app label
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+                  target_label  = "app"
+                }
+
+                rule {
+                  source_labels = ["app", "__meta_kubernetes_pod_label_app"]
+                  regex         = ";(.*)"
+                  target_label  = "app"
+                }
+              }
+
+              loki.source.kubernetes "pods" {
+                targets    = discovery.relabel.pod_logs.output
+                forward_to = [loki.process.pod_logs.receiver]
+              }
+
+              loki.process "pod_logs" {
+                forward_to = [loki.write.loki.receiver]
+
+                stage.static_labels {
+                  values = { cluster = "rpi-cluster" }
+                }
+
+                stage.label_keep {
+                  values = ["app", "cluster", "container", "namespace", "pod"]
+                }
+              }
+
+              // ---------------------------------------------------------------
+              // Shared writer
+              // ---------------------------------------------------------------
               loki.write "loki" {
                 endpoint {
                   url        = "http://loki-gateway.loki.svc.cluster.local/loki/api/v1/push"
