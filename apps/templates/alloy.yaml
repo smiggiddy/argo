@@ -1,0 +1,142 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alloy
+  namespace: argocd
+  labels:
+    utilities: kube-system
+  annotations:
+    notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+
+spec:
+  destination:
+    namespace: loki
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 1.6.2
+    chart: alloy
+    helm:
+      values: |
+        controller:
+          type: daemonset
+          volumes:
+            extra:
+              - name: journal
+                hostPath:
+                  path: /var/log/journal
+                  type: DirectoryOrCreate
+              - name: journal-run
+                hostPath:
+                  path: /run/log/journal
+                  type: DirectoryOrCreate
+              - name: machine-id
+                hostPath:
+                  path: /etc/machine-id
+                  type: File
+
+        alloy:
+          stabilityLevel: "generally-available"
+          enableReporting: false
+          storagePath: /tmp/alloy
+
+          mounts:
+            varlog: false
+            dockercontainers: false
+            extra:
+              - name: journal
+                mountPath: /var/log/journal
+                readOnly: true
+              - name: journal-run
+                mountPath: /run/log/journal
+                readOnly: true
+              - name: machine-id
+                mountPath: /etc/machine-id
+                readOnly: true
+
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              memory: "256Mi"
+
+          extraEnv:
+            - name: GOMEMLIMIT
+              value: "180MiB"
+            - name: GOMAXPROCS
+              value: "2"
+
+          configMap:
+            create: true
+            content: |-
+              logging {
+                level  = "info"
+                format = "logfmt"
+              }
+
+              loki.source.journal "system" {
+                path       = "/var/log/journal"
+                max_age    = "12h"
+                labels     = { job = "systemd-journal" }
+                forward_to = [loki.process.journal_relabel.receiver]
+              }
+
+              loki.process "journal_relabel" {
+                forward_to = [loki.write.loki.receiver]
+
+                stage.labels {
+                  values = {
+                    hostname = "__journal__hostname",
+                    unit     = "__journal__systemd_unit",
+                  }
+                }
+
+                stage.static_labels {
+                  values = { cluster = "rpi-cluster" }
+                }
+
+                stage.label_keep {
+                  values = ["job", "cluster", "hostname", "unit"]
+                }
+              }
+
+              loki.write "loki" {
+                endpoint {
+                  url        = "http://loki-gateway.loki.svc.cluster.local/loki/api/v1/push"
+                  batch_size = "512KiB"
+                  batch_wait = "5s"
+                  headers    = { "X-Scope-OrgID" = "1" }
+                }
+                external_labels = { cluster = "rpi-cluster" }
+              }
+
+        global:
+          podSecurityContext:
+            supplementalGroups: [190]
+
+        configReloader:
+          enabled: true
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "50Mi"
+            limits:
+              memory: "64Mi"
+
+        rbac:
+          create: true
+
+        serviceAccount:
+          create: true
+          automountServiceAccountToken: true
+
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+    - CreateNamespace=true
