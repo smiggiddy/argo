@@ -33,6 +33,8 @@ spec:
         crds:
           full: true
         server:
+          authModes:
+            - server
           httproute:
             enabled: true
             parentRefs:
