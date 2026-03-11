@@ -151,6 +151,11 @@ spec:
                   target_label  = "container"
                 }
 
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_node_name"]
+                  target_label  = "node"
+                }
+
                 // Prefer app.kubernetes.io/name, fall back to app label
                 rule {
                   source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
@@ -174,10 +179,6 @@ spec:
 
                 stage.static_labels {
                   values = { cluster = "rpi-cluster" }
-                }
-
-                stage.label_keep {
-                  values = ["app", "cluster", "container", "namespace", "pod"]
                 }
               }
 
