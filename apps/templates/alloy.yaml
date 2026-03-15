@@ -42,11 +42,13 @@ spec:
                 hostPath:
                   path: /etc/machine-id
                   type: File
+              - name: alloy-storage
+                emptyDir: {}
 
         alloy:
           stabilityLevel: "generally-available"
           enableReporting: false
-          storagePath: /tmp/alloy
+          storagePath: /var/lib/alloy
 
           mounts:
             varlog: false
@@ -61,19 +63,15 @@ spec:
               - name: machine-id
                 mountPath: /etc/machine-id
                 readOnly: true
+              - name: alloy-storage
+                mountPath: /var/lib/alloy
 
           resources:
             requests:
               cpu: "50m"
-              memory: "64Mi"
+              memory: "128Mi"
             limits:
-              memory: "256Mi"
-
-          extraEnv:
-            - name: GOMEMLIMIT
-              value: "180MiB"
-            - name: GOMAXPROCS
-              value: "2"
+              memory: "512Mi"
 
           configMap:
             create: true
@@ -197,7 +195,7 @@ spec:
 
         global:
           podSecurityContext:
-            supplementalGroups: [190]
+            supplementalGroups: [999]
 
         configReloader:
           enabled: true
