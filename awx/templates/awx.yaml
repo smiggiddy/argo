@@ -51,7 +51,7 @@ spec:
 
 
   destination:
-    server: https://pxmx-awx01:6443
+    server: https://pxmx-awx01.lab.smig.tech:6443
     namespace: awx
 
   syncPolicy:
