@@ -118,6 +118,7 @@ spec:
                   curlOptions: "-sLf"
                 loki-canary:
                   gnetId: 11489
+                  datasource: Prometheus
             dashboardProviders:
               dashboardproviders.yaml:
                 apiVersion: 1
