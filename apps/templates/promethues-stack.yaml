@@ -105,7 +105,6 @@ spec:
                       send_resolved: true
 
           grafana:
-            # 11489 - loki dashboard
             dashboards:
               default:
                 argocd:
@@ -119,6 +118,7 @@ spec:
                 loki-canary:
                   gnetId: 11489
                   datasource: Prometheus
+                  revision: 4
             dashboardProviders:
               dashboardproviders.yaml:
                 apiVersion: 1
