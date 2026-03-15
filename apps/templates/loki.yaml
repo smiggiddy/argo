@@ -20,6 +20,9 @@ spec:
     chart: loki
     helm:
       valuesObject:
+        monitoring:
+          serviceMonitor:
+            enabled: true
         loki:
           auth_enabled: false
           storage:
