@@ -137,7 +137,7 @@ spec:
                     path: /var/lib/grafana/dashboards/default
             additionalDataSources:
               - name: Loki
-                type: Loki
+                type: loki
                 access: proxy
                 basicAuth: false
                 url: http://loki-gateway.loki
