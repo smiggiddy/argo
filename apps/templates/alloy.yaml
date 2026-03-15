@@ -89,17 +89,25 @@ spec:
                 max_age    = "1h"
                 labels     = { job = "systemd-journal" }
                 forward_to = [loki.process.journal_relabel.receiver]
+                relabel_rules = loki.relabel.journal_labels.rules
+              }
+
+              loki.relabel "journal_labels" {
+                forward_to = []
+
+                rule {
+                  source_labels = ["__journal__hostname"]
+                  target_label  = "hostname"
+                }
+
+                rule {
+                  source_labels = ["__journal__systemd_unit"]
+                  target_label  = "unit"
+                }
               }
 
               loki.process "journal_relabel" {
                 forward_to = [loki.write.loki.receiver]
-
-                stage.labels {
-                  values = {
-                    hostname = "__journal__hostname",
-                    unit     = "__journal__systemd_unit",
-                  }
-                }
 
                 stage.static_labels {
                   values = { cluster = "rpi-cluster" }
