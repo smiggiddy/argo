@@ -150,6 +150,11 @@ spec:
                 }
 
                 rule {
+                  source_labels = ["__meta_kubernetes_pod_log_stream"]
+                  target_label  = "stream"
+                }
+
+                rule {
                   source_labels = ["__meta_kubernetes_pod_node_name"]
                   target_label  = "node"
                 }
