@@ -191,6 +191,10 @@ spec:
                 stage.static_labels {
                   values = { cluster = "rpi-cluster" }
                 }
+                stage.drop {
+                  expression  = "kube-probe"
+                  drop_counter_reason = "healthcheck"
+                }
               }
 
               // ---------------------------------------------------------------
