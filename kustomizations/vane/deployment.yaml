@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: vane
-          image: itzcrazykns1337/perplexica:slim-latest
+          image: itzcrazykns1337/vane:slim-latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
