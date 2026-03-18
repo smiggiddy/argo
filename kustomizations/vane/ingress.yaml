@@ -8,16 +8,16 @@ metadata:
 spec:
   tls:
     - hosts:
-        - perplexica.lab.smig.tech
+        - vane.lab.smig.tech
       secretName: perplexica-tls
   rules:
-    - host: perplexica.lab.smig.tech
+    - host: vane.lab.smig.tech
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: perplexica
+                name: vane
                 port:
                   name: http

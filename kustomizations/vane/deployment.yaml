@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: perplexica
+  name: vane
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: perplexica
+      app: vane
   template:
     metadata:
       labels:
-        app: perplexica
+        app: vane
     spec:
       containers:
-        - name: perplexica
+        - name: vane
           image: itzcrazykns1337/perplexica:slim-latest
           imagePullPolicy: IfNotPresent
           ports:
@@ -24,7 +24,7 @@ spec:
               value: "http://searxng.ai.svc.cluster.local:8080"
           volumeMounts:
             - name: perplexica-data
-              mountPath: /home/perplexica/data
+              mountPath: /home/vane/data
           securityContext:
             allowPrivilegeEscalation: false
           resources:

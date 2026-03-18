@@ -1,0 +1,8 @@
+resources:
+  - ./deployment.yaml
+  - ./ingress.yaml
+  - ./service.yaml
+
+images:
+  - name: itzcrazykns1337/vane
+    newTag: slim-latest
