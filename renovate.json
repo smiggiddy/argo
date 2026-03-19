@@ -46,6 +46,50 @@
       "depNameTemplate": "rabbitmq-cluster-operator",
       "datasourceTemplate": "github-releases",
       "packageNameTemplate": "rabbitmq/cluster-operator"
+    },
+    {
+      "customType": "regex",
+      "description": "GitHub raw URLs with version tags in kustomizations",
+      "managerFilePatterns": [
+        "/apps/kustomizations/.+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "https://raw\\.githubusercontent\\.com/(?<depName>[^/]+/[^/]+)/(?<currentValue>v?[^/]+)/"
+      ],
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "description": "GitHub release URLs in kustomizations",
+      "managerFilePatterns": [
+        "/apps/kustomizations/.+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/(?<currentValue>v?[^/]+)/"
+      ],
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "description": "Container images with imageName field (CloudNativePG, etc)",
+      "managerFilePatterns": [
+        "/apps/kustomizations/.+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "imageName:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(@(?<currentDigest>sha256:[a-f0-9]+))?"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Container images with image field",
+      "managerFilePatterns": [
+        "/apps/kustomizations/.+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "image:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(@(?<currentDigest>sha256:[a-f0-9]+))?"
+      ],
+      "datasourceTemplate": "docker"
     }
   ],
   "customDatasources": {
