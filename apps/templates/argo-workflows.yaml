@@ -32,6 +32,14 @@ spec:
       valuesObject:
         crds:
           full: true
+        workflow:
+          serviceAccount:
+            create: true
+            name: "argo-workflow"
+          rbac:
+            create: true
+          workflowNamespaces:
+            - default
         server:
           authModes:
             - server
