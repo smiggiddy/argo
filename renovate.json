@@ -51,7 +51,7 @@
       "customType": "regex",
       "description": "GitHub raw URLs with version tags in kustomizations",
       "managerFilePatterns": [
-        "/apps/kustomizations/.+\\.ya?ml$/"
+        "/kustomizations/.+\\.ya?ml$/"
       ],
       "matchStrings": [
         "https://raw\\.githubusercontent\\.com/(?<depName>[^/]+/[^/]+)/(?<currentValue>v?[^/]+)/"
@@ -62,7 +62,7 @@
       "customType": "regex",
       "description": "GitHub release URLs in kustomizations",
       "managerFilePatterns": [
-        "/apps/kustomizations/.+\\.ya?ml$/"
+        "/kustomizations/.+\\.ya?ml$/"
       ],
       "matchStrings": [
         "https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/(?<currentValue>v?[^/]+)/"
@@ -73,7 +73,7 @@
       "customType": "regex",
       "description": "Container images with imageName field (CloudNativePG, etc)",
       "managerFilePatterns": [
-        "/apps/kustomizations/.+\\.ya?ml$/"
+        "/kustomizations/.+\\.ya?ml$/"
       ],
       "matchStrings": [
         "imageName:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(@(?<currentDigest>sha256:[a-f0-9]+))?"
@@ -84,7 +84,7 @@
       "customType": "regex",
       "description": "Container images with image field",
       "managerFilePatterns": [
-        "/apps/kustomizations/.+\\.ya?ml$/"
+        "/kustomizations/.+\\.ya?ml$/"
       ],
       "matchStrings": [
         "image:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(@(?<currentDigest>sha256:[a-f0-9]+))?"
