@@ -40,6 +40,9 @@ spec:
           annotations:
             cert-manager.io/cluster-issuer: cluster-ca-issuer
             external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+        defaultSettings:
+          nodeDrainPolicy: allow-if-replica-is-stopped
+          detachManuallyAttachedVolumesWhenCordoned: true
         persistence:
           defaultClassReplicaCount: 2
           defaultDataLocality: "best-effort"
