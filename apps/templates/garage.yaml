@@ -30,7 +30,7 @@ spec:
         image:
           repository: dxflrs/arm64_garage
         garage:
-          replicationFactor: 3
+          replicationFactor: 2
           s3:
             api:
               region: "us-east-2"
