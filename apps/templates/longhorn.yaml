@@ -21,12 +21,6 @@ spec:
     chart: longhorn
     helm:
       valuesObject:
-        image:
-          longhorn:
-            manager:
-              tag: v1.11.0-hotfix-1
-            instanceManager:
-              tag: v1.11.0-hotfix-1
         preUpgradeChecker:
           upgradeVersionCheck: false
         upgradeCheck:
