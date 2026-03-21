@@ -30,21 +30,25 @@ spec:
         image:
           repository: dxflrs/arm64_garage
         garage:
-          replicationFactor: 2
+          replicationFactor: 3
           s3:
             api:
               region: "us-east-2"
               rootDomain: "s3.lab.smig.tech"
         deployment:
-          replicaCount: 4
-
+          replicaCount: 5
+        monitoring:
+          metrics:
+            enabled: true
+            serviceMonitor:
+              enabled: true
         persistence:
           meta:
             storageClass: "longhorn"
             size: 100Mi
           data:
             storageClass: "longhorn-noreplicas"
-            size: 12Gi
+            size: 20Gi
         ingress:
           s3:
             api:
@@ -63,8 +67,3 @@ spec:
                 - secretName: garage-ingress-cert
                   hosts:
                     - s3.lab.smig.tech
-        monitoring:
-          metrics:
-            enabled: true
-            serviceMonitor:
-              enabled: true
