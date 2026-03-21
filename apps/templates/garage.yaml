@@ -36,7 +36,7 @@ spec:
               region: "us-east-2"
               rootDomain: "s3.lab.smig.tech"
         deployment:
-          replicaCount: 5
+          replicaCount: 4
         monitoring:
           metrics:
             enabled: true
