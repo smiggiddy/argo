@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ioscheduler-tuner
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: ioscheduler-tuner
+  template:
+    metadata:
+      labels:
+        app: ioscheduler-tuner
+    spec:
+      hostPID: true
+      hostNetwork: true
+      initContainers:
+        - name: set-scheduler
+          image: busybox
+          securityContext:
+            privileged: true
+          command:
+            - /bin/sh
+            - -c
+            - |
+              # Write the udev rule
+              cat > /host/etc/udev/rules.d/60-ioscheduler.rules << 'EOF'
+              ACTION=="add|change", SUBSYSTEM=="block", ENV{ID_PATH}=="ip-*:3260-iscsi-*", ATTR{queue/scheduler}="none"
+              ACTION=="add|change", KERNEL=="sd[a-z]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="none"
+              EOF
+              # Apply immediately to currently attached devices
+              for dev in /host/sys/block/sd*/queue/scheduler; do
+                echo none > "$dev" 2>/dev/null || true
+              done
+          volumeMounts:
+            - name: host-root
+              mountPath: /host
+      containers:
+        - name: sleep
+          image: busybox
+          command: ["sh", "-c", "sleep infinity"]
+          securityContext:
+            privileged: true
+      volumes:
+        - name: host-root
+          hostPath:
+            path: /
