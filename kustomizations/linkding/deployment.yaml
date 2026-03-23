@@ -20,7 +20,7 @@ spec:
         app: linkding
     spec:
       containers:
-      - image: sissbruecker/linkding:1.36.0
+      - image: sissbruecker/linkding:1.45.0
         name: linkding
         ports:
           - containerPort: 9090
