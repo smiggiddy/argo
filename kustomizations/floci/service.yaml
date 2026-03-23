@@ -1,0 +1,15 @@
+# https://kubernetes.io/docs/concepts/services-networking/service/
+apiVersion: v1
+kind: Service
+metadata:
+  name: floci
+spec:
+  selector:
+    app: floci
+  type: ClusterIP
+  ports:
+    - name: floci
+      protocol: TCP
+      port: 4566
+      targetPort: 4566
+---

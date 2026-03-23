@@ -1,0 +1,47 @@
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: floci
+  labels:
+    app: floci
+spec:
+  selector:
+    matchLabels:
+      app: floci
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: floci
+      labels:
+        app: floci
+    spec:
+      containers:
+        - name: floci
+          image: hectorvent/floci:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+          envFrom:
+            - configMapRef:
+                name: floci-config
+          ports:
+            - containerPort: 4566
+              name: floci
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: floci
+      restartPolicy: Always
