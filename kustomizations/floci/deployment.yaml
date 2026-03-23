@@ -40,10 +40,10 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /app/data
-          securityContext:
-            fsGroup: 1001
       volumes:
         - name: data
           persistentVolumeClaim:
             claimName: floci
       restartPolicy: Always
+      securityContext:
+        fsGroup: 1001
