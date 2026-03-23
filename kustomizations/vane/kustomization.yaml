@@ -5,4 +5,4 @@ resources:
 
 images:
   - name: itzcrazykns1337/vane
-    newTag: slim-latest
+    newTag: slim-latest@sha256:af3f4146a8521c8e61e911e191f3d329555ea10942648e42cacb3eea1e10ee09
