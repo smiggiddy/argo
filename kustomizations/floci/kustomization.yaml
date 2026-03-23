@@ -5,7 +5,7 @@ resources:
 
 configMapGenerator:
   - name: floci-config
-    files:
+    envs:
       - ./floci-config
 
 commonLabels:
