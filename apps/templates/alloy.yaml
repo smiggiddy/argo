@@ -23,11 +23,6 @@ spec:
       values: |
         controller:
           type: daemonset
-          tolerations:
-            - key: "node-role.kubernetes.io/master"
-              operator: "Equal"
-              value: "true"
-              effect: "NoSchedule"
           volumes:
             extra:
               - name: journal
