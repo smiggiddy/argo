@@ -14,6 +14,9 @@ spec:
       secretAccessKey:
         name: authentik-backup-credentials
         key: ACCESS_SECRET_KEY
+      region:
+        key: region
+        name: authentik-backup-credentials
     wal:
       compression: gzip
     region: us-east-2

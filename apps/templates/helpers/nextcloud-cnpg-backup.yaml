@@ -14,6 +14,9 @@ spec:
       secretAccessKey:
         name: nextcloud-backup-credentials
         key: ACCESS_SECRET_KEY
+      region:
+        key: region
+        name: nextcloud-backup-credentials
     wal:
       compression: gzip
   retentionPolicy: "14d"
