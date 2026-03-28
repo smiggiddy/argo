@@ -19,9 +19,9 @@ spec:
       valuesObject:
         configuration:
           concurrency: 1
-          rebootDays: ["fri"]
+          rebootDays: ["fri", "sat"]
           startTime: "07:00"
-          endTime: "11:00"
+          endTime: "21:00"
           timeZone: "America/New_York"
           drainTimeout: "15m"
           lockTtl: "120m"

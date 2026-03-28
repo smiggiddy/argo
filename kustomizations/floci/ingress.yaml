@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: floci
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-ca-issuer
+    external-dns.alpha.kubernetes.io/target: k3s.lab.smig.tech.
+spec:
+  tls:
+    - hosts:
+        - floci.lab.smig.tech
+      secretName: floci-tls
+  rules:
+    - host: floci.lab.smig.tech
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: floci
+                port:
+                  number: 4566

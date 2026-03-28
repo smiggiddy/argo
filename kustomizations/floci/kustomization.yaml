@@ -1,0 +1,13 @@
+resources:
+  - ./deployment.yaml
+  - ./service.yaml
+  - ./ingress.yaml
+
+configMapGenerator:
+  - name: floci-config
+    envs:
+      - ./floci-config
+
+commonLabels:
+  app.kubernetes.io/name: floci
+  app.kubernetes.io/part-of: floci

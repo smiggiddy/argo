@@ -1,36 +1,28 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cert-manager
+  name: floci
   namespace: argocd
   labels:
     apps: utilities 
   annotations:
-    avp.kubernetes.io/ignore: "true"
     notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
     notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
     notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    
 spec:
   project: default
   source:
-    repoURL: https://charts.jetstack.io
-    targetRevision: v1.20.0 
-    chart: cert-manager
-
-    helm:
-      values: |
-          crds:
-            enabled: true
-          config:
-            enableGatewayAPI: true
-
+    repoURL: 'https://github.com/smiggiddy/argo'
+    targetRevision: HEAD
+    path: ./kustomizations/floci
   destination:
-    server: https://kubernetes.default.svc
-    namespace: utilities
-
+    server: 'https://kubernetes.default.svc'
+    namespace: floci
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
+    - ApplyOutOfSyncOnly=true
     automated:
-      prune: true
       selfHeal: true
+      prune: true
