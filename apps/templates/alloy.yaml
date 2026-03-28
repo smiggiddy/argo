@@ -151,6 +151,7 @@ spec:
                 rule {
                   source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
                   target_label  = "__path__"
+                  regex         = "(.+);(.+)"
                   replacement   = "/var/log/pods/*$1*/$2/*.log"
                 }
 
