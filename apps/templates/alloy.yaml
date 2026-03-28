@@ -23,6 +23,11 @@ spec:
       values: |
         controller:
           type: daemonset
+          tolerations:
+            - key: "node-role.kubernetes.io/master"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
           volumes:
             extra:
               - name: journal
@@ -39,6 +44,10 @@ spec:
                   type: File
               - name: alloy-storage
                 emptyDir: {}
+              - name: pods-logs
+                hostPath:
+                  path: /var/log/pods
+                  type: Directory
 
         alloy:
           stabilityLevel: "generally-available"
@@ -60,6 +69,9 @@ spec:
                 readOnly: true
               - name: alloy-storage
                 mountPath: /var/lib/alloy
+              - name: pods-logs
+                mountPath: /var/log/pods
+                readOnly: true
 
           resources:
             requests:
@@ -114,7 +126,7 @@ spec:
               }
 
               // ---------------------------------------------------------------
-              // Pipeline 2: Kubernetes pod logs (via API, no hostPath needed)
+              // Pipeline 2: Kubernetes pod logs (file-based)
               // ---------------------------------------------------------------
               discovery.kubernetes "pods" {
                 role = "pod"
@@ -123,18 +135,23 @@ spec:
               discovery.relabel "pod_logs" {
                 targets = discovery.kubernetes.pods.targets
 
-                // Only scrape pods scheduled on this node
                 rule {
                   source_labels = ["__meta_kubernetes_pod_node_name"]
                   action        = "keep"
                   regex         = sys.env("HOSTNAME")
                 }
 
-                // Drop pods that are not running
                 rule {
                   source_labels = ["__meta_kubernetes_pod_phase"]
                   action        = "drop"
                   regex         = "Pending|Succeeded|Failed|Unknown"
+                }
+
+                // Construct the file path - glob on UID handles the namespace_pod_uid dir format
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+                  target_label  = "__path__"
+                  replacement   = "/var/log/pods/*$1*/$2/*.log"
                 }
 
                 rule {
@@ -153,16 +170,10 @@ spec:
                 }
 
                 rule {
-                  source_labels = ["__meta_kubernetes_pod_log_stream"]
-                  target_label  = "stream"
-                }
-
-                rule {
                   source_labels = ["__meta_kubernetes_pod_node_name"]
                   target_label  = "node"
                 }
 
-                // Prefer app.kubernetes.io/name, fall back to app label
                 rule {
                   source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
                   target_label  = "app"
@@ -175,7 +186,7 @@ spec:
                 }
               }
 
-              loki.source.kubernetes "pods" {
+              loki.source.file "pods" {
                 targets    = discovery.relabel.pod_logs.output
                 forward_to = [loki.process.pod_logs.receiver]
               }
