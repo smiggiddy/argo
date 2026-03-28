@@ -19,7 +19,6 @@ spec:
         name: authentik-backup-credentials
     wal:
       compression: gzip
-    region: us-east-2
   retentionPolicy: "7d"
 ---
 apiVersion: postgresql.cnpg.io/v1
