@@ -190,6 +190,11 @@ spec:
               loki.source.file "pods" {
                 targets    = discovery.relabel.pod_logs.output
                 forward_to = [loki.process.pod_logs.receiver]
+
+                file_match {
+                  enabled     = true
+                  sync_period = "5s"
+                }
               }
 
               loki.process "pod_logs" {
