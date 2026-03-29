@@ -20,11 +20,11 @@ spec:
     helm:
       valuesObject:
           image:
-            repository: git.thecodedom.com/smig/excalidraw-image
+            repository: excalidraw/excalidraw
             # This sets the pull policy for images.
             pullPolicy: IfNotPresent
             # Overrides the image tag whose default is the chart appVersion.
-            tag: "latest@sha256:3b4509f6c0179ecb1129a84b46be4a3c12659739031ff85793f1a00c4a10c613"
+            tag: "latest"
 
           ingress:
             enabled: true
