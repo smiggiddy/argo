@@ -2,6 +2,7 @@ resources:
   - ./nextcloud-cnpg-cluster.yaml
   - ./nextcloud-backup-secret.yaml
   - ./nextcloud-cnpg-backup.yaml
+  - ./nextcloud-db-secret.yaml
   - ./authentik-pg.yaml
   - ./authentik-objectstore.yaml
   - ./authentik-r2.yaml
