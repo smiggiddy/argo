@@ -11,7 +11,7 @@ metadata:
 spec:
   destination:
     namespace: mattermost-operator
-    server: https://kubernetes.default.svc
+    server: {{ .Values.spec.destination.server }}
   project: default
   source:
     repoURL: https://helm.mattermost.com

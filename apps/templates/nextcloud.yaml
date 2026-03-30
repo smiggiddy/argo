@@ -139,6 +139,6 @@ spec:
                hosts:
                - cloud.lab.smig.tech
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: {{ .Values.spec.destination.server }}
     namespace: nextcloud
   {{ include "app.syncPolicy.manual" . | nindent 2 }}

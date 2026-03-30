@@ -9,7 +9,7 @@ metadata:
     {{ include "app.notifications" . | nindent 4 }}
 spec:
   destination: 
-    server: https://kubernetes.default.svc
+    server: {{ .Values.spec.destination.server }}
     namespace: immich
   {{ include "app.syncPolicy.automated" . | nindent 2 }}
 

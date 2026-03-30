@@ -16,7 +16,7 @@ spec:
     targetRevision: HEAD
     
   destination:
-    server: https://kubernetes.default.svc
+    server: {{ .Values.spec.destination.server }}
     namespace: monitoring
 
   {{ include "app.syncPolicy.automated" . | nindent 2 }}

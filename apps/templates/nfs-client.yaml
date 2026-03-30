@@ -32,7 +32,7 @@ spec:
             storageClassName: nfs-client 
 
   destination:
-    server: https://kubernetes.default.svc
+    server: {{ .Values.spec.destination.server }}
     namespace: nfs-stuff
 
   {{ include "app.syncPolicy.manual" . | nindent 2 }}

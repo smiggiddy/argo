@@ -15,5 +15,5 @@ spec:
     targetRevision: HEAD
   destination:
     namespace: nextcloud
-    server: 'https://kubernetes.default.svc'
+    server: {{ .Values.spec.destination.server }}
   {{ include "app.syncPolicy.automated" . | nindent 2 }}

@@ -13,7 +13,7 @@ spec:
 
   destination:
     namespace: argo-workflows
-    server: https://kubernetes.default.svc 
+    server: {{ .Values.spec.destination.server }} 
   project: default
   source:
     repoURL: https://argoproj.github.io/argo-helm 

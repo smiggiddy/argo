@@ -15,6 +15,6 @@ spec:
     targetRevision: HEAD
     path: ./kustomizations/floci
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: {{ .Values.spec.destination.server }}
     namespace: floci
   {{ include "app.syncPolicy.automated" . | nindent 2 }}

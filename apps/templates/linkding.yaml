@@ -10,7 +10,7 @@ metadata:
 spec:
   destination:
     namespace: apps
-    server: https://kubernetes.default.svc 
+    server: {{ .Values.spec.destination.server }} 
   project: default
 
   source:

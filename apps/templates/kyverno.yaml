@@ -15,7 +15,7 @@ spec:
     chart: kyverno
 
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: {{ .Values.spec.destination.server }}
     namespace: kyverno
   syncPolicy:
     syncOptions:

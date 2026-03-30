@@ -14,6 +14,6 @@ spec:
     targetRevision: HEAD
     path: ./kustomizations/cnpg-databases
   destination:
-    server: https://kubernetes.default.svc
+    server: {{ .Values.spec.destination.server }}
     namespace: kube-system
   {{ include "app.syncPolicy.automated" . | nindent 2 }}

@@ -18,7 +18,7 @@ spec:
     path: kustomizations/bootdev
 
   destination:
-    server: https://kubernetes.default.svc
+    server: {{ .Values.spec.destination.server }}
     namespace: bootdev
 
   {{ include "app.syncPolicy.automated" . | nindent 2 }}

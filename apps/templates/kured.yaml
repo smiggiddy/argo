@@ -32,7 +32,7 @@ spec:
         tolerations: [{"key": "node-role.kubernetes.io/master", "effect": "NoSchedule", "value": "true"}]
 
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: {{ .Values.spec.destination.server }}
     namespace: kube-system
   syncPolicy:
     syncOptions:

@@ -35,6 +35,6 @@ spec:
 
 
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: {{ .Values.spec.destination.server }}
     namespace: apps
   {{ include "app.syncPolicy.automated" . | nindent 2 }}

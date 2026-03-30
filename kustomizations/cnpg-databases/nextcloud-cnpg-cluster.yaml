@@ -9,8 +9,8 @@ spec:
     size: 4Gi
 
   plugins:
-  - name: barman-cloud.cloudnative-pg.io
-    isWALArchiver: true
-    parameters:
-      barmanObjectName: nextcloud-pg
-
+    - name: barman-cloud.cloudnative-pg.io
+      enabled: true
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: nextcloud-pg

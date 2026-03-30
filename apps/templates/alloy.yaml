@@ -11,7 +11,7 @@ metadata:
 spec:
   destination:
     namespace: loki
-    server: https://kubernetes.default.svc
+    server: {{ .Values.spec.destination.server }}
   project: default
   source:
     repoURL: https://grafana.github.io/helm-charts

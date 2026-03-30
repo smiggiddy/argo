@@ -8,9 +8,6 @@ metadata:
   annotations:
     {{ include "app.notifications" . | nindent 4 }}
 spec:
-  destination:
-    namespace: argocd
-    server: https://kubernetes.default.svc 
   project: default
   source:
     repoURL: https://kubernetes-sigs.github.io/external-dns
@@ -45,7 +42,7 @@ spec:
 
         
   destination:
-    server: https://kubernetes.default.svc
+    server: {{ .Values.spec.destination.server }}
     namespace: kube-system
 
   {{ include "app.syncPolicy.automated" . | nindent 2 }}
