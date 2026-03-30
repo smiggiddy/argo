@@ -11,9 +11,12 @@ spec:
   source:
     path: apps
     repoURL: https://github.com/smiggiddy/argo
+    # helm:
+    #   valueFiles:
+    #     - values.yaml
   syncPolicy:
     automated:
-      prune: true
+      # prune: true
       selfHeal: true
     syncOptions:
-    - ApplyOutOfSyncOnly=true
+      - ApplyOutOfSyncOnly=true
