@@ -6,6 +6,8 @@ spec:
   gatewayClassName: traefik
   listeners:
     - protocol: TCP
+      group: gateway.networking.k8s.io
+      kind: Gateway
       port: 5672
       name: rabbitmq
       allowedRoutes:
