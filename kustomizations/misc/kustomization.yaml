@@ -1,0 +1,12 @@
+resources:
+  - ./argocd-secret.yaml
+  - ./cert-manager-issuer.yaml
+  - ./code-server-middleware.yaml
+  - ./gitlab-runner-secret.yaml
+  - ./grafana-secret.yaml
+  - ./nextcloud-middlewear.yml
+  - ./nextlcoud-tailscale.yaml
+  - ./r2-backup-secret.yaml
+  - ./registry-secret.yaml
+  - ./storage-class.yaml
+  - ./traefik-overlay.yaml
