@@ -14,6 +14,12 @@ spec:
     targetRevision: 3.7.1
     chart: kyverno
 
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /metadata/annotations
+        - /metadata/labels
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: kyverno
