@@ -10,8 +10,8 @@ metadata:
 spec:
   project: default
   source:
-    path: './mattermost'
-    repoURL: 'https://github.com/smiggiddy/argo'
+    path: ./kustomizations/mattermost
+    repoURL: {{ .Values.repoURL }}
     targetRevision: HEAD
   destination:
     namespace: mattermost
