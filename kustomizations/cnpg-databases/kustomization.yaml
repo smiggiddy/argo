@@ -5,4 +5,5 @@ resources:
   - ./authentik-pg.yaml
   - ./authentik-objectstore.yaml
   - ./authentik-r2.yaml
+  - ./authentik-secret.yaml
   - ./open-webui-cnpg.yaml
