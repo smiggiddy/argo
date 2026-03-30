@@ -3,19 +3,17 @@ kind: Application
 metadata:
   name: cnpg-databases
   namespace: argocd
+  labels:
+    apps: databases
+  annotations:
+    {{ include "app.notifications" . | nindent 4 }}
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/smiggiddy/argo'
+    repoURL: {{ .Values.repoURL }}
     targetRevision: HEAD
     path: ./kustomizations/cnpg-databases
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
-  syncPolicy:
-    syncOptions:
-    - CreateNamespace=true
-    - ApplyOutOfSyncOnly=true
-    automated:
-      prune: true
-      selfHeal: true
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}

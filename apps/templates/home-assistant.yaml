@@ -3,18 +3,17 @@ kind: Application
 metadata:
   name: home-assistant
   namespace: argocd
+  labels:
+    apps: homelab
+  annotations:
+    {{ include "app.notifications" . | nindent 4 }}
 spec:
   project: default
   source:
     path: kustomizations/home-assistant  # Update with your path
-    repoURL: 'https://github.com/smiggiddy/argo'
+    repoURL: {{ .Values.repoURL }}
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
     namespace: home-assistant
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}

@@ -3,21 +3,18 @@ kind: Application
 metadata:
   name: vane
   namespace: argocd
+  labels:
+    apps: utilities
   annotations:
-   avp.kubernetes.io/ignore: "true"
+    {{ include "app.notifications" . | nindent 4 }}
+    avp.kubernetes.io/ignore: "true"
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/smiggiddy/argo'
+    repoURL: {{ .Values.repoURL }}
     targetRevision: HEAD
     path: ./kustomizations/vane
   destination:
     server: https://kubernetes.default.svc
     namespace: ai
-  syncPolicy:
-    syncOptions:
-    - CreateNamespace=true
-    - ApplyOutOfSyncOnly=true
-    automated:
-      prune: true
-      selfHeal: true
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}

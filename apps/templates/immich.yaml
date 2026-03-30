@@ -3,18 +3,15 @@ kind: Application
 metadata:
   name: immich
   namespace: argocd
+  labels:
+    apps: homelab
   annotations:
-    notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
-    notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
-    notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    {{ include "app.notifications" . | nindent 4 }}
 spec:
   destination: 
     server: https://kubernetes.default.svc
     namespace: immich
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}
 
   project: default
   source:

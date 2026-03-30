@@ -3,13 +3,17 @@ kind: Application
 metadata:
   name: bootdev
   namespace: argocd
+  labels:
+    apps: utilities
+  annotations:
+    {{ include "app.notifications" . | nindent 4 }}
   finalizers:
     # The default behaviour is foreground cascading deletion
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/smiggiddy/argo'
+    repoURL: {{ .Values.repoURL }}
     targetRevision: HEAD
     path: kustomizations/bootdev
 
@@ -17,9 +21,4 @@ spec:
     server: https://kubernetes.default.svc
     namespace: bootdev
 
-  syncPolicy:
-    syncOptions:
-    - CreateNamespace=true
-    automated:
-      prune: true
-      selfHeal: true
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}

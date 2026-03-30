@@ -7,10 +7,7 @@ metadata:
     apps: utilities 
     software: database
   annotations:
-    
-    notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
-    notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
-    notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    {{ include "app.notifications" . | nindent 4 }}
   # annotations:
   #  avp.kubernetes.io/ignore: "true"
 spec:
@@ -27,10 +24,4 @@ spec:
     server: https://kubernetes.default.svc
     namespace: cnpg-system
 
-  syncPolicy:
-    syncOptions:
-    - CreateNamespace=true
-    - ServerSideApply=true
-    automated:
-      selfHeal: true
-      prune: true
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}

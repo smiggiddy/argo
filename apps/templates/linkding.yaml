@@ -6,10 +6,7 @@ metadata:
   labels:
     utilities: kube-system
   annotations:
-    notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
-    notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
-    notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
-    
+    {{ include "app.notifications" . | nindent 4 }}
 spec:
   destination:
     namespace: apps
@@ -17,14 +14,9 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/smiggiddy/argo
+    repoURL: {{ .Values.repoURL }}
     path: ./kustomizations/linkding
     targetRevision: HEAD
 
-  syncPolicy:
-    syncOptions:
-    - CreateNamespace=true
-    automated:
-      prune: true
-      selfHeal: true
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}
 

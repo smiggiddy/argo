@@ -1,20 +1,23 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: searxng
+  name: prometheus-resources
   namespace: argocd
   labels:
-    apps: utilities
+    apps: utilities 
   annotations:
     {{ include "app.notifications" . | nindent 4 }}
-    avp.kubernetes.io/ignore: "true"
+
 spec:
   project: default
   source:
-    repoURL: {{ .Values.repoURL }}
+    repoURL: https://github.com/smiggiddy/argo.git
+    path: charts/prometheus-resources
     targetRevision: HEAD
-    path: ./kustomizations/searxng
+    
   destination:
     server: https://kubernetes.default.svc
-    namespace: ai
+    namespace: monitoring
+
   {{ include "app.syncPolicy.automated" . | nindent 2 }}
+

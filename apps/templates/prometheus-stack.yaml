@@ -6,9 +6,7 @@ metadata:
   labels:
     apps: utilities 
   annotations:
-    notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
-    notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
-    notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    {{ include "app.notifications" . | nindent 4 }}
   finalizers:
     # The default behaviour is foreground cascading deletion
     - resources-finalizer.argocd.argoproj.io
@@ -97,14 +95,14 @@ spec:
                       chat_id: <path:k8s/data/argocd/grafana#telegram_chat_id>
                       parse_mode: "HTML"
                       message: |
-                        {{ if eq .Status "resolved" }}✅ RESOLVED{{ else }}🚨 ALERT{{ end }} <b>{{ .CommonAnnotations.summary }}</b>
-                        Status: {{ .Status | toUpper }}
-                        {{ range .Alerts }}
-                        Namespace: {{ .Labels.namespace }}
-                        Pod: {{ .Labels.pod }}
-                        Severity: {{ .Labels.severity }}
-                        Description: {{ .Annotations.description }}
-                        {{ end }}
+                        {{ "{{" }} if eq .Status "resolved" {{ "}}" }}✅ RESOLVED{{ "{{" }} else {{ "}}" }}🚨 ALERT{{ "{{" }} end {{ "}}" }} <b>{{ "{{" }} .CommonAnnotations.summary {{ "}}" }}</b>
+                        Status: {{ "{{" }} .Status | toUpper {{ "}}" }}
+                        {{ "{{" }} range .Alerts {{ "}}" }}
+                        Namespace: {{ "{{" }} .Labels.namespace {{ "}}" }}
+                        Pod: {{ "{{" }} .Labels.pod {{ "}}" }}
+                        Severity: {{ "{{" }} .Labels.severity {{ "}}" }}
+                        Description: {{ "{{" }} .Annotations.description {{ "}}" }}
+                        {{ "{{" }} end {{ "}}" }}
                       send_resolved: true
 
           grafana:
@@ -214,11 +212,5 @@ spec:
     server: https://kubernetes.default.svc
     namespace: monitoring
 
-  syncPolicy:
-    syncOptions:
-    - CreateNamespace=true
-    - ServerSideApply=true
-    automated:
-      selfHeal: true
-      prune: true
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}
 

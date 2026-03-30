@@ -7,18 +7,9 @@ metadata:
     apps: utilities
   annotations:
     avp.kubernetes.io/ignore: "true"
-    notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
-    notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
-    notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    {{ include "app.notifications" . | nindent 4 }}
 spec:
-  syncPolicy:
-    automated:
-      selfHeal: true
-      prune: true
-    syncOptions:
-      - CreateNamespace=true
-      - ApplyOutOfSyncOnly=true
-      - ServerSideApply=true
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}
 
   destination:
     namespace: argocd
