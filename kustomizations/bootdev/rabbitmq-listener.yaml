@@ -7,9 +7,12 @@ metadata:
 spec:
   parentRefs:
     - name: bootdev
+      group: gateway.networking.k8s.io
+      kind: Gateway
   rules:
     - backendRefs:
         - name: bootdev
           port: 5672
           group: gateway.networking.k8s.io
           kind: Gateway
+          weight: 1
