@@ -1,2 +1,0 @@
-resources:
-  - https://raw.githubusercontent.com/argoproj/argo-cd/stable/notifications_catalog/install.yaml
