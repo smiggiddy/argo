@@ -26,6 +26,10 @@ spec:
               operator: "Equal"
               value: "true"
               effect: "NoSchedule"
+            - key: "not-enough-ram"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
           volumes:
             extra:
               - name: journal
