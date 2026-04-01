@@ -1,0 +1,106 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: mattermost-te-build-
+spec:
+  entrypoint: main
+  serviceAccountName: argo-workflow
+  arguments:
+    parameters:
+      - name: repo
+        value: https://github.com/mattermost/mattermost.git
+      # renovate: datasource=github-releases depName=mattermost/mattermost
+      - name: mm-version
+        value: "v11.5.1"
+      - name: image
+        value: mattermost-te
+      # renovate: datasource=docker depName=ubuntu
+      - name: base-image-tag
+        value: "noble-20260217"
+      - name: base-image-arm64-digest
+        value: "sha256:288ce2836bbcbed87626f077b10acb99006be8c3df12e21dda4f21ccbc58cc0b"
+
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: build
+            template: build-image
+
+    - name: build-image
+      inputs:
+        artifacts:
+          - name: source
+            path: /src
+            git:
+              repo: "{{workflow.parameters.repo}}"
+              revision: "{{workflow.parameters.mm-version}}"
+              depth: 1
+      volumes:
+        - name: docker-config
+          secret:
+            secretName: cr-smigz-com-registry
+      container:
+        image: quay.io/buildah/stable:v1.43.0
+        volumeMounts:
+          - name: docker-config
+            mountPath: /.docker
+        workingDir: /src/server/build
+        env:
+          - name: STORAGE_DRIVER
+            value: vfs
+          - name: BUILDAH_FORMAT
+            value: docker
+          - name: DOCKER_CONFIG
+            value: /.docker
+        command: ["/bin/bash"]
+        args:
+          - "-c"
+          - |
+            set -euo pipefail
+
+            MM_VERSION="{{workflow.parameters.mm-version}}"
+            MM_VERSION_NUM="${MM_VERSION#v}"
+            IMAGE="cr.smigz.com/{{workflow.parameters.image}}:${MM_VERSION_NUM}"
+            MM_PACKAGE="https://releases.mattermost.com/${MM_VERSION_NUM}/mattermost-team-${MM_VERSION_NUM}-linux-arm64.tar.gz"
+            BASE_TAG="{{workflow.parameters.base-image-tag}}"
+            ARM64_DIGEST="{{workflow.parameters.base-image-arm64-digest}}"
+
+            echo "Building Mattermost Team Edition ${MM_VERSION_NUM} for linux/arm64"
+            echo "Package URL: ${MM_PACKAGE}"
+            echo "Base image: ubuntu:${BASE_TAG}@${ARM64_DIGEST}"
+
+            # --- Patch Dockerfile for ARM64 ---
+
+            # 1. Replace base image tag and pin ARM64 digest
+            sed -i "s|FROM ubuntu:[^@]*@sha256:[a-f0-9]*|FROM ubuntu:${BASE_TAG}@${ARM64_DIGEST}|" Dockerfile
+
+            # 2. Fix library paths for aarch64
+            sed -i 's|COPY --from=builder /usr/lib/lib|COPY --from=builder /usr/lib/aarch64-linux-gnu/lib|g' Dockerfile
+
+            # --- Verify patches applied ---
+            if ! grep -q "FROM ubuntu:${BASE_TAG}@${ARM64_DIGEST}" Dockerfile; then
+              echo "ERROR: Failed to set ARM64 base image digest"
+              echo "FROM line is: $(grep '^FROM' Dockerfile | head -1)"
+              exit 1
+            fi
+
+            if grep -q 'COPY --from=builder /usr/lib/lib' Dockerfile; then
+              echo "ERROR: Failed to patch library paths for aarch64"
+              exit 1
+            fi
+
+            echo "=== Patched Dockerfile ==="
+            cat Dockerfile
+            echo "=========================="
+
+            # --- Build and push ---
+            buildah build \
+              --platform=linux/arm64 \
+              --build-arg MM_PACKAGE="${MM_PACKAGE}" \
+              -t "${IMAGE}" \
+              .
+
+            buildah push "${IMAGE}"
+
+            echo "Successfully built and pushed ${IMAGE}"

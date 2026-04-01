@@ -1,0 +1,78 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: buildah
+spec:
+  arguments:
+    parameters:
+      - name: repo
+        value: https://github.com/argoproj/argo-workflows
+      - name: branch
+        value: master
+      - name: path
+        value: test/e2e/images/argosay/v2
+      - name: image
+        value: alexcollinsintuit/argosay:v2
+      - name: platform
+        value: linux/arm64,linux/amd64
+  entrypoint: main
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: image
+            template: image
+            arguments:
+              parameters:
+                - name: path
+                  value: "{{workflow.parameters.path}}"
+                - name: image
+                  value: "{{workflow.parameters.image}}"
+    - name: image
+      inputs:
+        parameters:
+          - name: path
+          - name: image
+        artifacts:
+          - name: source
+            path: /src
+            git:
+              repo: "{{workflow.parameters.repo}}"
+              revision: "{{workflow.parameters.branch}}"
+              depth: 1
+      initContainers:
+        - name: qemu-setup
+          image: tonistiigi/binfmt
+          command: ["/usr/bin/binfmt", "--install", "amd64"]
+          securityContext:
+            privileged: true
+      volumes:
+        - name: docker-config
+          secret:
+            secretName: cr-smigz-com-registry
+      container:
+        image: quay.io/buildah/stable:v1.43.0
+        volumeMounts:
+          - name: docker-config
+            mountPath: /.docker
+        workingDir: /src/{{inputs.parameters.path}}
+        env:
+          - name: STORAGE_DRIVER
+            value: vfs
+          - name: BUILDAH_FORMAT
+            value: docker
+          - name: DOCKER_CONFIG
+            value: /.docker
+        command: ["/bin/bash"]
+        args:
+          - "-c"
+          - |
+            set -e 
+
+            buildah manifest create cr.smigz.com/{{inputs.parameters.image}}
+
+            buildah build --platform={{workflow.parameters.platform}} \
+            --manifest cr.smigz.com/{{inputs.parameters.image}} \
+            .
+
+            buildah manifest push cr.smigz.com/{{inputs.parameters.image}}

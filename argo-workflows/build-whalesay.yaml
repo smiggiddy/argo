@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: whalesay-build-
+spec:
+  entrypoint: main
+  serviceAccountName: argo-workflow
+  arguments:
+    parameters:
+      - name: repo
+        value: https://github.com/docker/whalesay.git
+      - name: branch
+        value: master
+      - name: path
+        value: ""
+      - name: image
+        value: whalesay:latest
+
+  workflowTemplateRef:
+    name: buildah

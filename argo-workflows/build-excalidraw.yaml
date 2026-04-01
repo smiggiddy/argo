@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: excalidraw-build-
+spec:
+  entrypoint: main
+  serviceAccountName: argo-workflow
+  arguments:
+    parameters:
+      - name: repo
+        value: https://git.thecodedom.com/smig/excalidraw.git
+      - name: branch
+        value: master
+      - name: path
+        value: ""
+      - name: image
+        value: smig/excalidraw:latest
+
+  workflowTemplateRef:
+    name: buildkit

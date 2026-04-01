@@ -90,6 +90,39 @@
         "image:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(@(?<currentDigest>sha256:[a-f0-9]+))?"
       ],
       "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Mattermost Team Edition version in Argo Workflows",
+      "managerFilePatterns": [
+        "/argo-workflows/.+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*- name: mm-version\\n\\s*value: \"(?<currentValue>[^\"]+)\""
+      ],
+      "versioningTemplate": "semver-coerced"
+    },
+    {
+      "customType": "regex",
+      "description": "Container images in Argo Workflows",
+      "managerFilePatterns": [
+        "/argo-workflows/.+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "image:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(@(?<currentDigest>sha256:[a-f0-9]+))?"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Mattermost base image tag and ARM64 digest",
+      "managerFilePatterns": [
+        "/argo-workflows/.+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=docker depName=(?<depName>\\S+)\\n\\s*- name: base-image-tag\\n\\s*value: \"(?<currentValue>[^\"]+)\"\\n\\s*- name: base-image-arm64-digest\\n\\s*value: \"(?<currentDigest>sha256:[a-f0-9]+)\""
+      ],
+      "datasourceTemplate": "docker"
     }
   ],
   "customDatasources": {
