@@ -27,13 +27,21 @@ spec:
               - 192.168.100.53
               - 192.168.100.162
           kubeApiServer:
-            enabled: false
+            enabled: true
+            serviceMonitor:
+              enabled: false
           kubeScheduler:
-            enabled: false
+            enabled: true
+            serviceMonitor:
+              enabled: false
           kubeControllerManager:
-            enabled: false
+            enabled: true
+            serviceMonitor:
+              enabled: false
           kubeProxy:
-            enabled: false
+            enabled: true
+            serviceMonitor:
+              enabled: false
           kubelet:
             serviceMonitor:
               metricRelabelings:
@@ -47,6 +55,16 @@ spec:
                   regex: "kubeproxy_(.+)"
                   targetLabel: "job"
                   replacement: "kube-proxy"
+                  action: replace
+                - sourceLabels: [__name__]
+                  regex: "apiserver_(.+)"
+                  targetLabel: "job"
+                  replacement: "apiserver"
+                  action: replace
+                - sourceLabels: [__name__]
+                  regex: "etcd_(.+)"
+                  targetLabel: "job"
+                  replacement: "kube-etcd"
                   action: replace
           alertmanager:
             alertmanagerSpec:
@@ -192,6 +210,9 @@ spec:
                         storage: 50Gi
               podMonitorSelectorNilUsesHelmValues: false
               serviceMonitorSelectorNilUsesHelmValues: false
+              ruleSelectorNilUsesHelmValues: false
+              scrapeConfigSelectorNilUsesHelmValues: false
+              probeSelectorNilUsesHelmValues: false
               tolerations:
                 - key: node-role.kubernetes.io/master
                   operator: "Equal"
