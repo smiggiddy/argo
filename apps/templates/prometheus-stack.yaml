@@ -35,9 +35,7 @@ spec:
             serviceMonitor:
               enabled: false
           kubeControllerManager:
-            enabled: true
-            serviceMonitor:
-              enabled: false
+            enabled: false
           kubeProxy:
             enabled: true
             serviceMonitor:
@@ -65,11 +63,6 @@ spec:
                   regex: "etcd_(.+)"
                   targetLabel: "job"
                   replacement: "kube-etcd"
-                  action: replace
-                - sourceLabels: [__name__]
-                  regex: "controllermanager_(.+)"
-                  targetLabel: "job"
-                  replacement: "kube-controller-manager"
                   action: replace
           alertmanager:
             alertmanagerSpec:
