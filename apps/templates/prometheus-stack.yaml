@@ -140,6 +140,8 @@ spec:
                     value: Prometheus
                   - name: DS_LOKI
                     value: Loki
+                cnpg:
+                  gnetId: 20417
             dashboardProviders:
               dashboardproviders.yaml:
                 apiVersion: 1
