@@ -36,15 +36,22 @@ spec:
               repo: "{{workflow.parameters.repo}}"
               revision: "{{workflow.parameters.mm-version}}"
               depth: 1
+              singleBranch: true
+              branch: master
       volumes:
         - name: docker-config
           secret:
             secretName: cr-smigz-com-registry
+        - name: ca-cert
+          secret:
+            secretName: smigtech-ca-cert
       container:
         image: quay.io/buildah/stable:v1.43.0
         volumeMounts:
           - name: docker-config
             mountPath: /.docker
+          - name: ca-cert
+            mountPath: /tmp/ca-cert
         workingDir: /src/server/build
         env:
           - name: STORAGE_DRIVER
@@ -75,8 +82,34 @@ spec:
             # 1. Replace base image tag and pin ARM64 digest
             sed -i "s|FROM ubuntu:[^@]*@sha256:[a-f0-9]*|FROM ubuntu:${BASE_TAG}@${ARM64_DIGEST}|" Dockerfile
 
-            # 2. Fix library paths for aarch64
-            sed -i 's|COPY --from=builder /usr/lib/lib|COPY --from=builder /usr/lib/aarch64-linux-gnu/lib|g' Dockerfile
+            # 2. Replace individual library COPY lines with ldd-based approach
+            #    The upstream paths (/usr/lib/libpng.so*) don't match arm64 naming
+            #    (e.g. libpng16.so* at /usr/lib/aarch64-linux-gnu/), so we gather
+            #    all needed libs dynamically using ldd in the builder stage.
+            cat > /tmp/patch.awk << 'AWKEOF'
+            /^# Final stage/ {
+              print "# Add self-signed CA cert"
+              print "COPY smigtech.pem /usr/local/share/ca-certificates/ca.crt"
+              print "RUN update-ca-certificates"
+              print ""
+              print "# Gather shared libraries needed by document processing binaries"
+              print "RUN mkdir -p /staging/usr/lib && \\"
+              print "  for bin in /usr/bin/pdftotext /usr/bin/wvText /usr/bin/wvWare /usr/bin/unrtf /usr/bin/tidy; do \\"
+              print "    for lib in $(ldd \"$bin\" 2>/dev/null | grep -oE \"/usr/lib/[^ ]+\" || true); do \\"
+              print "      cp -L \"$lib\" /staging/usr/lib/ 2>/dev/null || true; \\"
+              print "    done; \\"
+              print "  done"
+              print ""
+            }
+            /^COPY --from=builder \/usr\/lib\/lib/ { next }
+            /^# Copy necessary libraries/ {
+              print "# Copy necessary libraries for document processing utilities"
+              print "COPY --from=builder /staging/usr/lib/ /usr/lib/"
+              next
+            }
+            { print }
+            AWKEOF
+            awk -f /tmp/patch.awk Dockerfile > Dockerfile.tmp && mv Dockerfile.tmp Dockerfile
 
             # --- Verify patches applied ---
             if ! grep -q "FROM ubuntu:${BASE_TAG}@${ARM64_DIGEST}" Dockerfile; then
@@ -85,14 +118,17 @@ spec:
               exit 1
             fi
 
-            if grep -q 'COPY --from=builder /usr/lib/lib' Dockerfile; then
-              echo "ERROR: Failed to patch library paths for aarch64"
+            if ! grep -q '/staging/usr/lib/' Dockerfile; then
+              echo "ERROR: Failed to patch library gathering step"
               exit 1
             fi
 
             echo "=== Patched Dockerfile ==="
             cat Dockerfile
             echo "=========================="
+
+            # Copy CA cert from mounted secret into build context
+            cp /tmp/ca-cert/smigtech.pem .
 
             # --- Build and push ---
             buildah build \

@@ -5,9 +5,9 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "4"
 spec:
-  image: docker.io/smiggiddy/mattermost
+  image: cr.smigz.com/mattermost-te
   imagePullPolicy: Always
-  version: 11.2.1
+  version: 11.5.1
   replicas: 1
   mattermostEnv:
     - name: MM_SERVICESETTINGS_SITEURL
@@ -36,6 +36,5 @@ spec:
   fileStore:
     external:
       url: garage.garage.svc.cluster.local:3900
-      # url: rustfs-svc.rustfs.svc.cluster.local:9000
       bucket: mattermost
       secret: file-store-credentials
