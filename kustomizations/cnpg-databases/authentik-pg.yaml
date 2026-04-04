@@ -4,6 +4,7 @@ metadata:
   name: authentik-pg
   namespace: authentik
 spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:17-trixie
   instances: 3
   storage:
     size: 4Gi
@@ -14,21 +15,15 @@ spec:
     limits:
       memory: "384Mi"
       cpu: "500m"
-
   bootstrap:
-    recovery:
-      source: authentik-pg
+    initdb:
       database: authentik
       owner: authentik
+      encoding: UTF8
+      localeCType: C
+      localeCollate: C
       secret:
         name: authentik-postgres-credentials
-
-  externalClusters:
-    - name: authentik-pg
-      plugin:
-        name: barman-cloud.cloudnative-pg.io
-        parameters:
-          barmanObjectName: authentik-pg
 
   plugins:
     - name: barman-cloud.cloudnative-pg.io
