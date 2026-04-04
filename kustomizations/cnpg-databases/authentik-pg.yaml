@@ -4,7 +4,7 @@ metadata:
   name: authentik-pg
   namespace: authentik
 spec:
-  imageName: ghcr.io/cloudnative-pg/postgresql:17-trixie
+  imageName: ghcr.io/cloudnative-pg/postgresql:17-bookworm
   instances: 3
   storage:
     size: 4Gi
