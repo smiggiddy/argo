@@ -20,6 +20,8 @@ spec:
       source: authentik-pg
       database: authentik
       owner: authentik
+      secret:
+        name: authentik-postgres-credentials
 
   externalClusters:
     - name: authentik-pg
