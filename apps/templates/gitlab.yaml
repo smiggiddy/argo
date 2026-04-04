@@ -61,7 +61,7 @@ spec:
                       Insecure = true
                       AuthenticationType = "access-key"
                   [runners.kubernetes]
-                      namespace = "{{.Release.Namespace}}"
+                      namespace = "gitlab-runner"
                       image = "registry.lab.smig.tech/smig/ci-templates/alpine:latest"
                       privileged = true
                       pull_policy = "if-not-present"
