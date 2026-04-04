@@ -4,7 +4,11 @@ metadata:
   name: authentik-pg
   namespace: authentik
 spec:
-  imageName: ghcr.io/cloudnative-pg/postgresql:17-bookworm
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: postgresql
+    major: 17
   instances: 3
   storage:
     size: 4Gi

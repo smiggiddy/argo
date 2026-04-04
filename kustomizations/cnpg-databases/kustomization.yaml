@@ -1,4 +1,5 @@
 resources:
+  - ./image-catalog.yaml
   - ./nextcloud-cnpg-cluster.yaml
   - ./nextcloud-backup-secret.yaml
   - ./nextcloud-cnpg-backup.yaml
