@@ -14,20 +14,20 @@ spec:
     size: 4Gi
   resources:
     requests:
-      memory: "384Mi"
+      memory: "512Mi"
       cpu: "1000m"
     limits:
-      memory: "384Mi"
+      memory: "512Mi"
       cpu: "1000m"
-  # bootstrap:
-  #   initdb:
-  #     database: authentik
-  #     owner: authentik
-  #     encoding: UTF8
-  #     localeCType: C
-  #     localeCollate: C
-  #     secret:
-  #       name: authentik-postgres-credentials
+  bootstrap:
+    initdb:
+      database: authentik
+      owner: authentik
+      encoding: UTF8
+      localeCType: C
+      localeCollate: C
+      secret:
+        name: authentik-postgres-credentials
 
   plugins:
     - name: barman-cloud.cloudnative-pg.io
