@@ -65,7 +65,8 @@ spec:
                       image = "registry.lab.smig.tech/smig/ci-templates/alpine:latest"
                       privileged = true
                       pull_policy = "if-not-present"
-                      helper_image = "my.registry.local/gitlab/gitlab-runner-helper:arm64-v${CI_RUNNER_VERSION}"
+                      helper_image = "registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:arm64-v${CI_RUNNER_VERSION}"
+
                   [runners.kubernetes.pod_resources]
                       cpu_limit = "4"
                       memory_limit = "6Gi"
