@@ -15,6 +15,17 @@ spec:
       memory: "384Mi"
       cpu: "500m"
 
+  bootstrap:
+    recovery:
+      source: authentik-pg
+
+  externalClusters:
+    - name: authentik-pg
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: authentik-pg
+
   plugins:
     - name: barman-cloud.cloudnative-pg.io
       enabled: true
