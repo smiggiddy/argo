@@ -4,6 +4,9 @@ metadata:
   name: authentik-pg
   namespace: cnpg-system
 spec:
+  namespaceSelector:
+    matchNames:
+      - authentik
   selector:
     matchLabels:
       cnpg.io/cluster: authentik-pg
