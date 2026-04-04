@@ -15,10 +15,10 @@ spec:
   resources:
     requests:
       memory: "512Mi"
-      cpu: "1000m"
+      cpu: "1"
     limits:
       memory: "512Mi"
-      cpu: "1000m"
+      cpu: "1"
   bootstrap:
     initdb:
       database: authentik
