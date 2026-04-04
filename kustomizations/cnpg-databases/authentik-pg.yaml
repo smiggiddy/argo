@@ -18,6 +18,8 @@ spec:
   bootstrap:
     recovery:
       source: authentik-pg
+      database: authentik
+      owner: authentik
 
   externalClusters:
     - name: authentik-pg
