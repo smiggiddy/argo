@@ -20,33 +20,41 @@ spec:
         app: linkding
     spec:
       containers:
-      - image: sissbruecker/linkding:1.45.0
-        name: linkding
-        ports:
-          - containerPort: 9090
-            name: linkding-web
-        volumeMounts:
-        - mountPath: "/etc/linkding/data"
-          name: data
-        env:
-        - name: LD_SUPERUSER_NAME
-          valueFrom:
-            secretKeyRef:
-              name: linkding-secret 
-              key: admin-user
+        - image: sissbruecker/linkding:1.45.0
+          name: linkding
+          ports:
+            - containerPort: 9090
+              name: linkding-web
+          volumeMounts:
+            - mountPath: "/etc/linkding/data"
+              name: data
+          envFrom:
+            - configMapRef:
+                name: linkding-config
+          env:
+            - name: LD_SUPERUSER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: linkding-secret
+                  key: admin-user
 
-        - name: LD_SUPERUSER_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: linkding-secret 
-              key: admin-password
-        resources: 
-          requests: 
-            memory: "256Mi"
-            cpu: "200m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+            - name: LD_SUPERUSER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: linkding-secret
+                  key: admin-password
+            - name: OIDC_RP_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: linkding-secret
+                  key: secret_key
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
       volumes:
         - name: data
           persistentVolumeClaim:
