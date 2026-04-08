@@ -7,5 +7,5 @@ resources:
 
 configMapGenerator:
   - name: linkding-config
-    envs:
+    files:
       - env
