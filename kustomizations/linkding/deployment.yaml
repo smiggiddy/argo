@@ -30,7 +30,7 @@ spec:
               name: data
           envFrom:
             - configMapRef:
-                name: linkding-config
+                name: linkding-config-1
           env:
             - name: LD_SUPERUSER_NAME
               valueFrom:

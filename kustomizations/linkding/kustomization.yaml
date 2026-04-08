@@ -6,6 +6,6 @@ resources:
   - ./service.yaml
 
 configMapGenerator:
-  - name: linkding-config
+  - name: linkding-config-1
     files:
       - env
