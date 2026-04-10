@@ -5,3 +5,4 @@ OIDC_OP_USER_ENDPOINT=https://auth.thecodedom.com/application/o/userinfo/
 OIDC_OP_JWKS_ENDPOINT=https://auth.thecodedom.com/application/o/linkding/jwks/
 OIDC_RP_CLIENT_ID=linkding
 OIDC_USERNAME_CLAIM=preferred_username
+OIDC_RP_SIGN_ALGO=ES256
