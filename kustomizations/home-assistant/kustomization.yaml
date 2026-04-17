@@ -5,7 +5,7 @@ resources:
 
 images:
   - name: ghcr.io/home-assistant/home-assistant
-    newTag: stable@sha256:916682086154a7390114a9788782b8efb199852d4f7d47066722c2bc5d1829e6
+    newTag: stable@sha256:ae0800c81fea16bc1241ce03bddb9c6260566e90f58b09d3e5a629e4f68bdc0b
 
 configMapGenerator:
   - name: home-assistant-config
