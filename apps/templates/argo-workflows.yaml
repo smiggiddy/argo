@@ -18,7 +18,7 @@ spec:
   source:
     repoURL: https://argoproj.github.io/argo-helm 
     chart: argo-workflows
-    targetRevision: 1.0.6
+    targetRevision: 1.0.10
     helm:
       valuesObject:
         crds:
