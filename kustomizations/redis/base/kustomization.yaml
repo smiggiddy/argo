@@ -6,4 +6,4 @@ resources:
 
 images:
   - name: valkey/valkey
-    newTag: 9.0.3-trixie@sha256:3eeb09785cd61ec8e3be35f8804c8892080f3ca21934d628abc24ee4ed1698f6
+    newTag: 9.0.3-trixie@sha256:3b55fbaa0cd93cf0d9d961f405e4dfcc70efe325e2d84da207a0a8e6d8fde4f9
