@@ -18,7 +18,7 @@ spec:
       - name: base-image-tag
         value: "noble-20260217"
       - name: base-image-arm64-digest
-        value: "sha256:288ce2836bbcbed87626f077b10acb99006be8c3df12e21dda4f21ccbc58cc0b"
+        value: "sha256:186072bba1b2f436cbb91ef2567abca677337cfc786c86e107d25b7072feef0c"
 
   templates:
     - name: main
