@@ -7,19 +7,19 @@ metadata:
   name: searxng
 spec:
   rules:
-  - host: searxng.lab.smig.tech
-    http:
-      paths:
-      - backend:
-          service:
-            name: searxng
-            port:
-              number: 8080
-        path: /
-        pathType: Prefix
+    - host: searxng.lab.smig.tech
+      http:
+        paths:
+          - backend:
+              service:
+                name: searxng-svc
+                port:
+                  number: 8080
+            path: /
+            pathType: Prefix
   tls:
-  - hosts:
-    - searxng.lab.smig.tech
-    secretName: searxng-tls
+    - hosts:
+        - searxng.lab.smig.tech
+      secretName: searxng-tls
 status:
   loadBalancer: {}

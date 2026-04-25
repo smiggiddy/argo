@@ -3,13 +3,13 @@ kind: Service
 metadata:
   labels:
     app: searxng
-  name: searxng
+  name: searxng-svc
 spec:
   ports:
-  - name: "8080"
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
+    - name: "8080"
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
   selector:
     app: searxng
   type: ClusterIP
