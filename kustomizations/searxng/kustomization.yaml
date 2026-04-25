@@ -1,0 +1,10 @@
+resources:
+  - ./configmap.yaml
+  - ./deployment.yaml
+  - ./ingress.yaml
+  - ./service.yaml
+
+images:
+  - name: searxng
+    newName: ghcr.io/searxng
+    newTag: 2026.4.24-a7ac696b4
