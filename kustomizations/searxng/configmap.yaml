@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: searxng-limiter
+data:
+  limiter.toml: |
+    # /etc/searxng/limiter.toml
+
+    [real_ip]
+    # Number of values to trust for X-Forwarded-For.
+    # Usually 1 when behind a single ingress proxy (Traefik).
+    x_for = 1
+
+    # Define the number of leading bits used to group clients into "networks"
+    # for rate limiting.
+    ipv4_prefix = 32
+    ipv6_prefix = 48
+
+    [botdetection.ip_limit]
+    filter_link_local = false
+    link_token = true
+
+    [botdetection.ip_lists]
+    block_ip = []
+    pass_ip = []
+    pass_searxng_org = true
