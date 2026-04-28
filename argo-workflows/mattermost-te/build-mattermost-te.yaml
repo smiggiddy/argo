@@ -11,7 +11,7 @@ spec:
         value: https://github.com/mattermost/mattermost.git
       # renovate: datasource=github-releases depName=mattermost/mattermost
       - name: mm-version
-        value: "v11.5.1"
+        value: "v11.6.1"
       - name: image
         value: mattermost-te
       # renovate: datasource=docker depName=ubuntu
