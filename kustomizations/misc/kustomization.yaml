@@ -9,4 +9,5 @@ resources:
   - ./r2-backup-secret.yaml
   - ./registry-secret.yaml
   - ./storage-class.yaml
+  - ./the-method-gitlab-deploy.yaml
   - ./traefik-overlay.yaml

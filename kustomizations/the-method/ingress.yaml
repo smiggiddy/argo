@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: the-method
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-ca-issuer
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+spec:
+  tls:
+    - hosts:
+        - the-method.lab.smig.tech
+      secretName: the-method-tls
+  rules:
+    - host: the-method.lab.smig.tech
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: the-method
+                port:
+                  number: 80

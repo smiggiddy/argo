@@ -1,0 +1,37 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: the-method-pg
+  namespace: smigz
+spec:
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: postgresql
+    major: 17
+  instances: 1
+  storage:
+    size: 5Gi
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "1"
+  bootstrap:
+    initdb:
+      database: the_method
+      owner: the_method
+      encoding: UTF8
+      localeCType: C
+      localeCollate: C
+      secret:
+        name: the-method-postgres-credentials
+
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      enabled: true
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: the-method-pg

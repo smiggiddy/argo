@@ -1,0 +1,11 @@
+apiVersion: v1
+stringData:
+  username: <username>
+  password: <password>
+kind: Secret
+metadata:
+  name: the-method-gitlab-deploy
+  namespace: default
+  annotations:
+    avp.kubernetes.io/path: "k8s/data/argocd/the-method-gitlab-deploy"
+type: Opaque

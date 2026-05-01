@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: the-method-migrations
+  annotations:
+    # Run before each ArgoCD sync; deleted on the next sync's hook creation
+    # so we always see the latest run's status.
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: 1
+  ttlSecondsAfterFinished: 600
+  template:
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        kubernetes.io/arch: arm64
+      containers:
+        - name: migrate
+          image: cr.smigz.com/the-method:latest
+          imagePullPolicy: Always
+          command: ["/migrate", "-dir", "/db/migrations", "up"]
+          env:
+            - name: DB_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: the-method-pg-app
+                  key: uri
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi

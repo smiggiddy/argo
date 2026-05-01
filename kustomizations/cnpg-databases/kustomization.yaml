@@ -10,5 +10,9 @@ resources:
   - ./authentik-secret.yaml
   - ./authentik-backup-secret.yaml
   - ./authentik-cnpg-backup.yaml
+  - ./the-method-pg.yaml
+  - ./the-method-secret.yaml
+  - ./the-method-backup-secret.yaml
+  - ./the-method-cnpg-backup.yaml
   - ./podmonitor.yaml
   - ./open-webui-cnpg.yaml

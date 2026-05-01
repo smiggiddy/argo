@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: the-method
+  labels:
+    app: the-method
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: the-method
+  template:
+    metadata:
+      labels:
+        app: the-method
+    spec:
+      # Cluster is ARM64 (Raspberry Pi) per DEPLOY.md §12.6. The image is
+      # single-arch arm64; this nodeSelector is a guardrail so the pod never
+      # lands on a hypothetical AMD64 node.
+      nodeSelector:
+        kubernetes.io/arch: arm64
+      containers:
+        - name: api
+          image: cr.smigz.com/the-method:latest
+          imagePullPolicy: Always
+          # Bootstrap habit config is baked into the image at the binary's
+          # default path (/etc/habits/habits.json). It's personal data and
+          # belongs in the private app repo, not here.
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: TZ
+              value: America/New_York
+            - name: LOG_FORMAT
+              value: json
+            - name: OIDC_ISSUER
+              value: https://authentik.lab.smig.tech/application/o/the-method/
+            - name: OIDC_AUDIENCE
+              value: the-method
+            # DB DSN comes from the CNPG-generated app-role Secret.
+            - name: DB_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: the-method-pg-app
+                  key: uri
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
