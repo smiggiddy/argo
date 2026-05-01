@@ -21,11 +21,18 @@ spec:
           imagePullPolicy: Always
           command: ["/migrate", "-dir", "/db/migrations", "up"]
           env:
-            - name: DB_DSN
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: the-method-pg-app
-                  key: uri
+                  name: the-method-postgres-credentials
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: the-method-postgres-credentials
+                  key: password
+            - name: DB_DSN
+              value: "postgres://$(DB_USER):$(DB_PASSWORD)@the-method-pg-rw:5432/the_method?sslmode=prefer"
           resources:
             requests:
               cpu: 50m
