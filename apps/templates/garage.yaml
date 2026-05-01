@@ -21,7 +21,7 @@ spec:
   source:
     repoURL: https://git.deuxfleurs.fr/Deuxfleurs/garage
     path: script/helm/garage
-    targetRevision: v2.2.0
+    targetRevision: v2.3.0
     helm:
       valuesObject:
         image:
