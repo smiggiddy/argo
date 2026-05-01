@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: the-method
+  namespace: argocd
+  labels:
+    apps: utilities
+  annotations:
+    {{ include "app.notifications" . | nindent 4 }}
+spec:
+  destination:
+    namespace: smigz
+    server: {{ .Values.spec.destination.server }}
+  project: default
+
+  source:
+    repoURL: {{ .Values.repoURL }}
+    path: ./kustomizations/the-method
+    targetRevision: HEAD
+
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}
