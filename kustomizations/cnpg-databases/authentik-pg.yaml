@@ -11,7 +11,7 @@ spec:
     major: 17
   instances: 3
   storage:
-    size: 4Gi
+    size: 5Gi
   resources:
     requests:
       memory: "512Mi"
