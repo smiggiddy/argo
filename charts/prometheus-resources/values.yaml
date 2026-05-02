@@ -45,3 +45,12 @@ gpuAlerts:
   tempThresholdC: 85
   tempFor: 10m
   metricsMissingFor: 15m
+
+pvcAlerts:
+  enabled: true
+  warningRatio: 0.7
+  warningFor: 10m
+  criticalRatio: 0.85
+  criticalFor: 10m
+  # PVCs whose name matches this regex are excluded from fill alerts.
+  excludePVCRegex: "open-webui.*"
