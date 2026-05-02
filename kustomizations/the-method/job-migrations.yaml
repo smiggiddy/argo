@@ -31,8 +31,10 @@ spec:
                 secretKeyRef:
                   name: the-method-postgres-credentials
                   key: password
+            # libpq key=value form so URL-reserved chars in the password
+            # don't break parsing — k8s env-var substitution is literal.
             - name: DB_DSN
-              value: "postgres://$(DB_USER):$(DB_PASSWORD)@the-method-pg-rw:5432/the_method?sslmode=prefer"
+              value: "host=the-method-pg-rw port=5432 user=$(DB_USER) password='$(DB_PASSWORD)' dbname=the_method sslmode=prefer"
           resources:
             requests:
               cpu: 50m

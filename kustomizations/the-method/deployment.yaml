@@ -40,11 +40,15 @@ spec:
             - name: LOG_FORMAT
               value: json
             - name: OIDC_ISSUER
-              value: https://authentik.lab.smig.tech/application/o/the-method/
+              value: https://auth.thecodedom.com/application/o/the-method/
             - name: OIDC_AUDIENCE
               value: the-method
             # CNPG bootstrap uses our own Secret (username/password); no -app
             # Secret is generated, so we craft the DSN against the rw Service.
+            # Use libpq key=value form (NOT a postgres:// URL) — k8s env-var
+            # substitution is literal, and any URL-reserved char in the
+            # password (@ : / ? #) would break URL parsing. Single-quote the
+            # password to tolerate spaces and most special chars.
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
@@ -56,7 +60,7 @@ spec:
                   name: the-method-postgres-credentials
                   key: password
             - name: DB_DSN
-              value: "postgres://$(DB_USER):$(DB_PASSWORD)@the-method-pg-rw:5432/the_method?sslmode=prefer"
+              value: "host=the-method-pg-rw port=5432 user=$(DB_USER) password='$(DB_PASSWORD)' dbname=the_method sslmode=prefer"
           resources:
             requests:
               cpu: 50m
