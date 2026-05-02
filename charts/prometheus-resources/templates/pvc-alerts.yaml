@@ -1,0 +1,32 @@
+# {{- if .Values.pvcAlerts.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: pvc-fill-alerts
+  labels:
+    release: prometheus
+spec:
+  groups:
+    - name: pvc.fill.rules
+      rules:
+        - alert: PVCFillWarning
+          expr: >-
+            {{ printf "kubelet_volume_stats_used_bytes{persistentvolumeclaim!~%q} / on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_resource_requests_storage_bytes > %v" .Values.pvcAlerts.excludePVCRegex .Values.pvcAlerts.warningRatio }}
+          for: {{ .Values.pvcAlerts.warningFor | quote }}
+          labels:
+            severity: warning
+          annotations:
+            summary: "PVC over {{ .Values.pvcAlerts.warningRatio }} of requested size"
+            description: "PVC {{ `{{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }}` }} is at {{ `{{ $value | humanizePercentage }}` }} of its requested capacity (threshold {{ .Values.pvcAlerts.warningRatio }}) for {{ .Values.pvcAlerts.warningFor }}."
+
+        - alert: PVCFillCritical
+          expr: >-
+            {{ printf "kubelet_volume_stats_used_bytes{persistentvolumeclaim!~%q} / on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_resource_requests_storage_bytes > %v" .Values.pvcAlerts.excludePVCRegex .Values.pvcAlerts.criticalRatio }}
+          for: {{ .Values.pvcAlerts.criticalFor | quote }}
+          labels:
+            severity: critical
+          annotations:
+            summary: "PVC over {{ .Values.pvcAlerts.criticalRatio }} of requested size"
+            description: "PVC {{ `{{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }}` }} is at {{ `{{ $value | humanizePercentage }}` }} of its requested capacity (threshold {{ .Values.pvcAlerts.criticalRatio }}) for {{ .Values.pvcAlerts.criticalFor }}. Expand the PVC or free space soon."
+# {{- end }}
