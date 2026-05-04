@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: the-method-streak-rollover
+  labels:
+    app: the-method
+spec:
+  # 00:05 America/New_York daily, per SPEC §Streak freezes / DEPLOY.md §9.2.
+  # Using the timeZone field (k8s v1.27+ GA) rather than a UTC schedule with
+  # documented DST drift — k3s tracks modern k8s, and "00:05 local" is the
+  # actual contract.
+  schedule: "5 0 * * *"
+  timeZone: America/New_York
+  # Skip overlapping runs — a still-running rollover starting again would
+  # have nothing left to do (the first run consumed the freezes), but
+  # doubling the request load is pointless.
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      ttlSecondsAfterFinished: 600
+      template:
+        metadata:
+          # app=the-method makes the existing networkpolicy match — the
+          # cron pod gets the same DB egress as the api Deployment.
+          labels:
+            app: the-method
+        spec:
+          restartPolicy: Never
+          nodeSelector:
+            kubernetes.io/arch: arm64
+          containers:
+            - name: streak-rollover
+              image: cr.smigz.com/the-method:latest
+              imagePullPolicy: Always
+              command: ["/streak-rollover"]
+              env:
+                - name: TZ
+                  value: America/New_York
+                - name: LOG_FORMAT
+                  value: json
+                - name: DB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: the-method-postgres-credentials
+                      key: username
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: the-method-postgres-credentials
+                      key: password
+                # libpq key=value form for the same reason as deployment.yaml:
+                # k8s env-var substitution is literal, so URL-reserved chars
+                # in the password don't break parsing.
+                - name: DB_DSN
+                  value: "host=the-method-pg-rw port=5432 user=$(DB_USER) password='$(DB_PASSWORD)' dbname=the_method sslmode=prefer"
+              resources:
+                requests:
+                  cpu: 25m
+                  memory: 32Mi
+                limits:
+                  cpu: 100m
+                  memory: 128Mi

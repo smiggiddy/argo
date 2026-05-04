@@ -1,0 +1,61 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: the-method-weekly-rotation
+  labels:
+    app: the-method
+spec:
+  # Sunday 23:55 America/New_York, per SPEC §Weekly boss challenge.
+  # weekday "0" is Sunday; same timeZone field as streak-rollover.
+  # The binary itself resolves "next Monday" off the cron clock, so
+  # firing 5 minutes before midnight Sunday seeds the week starting
+  # the next morning.
+  schedule: "55 23 * * 0"
+  timeZone: America/New_York
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      ttlSecondsAfterFinished: 600
+      template:
+        metadata:
+          labels:
+            app: the-method
+        spec:
+          restartPolicy: Never
+          nodeSelector:
+            kubernetes.io/arch: arm64
+          containers:
+            - name: weekly-rotation
+              image: cr.smigz.com/the-method:latest
+              imagePullPolicy: Always
+              command: ["/weekly-rotation"]
+              # Default --config path (/etc/the-method/weekly_challenges.json)
+              # is baked into the image at the binary's expected path; no
+              # ConfigMap or Volume needed.
+              env:
+                - name: TZ
+                  value: America/New_York
+                - name: LOG_FORMAT
+                  value: json
+                - name: DB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: the-method-postgres-credentials
+                      key: username
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: the-method-postgres-credentials
+                      key: password
+                - name: DB_DSN
+                  value: "host=the-method-pg-rw port=5432 user=$(DB_USER) password='$(DB_PASSWORD)' dbname=the_method sslmode=prefer"
+              resources:
+                requests:
+                  cpu: 25m
+                  memory: 32Mi
+                limits:
+                  cpu: 100m
+                  memory: 128Mi

@@ -9,9 +9,11 @@ resources:
   - ./ingress.yaml
   - ./job-migrations.yaml
   - ./networkpolicy.yaml
+  - ./cronjob-streak-rollover.yaml
+  - ./cronjob-weekly-rotation.yaml
 
 # Tag bumped here on each deploy. The build workflow pushes a tag, then this
 # value is updated and the argo repo committed — that's what triggers ArgoCD.
 images:
   - name: cr.smigz.com/the-method
-    newTag: 18c6898
+    newTag: dc49cfb
