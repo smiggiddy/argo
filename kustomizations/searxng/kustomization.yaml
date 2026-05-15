@@ -5,7 +5,7 @@ resources:
   - ./service.yaml
 
 images:
-  # original image is image: searxng/searxng:2025.8.1-3d96414
+  # original image is image: searxng/searxng:2025.8.1-3d96414@sha256:3f229455cee2e21bd9bd910fd1193687b380ebe2a083e15ad19bd5df72bab47f
   - name: searxng/searxng
     newName: ghcr.io/searxng/searxng
-    newTag: 2026.4.24-a7ac696b4
+    newTag: 2026.4.24-a7ac696b4@sha256:c9100c29c14a77d5289263a671580226c3b8a396a1a0130d2f500f57076a0119

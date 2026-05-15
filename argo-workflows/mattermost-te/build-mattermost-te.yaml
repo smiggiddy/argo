@@ -46,7 +46,7 @@ spec:
           secret:
             secretName: smigtech-ca-cert
       container:
-        image: quay.io/buildah/stable:v1.43.0
+        image: quay.io/buildah/stable:v1.43.0@sha256:5f926630fecf42024426154db6aa8a2394adabe3d2e13e4bef48ef99dde2d719
         volumeMounts:
           - name: docker-config
             mountPath: /.docker

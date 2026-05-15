@@ -18,7 +18,7 @@ spec:
         app: searxng
     spec:
       containers:
-        - image: searxng/searxng:2025.8.1-3d96414
+        - image: searxng/searxng:2025.8.1-3d96414@sha256:3f229455cee2e21bd9bd910fd1193687b380ebe2a083e15ad19bd5df72bab47f
           name: searxng
           ports:
             - containerPort: 8080
