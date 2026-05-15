@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: vane
-          image: itzcrazykns1337/vane:slim-latest
+          image: itzcrazykns1337/vane:slim-latest@sha256:aaf9da6bf76f01480c3e755388421029982e819773cbcecdcf0e9621a10e0690
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
