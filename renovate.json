@@ -76,7 +76,7 @@
         "/kustomizations/.+\\.ya?ml$/"
       ],
       "matchStrings": [
-        "imageName:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(@(?<currentDigest>sha256:[a-f0-9]+))?"
+        "imageName:\\s*(?<depName>[^:@\\s]+)(?::(?<currentValue>[^@\\s]+))?(?:@(?<currentDigest>sha256:[a-f0-9]+))?"
       ],
       "datasourceTemplate": "docker"
     },
@@ -87,7 +87,7 @@
         "/kustomizations/.+\\.ya?ml$/"
       ],
       "matchStrings": [
-        "image:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(@(?<currentDigest>sha256:[a-f0-9]+))?"
+        "image:\\s*(?<depName>[^:@\\s]+)(?::(?<currentValue>[^@\\s]+))?(?:@(?<currentDigest>sha256:[a-f0-9]+))?"
       ],
       "datasourceTemplate": "docker"
     },
@@ -109,7 +109,7 @@
         "/argo-workflows/.+\\.ya?ml$/"
       ],
       "matchStrings": [
-        "image:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(@(?<currentDigest>sha256:[a-f0-9]+))?"
+        "image:\\s*(?<depName>[^:@\\s]+)(?::(?<currentValue>[^@\\s]+))?(?:@(?<currentDigest>sha256:[a-f0-9]+))?"
       ],
       "datasourceTemplate": "docker"
     },
