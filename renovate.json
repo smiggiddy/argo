@@ -16,6 +16,13 @@
     {
       "matchPackageNames": ["/argo/"],
       "groupName": "argocd"
+    },
+    {
+      "description": "Pin each CNPG ClusterImageCatalog entry to its own postgres major",
+      "matchFileNames": ["kustomizations/cnpg-databases/image-catalog.yaml"],
+      "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ],
   "argocd": {
