@@ -67,11 +67,6 @@ spec:
           alertmanager:
             alertmanagerSpec:
               replicas: 2
-              tolerations:
-                - key: node-role.kubernetes.io/master
-                  operator: "Equal"
-                  value: "true"
-                  effect: "NoSchedule"
               affinity:
                 nodeAffinity:
                   preferredDuringSchedulingIgnoredDuringExecution:
@@ -219,11 +214,6 @@ spec:
               ruleSelectorNilUsesHelmValues: false
               scrapeConfigSelectorNilUsesHelmValues: false
               probeSelectorNilUsesHelmValues: false
-              tolerations:
-                - key: node-role.kubernetes.io/master
-                  operator: "Equal"
-                  value: "true"
-                  effect: "NoSchedule"
               affinity:
                 nodeAffinity:
                   preferredDuringSchedulingIgnoredDuringExecution:
