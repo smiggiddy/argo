@@ -18,6 +18,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: floci
+                name: floci-svc
                 port:
                   number: 4566
