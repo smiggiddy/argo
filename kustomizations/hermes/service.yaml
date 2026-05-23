@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: heremes-agent
+  name: hermes-agent
 spec:
   selector:
-    app: heremes-agent
+    app: hermes-agent
   type: ClusterIP
   ports:
-    - name: heremes-agent
+    - name: hermes-agent
       protocol: TCP
       port: 8642
       targetPort: 8642
