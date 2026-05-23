@@ -40,7 +40,7 @@ spec:
           - secretRef:
               name: hermes-secret
           - configmapRef:
-              name: hermes-config
+              name: hermes-configmap-1
         ports:
         - containerPort: 8642
           name: hermes-agent

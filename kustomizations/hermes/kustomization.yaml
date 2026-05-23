@@ -1,7 +1,13 @@
 resources:
   - ./deployement.yaml
   - ./service.yaml
+  - ./secret.yaml
 
 images:
   - name: nousresearch/hermes-agent
     newTag: latest
+
+configMapGenerator:
+  - name: hermes-configmap-1
+    files:
+      - ./configmap.yaml
