@@ -24,7 +24,6 @@ spec:
         runAsUser: 10000
         runAsGroup: 10000
         runAsNonRoot: true
-        allowPrivilegeEscalation: false
       initContainers:
       - name: init-container-mode
         image: busybox
@@ -49,6 +48,8 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /opt/data
+        securityContext:
+          allowPrivilegeEscalation: false
       volumes:
         - name: data
           persistentVolumeClaim:
