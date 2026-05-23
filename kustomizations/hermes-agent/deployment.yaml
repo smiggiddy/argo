@@ -1,0 +1,56 @@
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hermes-agent
+  labels:
+    app: hermes-agent
+spec:
+  selector:
+    matchLabels:
+      app: hermes-agent
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container:  hermes-agent
+      labels:
+        app: hermes-agent
+    spec:
+      containers:
+      - name: hermes-agent
+        image: nousresearch/hermes-agent
+        command: [gateway, run]
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+        livenessProbe:
+          tcpSocket:
+            port: 8642
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+        envFrom:
+          - secretRef:
+              name: hermes-secret
+          - configmapRef:
+              name: hermes-config
+        ports:
+        - containerPort: 8642
+          name: hermes-agent
+        volumeMounts:
+        - name: data
+          mountPath: /opt/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: hermes
+      restartPolicy: Always
+---
+

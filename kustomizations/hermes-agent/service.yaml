@@ -1,0 +1,14 @@
+# https://kubernetes.io/docs/concepts/services-networking/service/
+apiVersion: v1
+kind: Service
+metadata:
+  name: heremes-agent
+spec:
+  selector:
+    app: heremes-agent
+  type: ClusterIP
+  ports:
+    - name: heremes-agent
+      protocol: TCP
+      port: 8642
+      targetPort: 8642

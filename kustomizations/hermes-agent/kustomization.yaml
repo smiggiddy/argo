@@ -1,0 +1,7 @@
+resources:
+  - ./deployement.yaml
+  - ./service.yaml
+
+images:
+  - name: nousresearch/hermes-agent
+    newTag: latest

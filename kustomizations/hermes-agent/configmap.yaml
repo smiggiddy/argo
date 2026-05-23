@@ -1,0 +1,9 @@
+# https://kubernetes.io/docs/concepts/configuration/configmap/
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hermes-config
+data:
+  OLLAMA_BASE_URL: http://smig-inference.lab.smig.tech:8080/v1
+---
+
