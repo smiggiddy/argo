@@ -51,17 +51,6 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /opt/data
-        startupProbe:
-          tcpSocket:
-            port: 8642
-          failureThreshold: 30
-          periodSeconds: 10
-        livenessProbe:
-          tcpSocket:
-            port: 8642
-          initialDelaySeconds: 60
-          periodSeconds: 30
-          failureThreshold: 3
         securityContext:
           allowPrivilegeEscalation: false
       volumes:
