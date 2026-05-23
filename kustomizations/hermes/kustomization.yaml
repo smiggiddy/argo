@@ -9,5 +9,5 @@ images:
 
 configMapGenerator:
   - name: hermes-configmap-1
-    files:
+    envs:
       - ./configmap.yaml

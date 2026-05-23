@@ -22,7 +22,7 @@ spec:
       containers:
       - name: hermes-agent
         image: nousresearch/hermes-agent
-        command: [gateway, run]
+        args: [gateway, run]
         imagePullPolicy: Always
         resources:
           requests:
@@ -38,8 +38,8 @@ spec:
           periodSeconds: 10
         envFrom:
           - secretRef:
-              name: hermes-secret
-          - configmapRef:
+              name: hermes-secrets
+          - configMapRef:
               name: hermes-configmap-1
         ports:
         - containerPort: 8642
