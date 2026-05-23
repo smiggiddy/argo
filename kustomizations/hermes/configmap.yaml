@@ -1,2 +1,1 @@
 OLLAMA_BASE_URL=http://smig-inference.lab.smig.tech:8080/v1
-HERMES_INFERENCE_PROVIDER="custom"
