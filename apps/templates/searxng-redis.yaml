@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: searxng-redis
+  namespace: argocd
+  labels:
+    apps: homelab
+  annotations:
+    {{ include "app.notifications" . | nindent 4 }}
+spec:
+  project: default
+  source:
+    path: ./kustomizations/redis/overlays/searxng
+    repoURL: {{ .Values.repoURL }}
+    targetRevision: HEAD
+  destination:
+    namespace: searxng
+    server: {{ .Values.spec.destination.server }}
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}
