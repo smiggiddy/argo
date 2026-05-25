@@ -9,5 +9,5 @@ patches:
 commonLabels:
   app.kubernetes.io/name: redis
   app.kubernetes.io/component: cache
-  app.kubernetes.io/part-of: nextcloud
+  app.kubernetes.io/part-of: searxng
   app.kubernetes.io/managed-by: kustomize
