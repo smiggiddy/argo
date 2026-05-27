@@ -24,13 +24,6 @@ spec:
         runAsUser: 10000
         runAsGroup: 10000
         runAsNonRoot: true
-      initContainers:
-      - name: init-container-mode
-        image: busybox
-        command: ["sh", "-c", "mkdir -p /opt/data && touch /opt/data/.container-mode && chown -R 10000:10000 /opt/data"]
-        securityContext:
-          runAsNonRoot: false
-          runAsUser: 0
       containers:
       - name: hermes-agent
         image: nousresearch/hermes-agent
@@ -60,4 +53,3 @@ spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 60
 ---
-
