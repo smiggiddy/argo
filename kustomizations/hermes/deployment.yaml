@@ -46,7 +46,6 @@ spec:
           }
 
           mkdir -p "${ssh_dir}"
-          touch "${data_dir}/.container-mode"
 
           for dir in audio_cache cron hooks image_cache logs memories pairing sessions skills; do
             create_dir "${dir}" 700
