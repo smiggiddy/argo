@@ -104,8 +104,6 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /opt/data
-        securityContext:
-          allowPrivilegeEscalation: false
       volumes:
         - name: data
           persistentVolumeClaim:
