@@ -1,4 +1,6 @@
 OLLAMA_BASE_URL=http://smig-inference.lab.smig.tech:8080/v1
+HERMES_UID=10000
+HERMES_GID=10000
 TERMINAL_ENV=ssh
 TERMINAL_SSH_HOST=pve-hermes.lab.smig.tech
 TERMINAL_SSH_USER=alma

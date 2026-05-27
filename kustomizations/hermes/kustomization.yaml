@@ -3,7 +3,6 @@ resources:
   - ./service.yaml
   - ./secret.yaml
   - ./secret-bootstrap.yaml
-  - ./job-bootstrap.yaml
 
 images:
   - name: nousresearch/hermes-agent
