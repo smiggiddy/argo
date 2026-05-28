@@ -47,7 +47,6 @@ spec:
 
           mkdir -p "${ssh_dir}"
 
-          rm "${data_dir}/.container-mode" || true
 
           for dir in audio_cache cron hooks image_cache logs memories pairing sessions skills; do
             create_dir "${dir}" 700
@@ -66,7 +65,6 @@ spec:
             rm "${tmp_key}"
           fi
 
-          chown "${uid}:${gid}" "${data_dir}/.container-mode" "${ssh_dir}" "${key_file}"
           chmod 700 "${ssh_dir}"
           chmod 600 "${key_file}"
         resources:
