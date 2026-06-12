@@ -16,4 +16,4 @@ resources:
 # value is updated and the argo repo committed — that's what triggers ArgoCD.
 images:
   - name: cr.smigz.com/the-method
-    newTag: db20f50
+    newTag: 8cefd26
