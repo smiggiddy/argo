@@ -1,0 +1,265 @@
+{
+  "title": "The Method — Habits",
+  "uid": "the-method-habits",
+  "tags": ["the-method", "habits"],
+  "timezone": "America/New_York",
+  "editable": true,
+  "graphTooltip": 0,
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "",
+  "time": {
+    "from": "now-1y",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "habit",
+        "label": "Habit",
+        "type": "query",
+        "datasource": { "type": "postgres", "uid": "the-method-pg" },
+        "query": "SELECT name AS __text, slug AS __value FROM app.habits WHERE active ORDER BY sort_order;",
+        "definition": "SELECT name AS __text, slug AS __value FROM app.habits WHERE active ORDER BY sort_order;",
+        "refresh": 1,
+        "sort": 0,
+        "multi": false,
+        "includeAll": false,
+        "current": {},
+        "options": []
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Current streaks",
+      "description": "Mirrors the app's today-only streak rule with a one-day analytic grace: a streak whose last completion is older than yesterday (America/New_York) reads 0.",
+      "datasource": { "type": "postgres", "uid": "the-method-pg" },
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "the-method-pg" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT h.name, CASE WHEN vcs.last_completion >= (now() AT TIME ZONE 'America/New_York')::date - 1 THEN vcs.streak_length ELSE 0 END AS streak FROM app.v_current_streaks vcs JOIN app.habits h ON h.id = vcs.habit_id WHERE h.active ORDER BY h.sort_order;"
+        }
+      ],
+      "options": {
+        "reduceOptions": { "values": true, "calcs": [], "fields": "/^streak$/" },
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "text", "value": null },
+              { "color": "orange", "value": 3 },
+              { "color": "green", "value": 7 },
+              { "color": "purple", "value": 30 }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Total XP",
+      "datasource": { "type": "postgres", "uid": "the-method-pg" },
+      "gridPos": { "h": 6, "w": 6, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "the-method-pg" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT total_xp FROM app.v_total_xp;"
+        }
+      ],
+      "options": {
+        "reduceOptions": { "values": false, "calcs": ["lastNotNull"], "fields": "" },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "color": { "mode": "fixed", "fixedColor": "yellow" }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Level",
+      "description": "floor(sqrt(total_xp / 50)) — mirrors backend/internal/gamification/levels.go.",
+      "datasource": { "type": "postgres", "uid": "the-method-pg" },
+      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "the-method-pg" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT floor(sqrt(total_xp / 50.0))::int AS level FROM app.v_total_xp;"
+        }
+      ],
+      "options": {
+        "reduceOptions": { "values": false, "calcs": ["lastNotNull"], "fields": "" },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "color": { "mode": "fixed", "fixedColor": "purple" }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 4,
+      "type": "marcusolsson-calendar-panel",
+      "title": "Completions — $habit",
+      "description": "One cell per completed day. Value habits show the max logged value for the day; binary habits show 1. Multi-source rows (manual + freeze etc.) collapse to one cell, matching the streak view's per-day semantics.",
+      "datasource": { "type": "postgres", "uid": "the-method-pg" },
+      "gridPos": { "h": 13, "w": 24, "x": 0, "y": 6 },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "the-method-pg" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT c.completed_for::timestamp AS time, max(coalesce(c.value, 1)) AS value FROM app.completions c JOIN app.habits h ON h.id = c.habit_id WHERE h.slug = '$habit' AND $__timeFilter(c.completed_for::timestamp) GROUP BY c.completed_for ORDER BY c.completed_for;"
+        }
+      ],
+      "options": {},
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "continuous-GrYlRd" }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Ring closures per week",
+      "description": "Days per ISO week on which all three rings closed (max 7). Bucketed by when the XP event was written, so a backfilled closure lands in the week it was logged, not the week it closed.",
+      "datasource": { "type": "postgres", "uid": "the-method-pg" },
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 19 },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "the-method-pg" },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT date_trunc('week', occurred_at) AS time, count(*) AS ring_closures FROM app.xp_events WHERE source = 'all_rings_closed' AND $__timeFilter(occurred_at) GROUP BY 1 ORDER BY 1;"
+        }
+      ],
+      "options": {
+        "legend": { "displayMode": "hidden", "showLegend": false },
+        "tooltip": { "mode": "single", "sort": "none" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "min": 0,
+          "max": 7,
+          "color": { "mode": "fixed", "fixedColor": "green" },
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "lineWidth": 0,
+            "barAlignment": 0,
+            "stacking": { "mode": "none", "group": "A" }
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Weekly XP earned",
+      "description": "Stacked by XP source: completion, streak_milestone, all_rings_closed, weekly_boss, jackpot.",
+      "datasource": { "type": "postgres", "uid": "the-method-pg" },
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 19 },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "the-method-pg" },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT date_trunc('week', occurred_at) AS time, source AS metric, sum(xp) AS xp FROM app.xp_events WHERE $__timeFilter(occurred_at) GROUP BY 1, 2 ORDER BY 1;"
+        }
+      ],
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "min": 0,
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "lineWidth": 0,
+            "barAlignment": 0,
+            "stacking": { "mode": "normal", "group": "A" }
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 7,
+      "type": "table",
+      "title": "Most recent completions",
+      "datasource": { "type": "postgres", "uid": "the-method-pg" },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 28 },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "postgres", "uid": "the-method-pg" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT c.completed_at AS \"logged at\", h.name AS habit, c.completed_for AS \"for day\", c.value, h.unit, c.source FROM app.completions c JOIN app.habits h ON h.id = c.habit_id ORDER BY c.completed_at DESC LIMIT 25;"
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "footer": { "show": false, "reducer": ["sum"], "countRows": false, "fields": "" }
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      }
+    }
+  ]
+}

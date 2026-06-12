@@ -117,6 +117,9 @@ spec:
                       send_resolved: true
 
           grafana:
+            plugins:
+              # Calendar heatmap panel for the-method habits dashboard.
+              - marcusolsson-calendar-panel
             dashboards:
               default:
                 argocd:
@@ -137,6 +140,10 @@ spec:
                     value: Loki
                 cnpg:
                   gnetId: 20417
+                the-method-habits:
+                  url: https://raw.githubusercontent.com/smiggiddy/argo/main/grafana-dashboards/the-method/habits.json
+                  token: ""
+                  curlOptions: "-sLf"
             dashboardProviders:
               dashboardproviders.yaml:
                 apiVersion: 1
@@ -158,6 +165,23 @@ spec:
                 jsonData:
                   timeout: 300
                   maxLines: 1000
+              # the-method habits dashboard queries the app's CNPG database
+              # directly. Reuses the app-owner credentials from Vault — fine
+              # for a single-user homelab dashboard; revisit with a read-only
+              # role if more dashboards start hitting this DB.
+              - name: TheMethod-PG
+                uid: the-method-pg
+                type: postgres
+                access: proxy
+                url: the-method-pg-rw.smigz.svc.cluster.local:5432
+                user: the_method
+                secureJsonData:
+                  password: <path:k8s/data/argocd/the-method#password>
+                jsonData:
+                  database: the_method
+                  sslmode: require
+                  postgresVersion: 1700
+                  maxOpenConns: 2
             persistence:
               enabled: true
               type: sts
