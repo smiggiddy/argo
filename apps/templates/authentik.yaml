@@ -27,6 +27,8 @@ spec:
           enabled: false
 
         server:
+            deploymentStrategy:
+              type: Recreate
             securityContext:
               fsGroup: 1000
             volumes:
