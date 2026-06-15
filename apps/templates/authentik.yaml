@@ -27,6 +27,8 @@ spec:
           enabled: false
 
         server:
+            securityContext:
+              fsGroup: 1000
             volumes:
               - name: postgres-creds
                 secret:
