@@ -31,10 +31,15 @@ spec:
               - name: postgres-creds
                 secret:
                   secretName: authentik-postgres-credentials
+              - name: authentik-data
+                persistentVolumeClaim:
+                  claimName: authentik-data
             volumeMounts:
               - name: postgres-creds
                 mountPath: /postgres-creds
                 readOnly: true
+              - name: authentik-data
+                mountPath: /data
             resources:
               requests:
                 cpu: 300m
