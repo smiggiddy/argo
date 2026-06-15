@@ -14,10 +14,10 @@ spec:
     size: 5Gi
   resources:
     requests:
-      memory: "512Mi"
+      memory: "1024Mi"
       cpu: "1"
     limits:
-      memory: "512Mi"
+      memory: "1024Mi"
       cpu: "1"
   bootstrap:
     initdb:
