@@ -51,7 +51,7 @@ spec:
                     tag: v2.5.6-armnn
                   resources:
                     limits:
-                      squat.ai/mali: 1
+                      devic.es/mali: 1
           persistence:
             cache:
               type: persistentVolumeClaim
@@ -81,7 +81,7 @@ spec:
                     DB_PASSWORD: <path:k8s/data/argocd/immich#password>
                   resources:
                     limits:
-                      squat.ai/video: 1
+                      devic.es/video: 1
                       cpu: "4"
                       memory: "7Gi"
                     requests:
