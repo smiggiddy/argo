@@ -7,7 +7,7 @@ metadata:
 spec:
   image: cr.smigz.com/mattermost-te
   imagePullPolicy: Always
-  version: 11.5.1
+  version: 11.8.1
   replicas: 1
   mattermostEnv:
     - name: MM_SERVICESETTINGS_SITEURL
