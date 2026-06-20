@@ -21,6 +21,7 @@ spec:
         storageSize: "5Gi"
         storageClassName: "longhorn"
         tailscale:
+          enabled: true
           authSecretName: "tailscale-auth"
         ingress:
           enabled: true
