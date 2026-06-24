@@ -4,6 +4,7 @@ metadata:
   name: k0s-public-cluster-secret
   labels:
     argocd.argoproj.io/secret-type: cluster
+  annotations:
     avp.kubernetes.io/path: "k8s/data/argocd/clusters"
 type: Opaque
 stringData:
