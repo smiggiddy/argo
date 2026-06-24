@@ -1,0 +1,2 @@
+resources:
+  - ./k0s-cluster.yml

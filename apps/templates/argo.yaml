@@ -25,6 +25,9 @@ spec:
   - repoURL: 'https://gitea.smigz.com/smiggiddy/argocd-values.git'
     targetRevision: HEAD
     ref: values
+  - repoURL: https://github.com/smiggiddy/argo.git
+    targetRevision: HEAD
+    path: kustomizations/clusters
 
 
 

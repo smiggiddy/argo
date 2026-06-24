@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: k0s-public-cluster-secret
+  labels:
+    argocd.argoproj.io/secret-type: cluster
+    avp.kubernetes.io/path: "k8s/data/argocd/clusters"
+type: Opaque
+stringData:
+  name: k0s-pub-smig-tech
+  server: https://192.168.150.10
+  config: <k0s-cluster>
