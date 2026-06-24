@@ -9,5 +9,5 @@ metadata:
 type: Opaque
 stringData:
   name: k0s-pub-smig-tech
-  server: https://192.168.150.10
+  server: https://192.168.150.10:6443
   config: <k0s-cluster>
