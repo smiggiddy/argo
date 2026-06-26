@@ -16,9 +16,9 @@ spec:
         value: mattermost-te
       # renovate: datasource=docker depName=ubuntu
       - name: base-image-tag
-        value: "noble-20260217"
+        value: "noble-20260509.1"
       - name: base-image-arm64-digest
-        value: "sha256:186072bba1b2f436cbb91ef2567abca677337cfc786c86e107d25b7072feef0c"
+        value: "sha256:786a8b558f7be160c6c8c4a54f9a57274f3b4fb1491cf65146521ae77ff1dc54"
 
   templates:
     - name: main
