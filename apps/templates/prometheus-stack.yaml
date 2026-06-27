@@ -20,7 +20,7 @@ spec:
     chart: kube-prometheus-stack
     
     helm:
-      values: |
+      valuesObject:
           kubeEtcd:
             endpoints:
               - 192.168.100.52
