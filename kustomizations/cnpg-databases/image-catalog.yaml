@@ -7,7 +7,7 @@ spec:
     - major: 15
       image: ghcr.io/cloudnative-pg/postgresql:15.17-system-trixie@sha256:dfe703aa58f85558ef33e8ff3c7bdb2c834fb0ea4f4496f5fd951aac7d198320
     - major: 16
-      image: ghcr.io/cloudnative-pg/postgresql:16.13-system-trixie@sha256:91d4e86f4ca9dbcb1052105cc131d68d22d2151047436189f9d966d71a0503d1
+      image: ghcr.io/cloudnative-pg/postgresql:16.14-system-trixie@sha256:979f34c62f65784d12a456c0af3a5a0da955c4225f0a4261bb3e207ebeb53b4e
     - major: 17
       image: ghcr.io/cloudnative-pg/postgresql:17.10-system-trixie@sha256:77c83a52907e3b1832ab29fc462005c1a5868518ff02e832d6507f5e64c60ffb
     - major: 18
