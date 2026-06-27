@@ -15,7 +15,7 @@ spec:
   project: default
   source:
     repoURL: https://helm.mattermost.com
-    targetRevision: 1.0.4
+    targetRevision: 1.0.5
     chart: mattermost-operator
     helm:
       valuesObject:
