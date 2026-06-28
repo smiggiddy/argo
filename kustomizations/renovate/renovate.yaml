@@ -42,7 +42,7 @@ spec:
       template:
         spec:
           containers:
-            - image: renovate/renovate:full@sha256:37b640af0237b13c80fd658c158726a9404a64349534463439203e985a0ac7d1
+            - image: renovate/renovate:full@sha256:92635b1b30b3ded7d540d1614952d1496b0638e363e93b83d99522eaa45015e6
               name: renovate-bot
               env:
                 - name: RENOVATE_PLATFORM
