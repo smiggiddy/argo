@@ -12,7 +12,7 @@ spec:
   {{ include "app.syncPolicy.automated" . | nindent 2 }}
 
   destination:
-    namespace: argo-workflows
+    namespace: argo
     server: {{ .Values.spec.destination.server }} 
   project: default
   source:
