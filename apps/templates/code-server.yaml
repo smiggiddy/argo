@@ -14,7 +14,7 @@ spec:
   project: default
   source:
     repoURL: https://smiggiddy.github.io
-    targetRevision: 3.17.2
+    targetRevision: 3.17.3
     chart: code-server
 
     helm:     
@@ -30,7 +30,14 @@ spec:
               value: "<path:k8s/data/argocd/code-server#client_secret>"
             - name: CODER_OIDC_SIGN_IN_TEXT
               value: "Log in with authentic"
+            - name: PATH
+              value: /opt/tools/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
+          extraImageVolumes: 
+            - name: tools
+              mountPath: /opt/tools
+              reference: cr.smigz.com/image-volume:latest
+              pullPolicy: IfNotPresent 
 
           # password: <path:k8s/data/argocd/code-server#password>
           image:
