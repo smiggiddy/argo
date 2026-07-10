@@ -34,6 +34,9 @@ spec:
           uid=10000
           gid=10000
           data_dir=/opt/data
+          ssh_dir="${data_dir}/.ssh"
+          key_file="${ssh_dir}/hermes_ed25519"
+          tmp_key="${key_file}.tmp"
 
           create_dir() {
             path="${data_dir}/$1"
@@ -45,6 +48,8 @@ spec:
             chown "${uid}:${gid}" "${path}"
           }
 
+          mkdir -p "${ssh_dir}"
+
           for dir in audio_cache cron hooks image_cache logs memories pairing sessions skills; do
             create_dir "${dir}" 700
           done
@@ -52,6 +57,19 @@ spec:
           for dir in bin cache home plans sandboxes skins workspace; do
             create_dir "${dir}" 2775
           done
+
+          base64 -d /bootstrap-secrets/ssh_private_key > "${tmp_key}"
+          test -s "${tmp_key}"
+
+          if ! cmp -s "${tmp_key}" "${key_file}"; then
+            mv "${tmp_key}" "${key_file}"
+          else
+            rm "${tmp_key}"
+          fi
+
+          chmod 700 "${ssh_dir}"
+          chmod 600 "${key_file}"
+          chown -R "${uid}:${gid}" "${ssh_dir}"
 
           # freeze the bundled-skill set: presence of this marker disables
           # hermes' skills seeding sync (trimmed skills stay trimmed)
@@ -70,6 +88,9 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /opt/data
+        - name: bootstrap-secrets
+          mountPath: /bootstrap-secrets
+          readOnly: true
       containers:
       - name: hermes-agent
         image: nousresearch/hermes-agent
@@ -110,6 +131,9 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: hermes
+        - name: bootstrap-secrets
+          secret:
+            secretName: hermes-bootstrap-secrets
         - name: managed-config
           configMap:
             name: hermes-config-file
