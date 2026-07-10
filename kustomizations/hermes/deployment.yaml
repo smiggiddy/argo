@@ -21,6 +21,9 @@ spec:
     spec:
       securityContext:
         fsGroup: 10000
+        runAsUser: 10000
+        runAsGroup: 10000
+        runAsNonRoot: true
       initContainers:
       - name: bootstrap-data
         image: busybox:1.38@sha256:fd8d9aa63ba2f0982b5304e1ee8d3b90a210bc1ffb5314d980eb6962f1a9715d
@@ -81,10 +84,16 @@ spec:
               name: hermes-secrets
           - configMapRef:
               name: hermes-configmap-1
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: [ALL]
         ports:
         - containerPort: 8642
           name: hermes-agent
         volumeMounts:
+        - name: run
+          mountPath: /run
         - name: data
           mountPath: /opt/data
         - name: managed-config
@@ -94,6 +103,10 @@ spec:
           mountPath: /opt/tools
           readOnly: true
       volumes:
+        - name: run
+          emptyDir:
+            medium: Memory
+            sizeLimit: 64Mi
         - name: data
           persistentVolumeClaim:
             claimName: hermes
