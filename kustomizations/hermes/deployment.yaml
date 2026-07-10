@@ -58,7 +58,7 @@ spec:
             create_dir "${dir}" 2775
           done
 
-          base64 -d /bootstrap-secrets/ssh_private_key > "${tmp_key}"
+          cat /bootstrap-secrets/ssh_private_key > "${tmp_key}"
           test -s "${tmp_key}"
 
           if ! cmp -s "${tmp_key}" "${key_file}"; then
