@@ -2,6 +2,7 @@ model:
   default: "google/gemma-4-26b-a4b-qat"
   provider: "lmstudio"
   base_url: "http://smig-mpb-llm.lab.smig.tech:1234/v1"
+  context_length: 65536  # LM Studio doesn't report loaded context; hermes assumes 256K otherwise
 
 model_aliases:
   gemma:
