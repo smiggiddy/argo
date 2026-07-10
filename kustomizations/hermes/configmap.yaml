@@ -1,2 +1,3 @@
-HERMES_HOME=/opt/data HOME=/opt/data
+HERMES_HOME=/opt/data
+HOME=/opt/data
 PATH=/opt/tools/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
