@@ -1,3 +1,5 @@
 HERMES_HOME=/opt/data
 HOME=/opt/data
+LM_API_KEY=lmstudio
+LM_BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
 PATH=/opt/tools/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
