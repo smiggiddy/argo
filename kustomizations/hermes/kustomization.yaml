@@ -2,7 +2,6 @@ resources:
   - ./deployment.yaml
   - ./service.yaml
   - ./secret.yaml
-  - ./secret-bootstrap.yaml
 
 images:
   - name: nousresearch/hermes-agent
@@ -12,3 +11,6 @@ configMapGenerator:
   - name: hermes-configmap-1
     envs:
       - ./configmap.yaml
+  - name: hermes-config-file
+    files:
+      - config.yaml=./hermes-config.yaml

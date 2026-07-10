@@ -1,0 +1,14 @@
+model:
+  default: "google/gemma-4-26b-a4b-qat"
+  provider: "lmstudio"
+  base_url: "http://smig-mpb-llm.lab.smig.tech:1234/v1"
+
+model_aliases:
+  gemma:
+    model: "google/gemma-4-26b-a4b-qat"
+    provider: lmstudio
+    base_url: "http://smig-mpb-llm.lab.smig.tech:1234/v1"
+  qwen-small:
+    model: "qwen3-8b"
+    provider: custom
+    base_url: "http://smig-inference.lab.smig.tech:8080/v1"

@@ -1,10 +1,4 @@
-OLLAMA_BASE_URL=http://smig-inference.lab.smig.tech:8080/v1
 S6_KEEP_ENV=1
 HERMES_HOME=/opt/data
 HOME=/opt/data
-TERMINAL_ENV=ssh
-TERMINAL_SSH_HOST=pve-hermes.lab.smig.tech
-TERMINAL_SSH_USER=alma
-TERMINAL_SSH_PORT=22
-TERMINAL_SSH_KEY=/opt/data/.ssh/hermes_ed25519
-TERMINAL_SSH_PERSISTENT=true
+PATH=/opt/tools/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
