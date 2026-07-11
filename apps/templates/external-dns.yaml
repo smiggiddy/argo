@@ -26,7 +26,7 @@ spec:
           - service
           - ingress
           - gateway-httproute
-          - gateway-tlsroute
+          # - gateway-tlsroute
           - gateway-tcproute
           - gateway-udproute
           pihole-api-version: 6
