@@ -12,6 +12,10 @@ spec:
     kind: ClusterImageCatalog
     name: pgvector
     major: 17
+  # the pgvector image is built on the official postgres image where the
+  # postgres user is uid/gid 999; CNPG's default of 26 doesn't exist there
+  postgresUID: 999
+  postgresGID: 999
   instances: 1
   storage:
     size: 5Gi
