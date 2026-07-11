@@ -1,8 +1,10 @@
 # Single gateway process serves all profiles (default = telegram,
 # family = mattermost). Secondary profiles get creds via their own
 # $HERMES_HOME/profiles/<name>/.env, not process env.
-gateway:
-  multiplex_profiles: true
+# MUST be top-level: load_gateway_config() only maps the top-level key from
+# config.yaml; a nested gateway.multiplex_profiles is silently ignored
+# (the nested fallback in from_dict only sees legacy gateway.json). See NOTES.md.
+multiplex_profiles: true
 
 model:
   default: "google/gemma-4-26b-a4b-qat"
