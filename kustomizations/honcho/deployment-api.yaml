@@ -19,8 +19,18 @@ spec:
       containers:
         - name: api
           image: ghcr.io/plastic-labs/honcho
-          # runs scripts/provision_db.py then starts FastAPI on 8000
-          command: ["sh", "docker/entrypoint.sh"]
+          # mirrors docker/entrypoint.sh (provision_db then fastapi on 8000),
+          # plus configure_embeddings: migrations create vector columns at the
+          # 1536 default, and this idempotently alters them to
+          # EMBEDDING_VECTOR_DIMENSIONS (refuses if real embeddings exist)
+          command:
+            - sh
+            - -c
+            - |
+              set -e
+              /app/.venv/bin/python scripts/provision_db.py
+              /app/.venv/bin/python scripts/configure_embeddings.py --yes
+              exec /app/.venv/bin/fastapi run --host 0.0.0.0 src/main.py
           ports:
             - containerPort: 8000
               name: http
