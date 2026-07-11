@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./deployment-api.yaml
+  - ./deployment-deriver.yaml
+  - ./service.yaml
+  - ./ingress.yaml
+images:
+  - name: ghcr.io/plastic-labs/honcho
+    newTag: v3.0.11@sha256:423dc96fd3034408d66e5381c184c9ea824610acdb5581898dd00b0b1ab096d6
+configMapGenerator:
+  - name: honcho-config
+    envs:
+      - ./configmap.yaml

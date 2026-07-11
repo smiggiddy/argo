@@ -16,3 +16,4 @@ resources:
   - ./the-method-cnpg-backup.yaml
   - ./podmonitor.yaml
   - ./open-webui-cnpg.yaml
+  - ./honcho-pg.yaml

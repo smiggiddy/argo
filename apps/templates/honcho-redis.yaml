@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: honcho-redis
+  namespace: argocd
+  labels:
+    apps: ai
+  annotations:
+    {{ include "app.notifications" . | nindent 4 }}
+spec:
+  project: default
+  source:
+    path: ./kustomizations/redis/overlays/honcho
+    repoURL: {{ .Values.repoURL }}
+    targetRevision: HEAD
+  destination:
+    namespace: ai
+    server: {{ .Values.spec.destination.server }}
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}

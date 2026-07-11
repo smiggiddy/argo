@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: honcho-deriver
+  labels:
+    app: honcho-deriver
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: honcho-deriver
+  template:
+    metadata:
+      labels:
+        app: honcho-deriver
+    spec:
+      containers:
+        - name: deriver
+          image: ghcr.io/plastic-labs/honcho
+          # crashloops until the api pod finishes provisioning the db on
+          # first install, then settles — no ordering hook needed
+          command: ["/app/.venv/bin/python", "-m", "src.deriver"]
+          envFrom:
+            - configMapRef:
+                name: honcho-config
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: honcho-pg-app
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: honcho-pg-app
+                  key: password
+            - name: DB_CONNECTION_URI
+              value: "postgresql+psycopg://$(DB_USER):$(DB_PASSWORD)@honcho-pg-rw:5432/honcho"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi

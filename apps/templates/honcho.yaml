@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: honcho
+  namespace: argocd
+  labels:
+    apps: ai
+  annotations:
+    {{ include "app.notifications" . | nindent 4 }}
+
+spec:
+  project: default
+  source:
+    repoURL: {{ .Values.repoURL }}
+    targetRevision: HEAD
+    path: ./kustomizations/honcho
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: ai
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}

@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: honcho
+  labels:
+    app: honcho
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: honcho
+  template:
+    metadata:
+      labels:
+        app: honcho
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/plastic-labs/honcho
+          # runs scripts/provision_db.py then starts FastAPI on 8000
+          command: ["sh", "docker/entrypoint.sh"]
+          ports:
+            - containerPort: 8000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: honcho-config
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: honcho-pg-app
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: honcho-pg-app
+                  key: password
+            - name: DB_CONNECTION_URI
+              value: "postgresql+psycopg://$(DB_USER):$(DB_PASSWORD)@honcho-pg-rw:5432/honcho"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi

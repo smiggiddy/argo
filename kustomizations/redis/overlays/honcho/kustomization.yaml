@@ -1,0 +1,18 @@
+resources:
+  - ../../base/
+  - ./pvc.yaml
+namePrefix: honcho-
+namespace: ai
+patches:
+  - path: ./deploy-resources.yaml
+  - path: ./pvc-name.yaml
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+  - includeSelectors: true
+    pairs:
+      app.kubernetes.io/component: cache
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: redis
+      app.kubernetes.io/part-of: honcho

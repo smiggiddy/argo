@@ -1,0 +1,29 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: honcho-pg
+  namespace: ai
+spec:
+  # pgvector isn't shipped in the stock CNPG catalog images, so this cluster
+  # pins the official pgvector image instead of imageCatalogRef
+  imageName: pgvector/pgvector:pg17
+  instances: 1
+  storage:
+    size: 5Gi
+    storageClass: longhorn
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "1"
+  bootstrap:
+    initdb:
+      database: honcho
+      owner: honcho
+      encoding: UTF8
+      localeCType: C
+      localeCollate: C
+      postInitApplicationSQL:
+        - CREATE EXTENSION IF NOT EXISTS vector;

@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: honcho
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-ca-issuer
+    external-dns.alpha.kubernetes.io/target: k3s.lab.smig.tech.
+spec:
+  rules:
+    - host: honcho.lab.smig.tech
+      http:
+        paths:
+          - backend:
+              service:
+                name: honcho
+                port:
+                  number: 8000
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - honcho.lab.smig.tech
+      secretName: honcho-tls
