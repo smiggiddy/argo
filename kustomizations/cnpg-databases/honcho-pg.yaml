@@ -4,9 +4,14 @@ metadata:
   name: honcho-pg
   namespace: ai
 spec:
-  # pgvector isn't shipped in the stock CNPG catalog images, so this cluster
-  # pins the official pgvector image instead of imageCatalogRef
-  imageName: pgvector/pgvector:pg17
+  # pgvector isn't shipped in the stock CNPG catalog images; the pgvector
+  # catalog carries the major version explicitly because the upstream pg17
+  # tag doesn't pass the webhook's version parsing as a bare imageName
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: pgvector
+    major: 17
   instances: 1
   storage:
     size: 5Gi
