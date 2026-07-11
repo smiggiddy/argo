@@ -6,11 +6,14 @@
 # (the nested fallback in from_dict only sees legacy gateway.json). See NOTES.md.
 multiplex_profiles: true
 
+memory:
+  provider: honcho
+
 model:
   default: "google/gemma-4-26b-a4b-qat"
   provider: "lmstudio"
   base_url: "http://smig-mpb-llm.lab.smig.tech:1234/v1"
-  context_length: 65536  # LM Studio doesn't report loaded context; hermes assumes 256K otherwise
+  context_length: 65536 # LM Studio doesn't report loaded context; hermes assumes 256K otherwise
 
 providers:
   qwen-small:
@@ -29,7 +32,7 @@ auxiliary:
     provider: "custom"
     base_url: "http://smig-inference.lab.smig.tech:8080/v1"
     model: "qwen3-8b"
-    timeout: 300  # default 120s; local model summarizing 64K contexts needs headroom
+    timeout: 300 # default 120s; local model summarizing 64K contexts needs headroom
   web_extract:
     provider: "custom"
     base_url: "http://smig-inference.lab.smig.tech:8080/v1"
