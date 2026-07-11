@@ -1,3 +1,9 @@
+# Single gateway process serves all profiles (default = telegram,
+# family = mattermost). Secondary profiles get creds via their own
+# $HERMES_HOME/profiles/<name>/.env, not process env.
+gateway:
+  multiplex_profiles: true
+
 model:
   default: "google/gemma-4-26b-a4b-qat"
   provider: "lmstudio"
