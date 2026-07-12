@@ -17,13 +17,15 @@ DREAM_DEDUCTION_MODEL_CONFIG__MODEL=qwen/qwen3.6-27b
 DREAM_DEDUCTION_MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
 DREAM_INDUCTION_MODEL_CONFIG__MODEL=qwen/qwen3.6-27b
 DREAM_INDUCTION_MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
-DIALECTIC_LEVELS__minimal__MODEL_CONFIG__MODEL=qwen/qwen3.6-27b
-DIALECTIC_LEVELS__minimal__MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
-DIALECTIC_LEVELS__low__MODEL_CONFIG__MODEL=qwen/qwen3.6-27b
-DIALECTIC_LEVELS__low__MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
-DIALECTIC_LEVELS__medium__MODEL_CONFIG__MODEL=qwen/qwen3.6-27b
-DIALECTIC_LEVELS__medium__MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
-DIALECTIC_LEVELS__high__MODEL_CONFIG__MODEL=qwen/qwen3.6-27b
-DIALECTIC_LEVELS__high__MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
-DIALECTIC_LEVELS__max__MODEL_CONFIG__MODEL=qwen/qwen3.6-27b
-DIALECTIC_LEVELS__max__MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
+# dialectic is the interactive path behind hermes' 30s plugin timeout —
+# it runs on the fast small model, not the 27b (93s+ under load)
+DIALECTIC_LEVELS__minimal__MODEL_CONFIG__MODEL=qwen3-8b
+DIALECTIC_LEVELS__minimal__MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-inference.lab.smig.tech:8080/v1
+DIALECTIC_LEVELS__low__MODEL_CONFIG__MODEL=qwen3-8b
+DIALECTIC_LEVELS__low__MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-inference.lab.smig.tech:8080/v1
+DIALECTIC_LEVELS__medium__MODEL_CONFIG__MODEL=qwen3-8b
+DIALECTIC_LEVELS__medium__MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-inference.lab.smig.tech:8080/v1
+DIALECTIC_LEVELS__high__MODEL_CONFIG__MODEL=qwen3-8b
+DIALECTIC_LEVELS__high__MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-inference.lab.smig.tech:8080/v1
+DIALECTIC_LEVELS__max__MODEL_CONFIG__MODEL=qwen3-8b
+DIALECTIC_LEVELS__max__MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-inference.lab.smig.tech:8080/v1
