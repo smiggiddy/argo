@@ -9,13 +9,13 @@ EMBEDDING_MAX_INPUT_TOKENS=2048
 EMBEDDING_MODEL_CONFIG__TRANSPORT=openai
 EMBEDDING_MODEL_CONFIG__MODEL=/models/nomic-embed-text-v1.5.Q8_0.gguf
 EMBEDDING_MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-inference.lab.smig.tech:8081/v1
-DERIVER_MODEL_CONFIG__MODEL=unsloth/qwen3.6-27b
+DERIVER_MODEL_CONFIG__MODEL=qwen/qwen3.6-27b
 DERIVER_MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
-SUMMARY_MODEL_CONFIG__MODEL=unsloth/qwen3.6-27b
+SUMMARY_MODEL_CONFIG__MODEL=qwen/qwen3.6-27b
 SUMMARY_MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
-DREAM_DEDUCTION_MODEL_CONFIG__MODEL=unsloth/qwen3.6-27b
+DREAM_DEDUCTION_MODEL_CONFIG__MODEL=qwen/qwen3.6-27b
 DREAM_DEDUCTION_MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
-DREAM_INDUCTION_MODEL_CONFIG__MODEL=unsloth/qwen3.6-27b
+DREAM_INDUCTION_MODEL_CONFIG__MODEL=qwen/qwen3.6-27b
 DREAM_INDUCTION_MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
 # dialectic is the interactive path behind hermes' 30s plugin timeout —
 # it runs on the fast small model, not the 27b (93s+ under load)
