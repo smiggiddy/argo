@@ -10,7 +10,8 @@ memory:
   provider: honcho
 
 model:
-  default: "qwen/qwen3.6-27b"
+  default: "qwen3.6-35b-a3b"
+  # default: "qwen/qwen3.6-27b"
   provider: "lmstudio"
   base_url: "http://smig-mpb-llm.lab.smig.tech:1234/v1"
   context_length: 65536
@@ -48,6 +49,7 @@ model_aliases:
     provider: custom
     base_url: "http://smig-inference.lab.smig.tech:8080/v1"
   qwen-big:
-    model: "qwen/qwen3.6-27b"
+    model: "qwen3.6-35b-a3b"
+    # model: "qwen/qwen3.6-27b"
     provider: lmstudio
     base_url: "http://smig-mpb-llm.lab.smig.tech:1234/v1"
