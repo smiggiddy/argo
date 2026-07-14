@@ -14,7 +14,7 @@ model:
   # default: "qwen/qwen3.6-27b"
   provider: "lmstudio"
   base_url: "http://smig-mpb-llm.lab.smig.tech:1234/v1"
-  context_length: 65536
+  context_length: 131072
 
 providers:
   qwen-small:
