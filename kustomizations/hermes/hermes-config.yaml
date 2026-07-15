@@ -6,6 +6,9 @@
 # (the nested fallback in from_dict only sees legacy gateway.json). See NOTES.md.
 multiplex_profiles: true
 
+display:
+  tool_progress_command: true
+
 memory:
   provider: honcho
 
