@@ -13,9 +13,9 @@ DERIVER_MODEL_CONFIG__MODEL=google/gemma-4-e4b
 DERIVER_MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
 SUMMARY_MODEL_CONFIG__MODEL=google/gemma-4-e4b
 SUMMARY_MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
-DREAM_DEDUCTION_MODEL_CONFIG__MODEL=unsloth/qwen3.6-27b
+DREAM_DEDUCTION_MODEL_CONFIG__MODEL=qwen3.6-35b-a3b
 DREAM_DEDUCTION_MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
-DREAM_INDUCTION_MODEL_CONFIG__MODEL=unsloth/qwen3.6-27b
+DREAM_INDUCTION_MODEL_CONFIG__MODEL=qwen3.6-35b-a3b
 DREAM_INDUCTION_MODEL_CONFIG__OVERRIDES__BASE_URL=http://smig-mpb-llm.lab.smig.tech:1234/v1
 # dialectic is the interactive path behind hermes' 30s plugin timeout —
 # it runs on the fast small model, not the 27b (93s+ under load)
