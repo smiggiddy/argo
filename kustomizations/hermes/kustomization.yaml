@@ -6,7 +6,7 @@ resources:
 
 images:
   - name: nousresearch/hermes-agent
-    newTag: latest@sha256:c613957ef89891a76e81c9d3b5f73609a0396e2b4edb2dbfba33357977ecc2c8
+    newTag: latest@sha256:e9bf9740d33a3e8f911845bf12eaaaee9a68cca19d588a086f8b92fc5ba71d8f
 
 configMapGenerator:
   - name: hermes-configmap-1
