@@ -18,6 +18,14 @@ model:
   provider: "lmstudio"
   base_url: "http://smig-mpb-llm.lab.smig.tech:1234/v1"
   context_length: 131072
+  # String-form aliases ("provider/model") — the top-level model_aliases: dict
+  # is flagged as an unknown root by the post-0.18.2 config validator. Aliases
+  # carry no base_url in this form; it resolves via the provider path
+  # (providers.qwen-small entry / LM_BASE_URL env for lmstudio).
+  aliases:
+    gemma: "lmstudio/unsloth/gemma-4-26b-a4b-it-qat"
+    qwen-small: "qwen-small/qwen3-8b"
+    qwen-big: "lmstudio/qwen3.6-35b-a3b"
 
 providers:
   qwen-small:
@@ -41,18 +49,3 @@ auxiliary:
     provider: "custom"
     base_url: "http://smig-inference.lab.smig.tech:8080/v1"
     model: "qwen3-8b"
-
-model_aliases:
-  gemma:
-    model: "unsloth/gemma-4-26b-a4b-it-qat"
-    provider: lmstudio
-    base_url: "http://smig-mpb-llm.lab.smig.tech:1234/v1"
-  qwen-small:
-    model: "qwen3-8b"
-    provider: custom
-    base_url: "http://smig-inference.lab.smig.tech:8080/v1"
-  qwen-big:
-    model: "qwen3.6-35b-a3b"
-    # model: "qwen/qwen3.6-27b"
-    provider: lmstudio
-    base_url: "http://smig-mpb-llm.lab.smig.tech:1234/v1"
