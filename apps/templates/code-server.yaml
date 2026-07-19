@@ -36,7 +36,7 @@ spec:
           extraImageVolumes: 
             - name: tools
               mountPath: /opt/tools
-              reference: cr.smigz.com/image-volume:0.1.0
+              reference: cr.smigz.com/image-volume:0.1.1
               pullPolicy: IfNotPresent 
 
           # password: <path:k8s/data/argocd/code-server#password>
