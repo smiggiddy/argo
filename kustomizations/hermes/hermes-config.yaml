@@ -34,17 +34,18 @@ providers:
     model: "qwen3-8b"
     discover_models: true
 
-# Side tasks (context compression, web extraction) run on the small qwen box
-# instead of following the main model onto LM Studio. provider: custom is
-# required — a bare base_url without api_key falls through to auto, which
-# targets the main provider with the overridden model name and 400s.
+# Side tasks run off the main LM Studio model. provider: custom is required
+# for local endpoints — a bare base_url without api_key falls through to auto,
+# which targets the main provider with the overridden model name and 400s.
 # vision stays on auto — qwen3-8b is text-only.
 auxiliary:
+  # Compression goes to OpenAI, not qwen-small: qwen3-8b's context window is
+  # smaller than the main model's 131K, so big-context summarize calls overflow
+  # it. Named provider resolves endpoint + OPENAI_API_KEY (pod env via
+  # hermes-secrets) itself; no base_url/timeout override needed.
   compression:
-    provider: "custom"
-    base_url: "http://smig-inference.lab.smig.tech:8080/v1"
-    model: "qwen3-8b"
-    timeout: 300 # default 120s; local model summarizing 64K contexts needs headroom
+    provider: "openai"
+    model: "gpt-5-mini"
   web_extract:
     provider: "custom"
     base_url: "http://smig-inference.lab.smig.tech:8080/v1"
