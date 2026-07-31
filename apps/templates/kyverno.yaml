@@ -11,7 +11,7 @@ spec:
   project: default
   source:
     repoURL: https://kyverno.github.io/kyverno
-    targetRevision: 3.8.1
+    targetRevision: 3.8.2
     chart: kyverno
 
   ignoreDifferences:
