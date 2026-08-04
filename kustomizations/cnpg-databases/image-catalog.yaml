@@ -5,10 +5,10 @@ metadata:
 spec:
   images:
     - major: 15
-      image: ghcr.io/cloudnative-pg/postgresql:15.18-system-trixie@sha256:2eef8bd1be782580957825542c7f3de84daacd0ced124a1cd5090d4d8f96dd30
+      image: ghcr.io/cloudnative-pg/postgresql:15.18-system-trixie@sha256:2286f66af9c9b802cb054f94da1a3cae47dbbc724cefb25d33f1de555f3aa1b5
     - major: 16
-      image: ghcr.io/cloudnative-pg/postgresql:16.14-system-trixie@sha256:145ec3ede3989450c328056b5022f858f9e1fc5210c2c7f2388eb6e1d2f1404c
+      image: ghcr.io/cloudnative-pg/postgresql:16.14-system-trixie@sha256:a8396581ad96e2e2c177f72ddd2183b20d854afc02bca8451ae81b277fd7a1fb
     - major: 17
-      image: ghcr.io/cloudnative-pg/postgresql:17.10-system-trixie@sha256:5f5186f17dd2375baeb43877dbb8c141b1f047e3268ae75e8141c05ee4e60a65
+      image: ghcr.io/cloudnative-pg/postgresql:17.10-system-trixie@sha256:7423c3d6640336bad92bea0e61f65a629ecf079a041a75f2983dbed2e7652a72
     - major: 18
-      image: ghcr.io/cloudnative-pg/postgresql:18.4-system-trixie@sha256:660141d8ac12d783f12a3f6bb5ca6c3b1412ea18881f73b9853cfb1eeb9cf128
+      image: ghcr.io/cloudnative-pg/postgresql:18.4-system-trixie@sha256:4b384608950050622a7ee9cd5057b45c67a96ada3859fc9b7d839f54c11b9425
