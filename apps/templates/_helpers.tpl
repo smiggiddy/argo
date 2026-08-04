@@ -1,11 +1,12 @@
 {{/*
-Mattermost notification annotations.
+Shared Application annotations.
 Usage: {{ include "app.notifications" . | nindent 4 }}
 */}}
 {{- define "app.notifications" -}}
 notifications.argoproj.io/subscribe.on-sync-failed.mattermost: {{ .Values.mattermost.webhookId }}
 notifications.argoproj.io/subscribe.on-health-degraded.mattermost: {{ .Values.mattermost.webhookId }}
 notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: {{ .Values.mattermost.webhookId }}
+argocd.argoproj.io/compare-options: ServerSideDiff=true
 {{- end }}
 
 {{/*
