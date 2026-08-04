@@ -16,6 +16,12 @@
       "matchUpdateTypes": ["digest"]
     },
     {
+      "description": "Keep hermes-agent out of the all-digest group so its diff is reviewable on its own",
+      "matchPackageNames": ["nousresearch/hermes-agent"],
+      "groupName": "hermes-agent",
+      "groupSlug": "hermes-agent"
+    },
+    {
       "matchPackageNames": ["/argo/"],
       "groupName": "argocd"
     },
