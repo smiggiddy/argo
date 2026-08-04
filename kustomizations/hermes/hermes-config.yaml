@@ -18,10 +18,6 @@ model:
   provider: "lmstudio"
   base_url: "http://smig-mpb-llm.lab.smig.tech:1234/v1"
   context_length: 131072
-  # String-form aliases ("provider/model") — the top-level model_aliases: dict
-  # is flagged as an unknown root by the post-0.18.2 config validator. Aliases
-  # carry no base_url in this form; it resolves via the provider path
-  # (providers.qwen-small entry / LM_BASE_URL env for lmstudio).
   aliases:
     gemma: "lmstudio/unsloth/gemma-4-26b-a4b-it-qat"
     qwen-small: "qwen-small/qwen3-8b"
@@ -34,26 +30,16 @@ providers:
     model: "qwen3-8b"
     discover_models: true
 
-  # "openai" isn't a built-in name (registry has openai-api / openai-codex), so
-  # it resolves as a named entry — which is also the only way to inject the key:
-  # multiplex_profiles hides the pod env behind the fail-closed profile scope.
-  # ${env:} expands from os.environ at load; key_env: would re-enter the scope.
   openai:
     name: "openai"
     base_url: "https://api.openai.com/v1"
     api_key: "${env:OPENAI_API_KEY}"
 
-# Side tasks run off the main LM Studio model. provider: custom is required
-# for local endpoints — a bare base_url without api_key falls through to auto,
-# which targets the main provider with the overridden model name and 400s.
-# vision stays on auto — qwen3-8b is text-only.
 auxiliary:
-  # Compression goes to OpenAI, not qwen-small: qwen3-8b's context window is
-  # smaller than the main model's 131K, so big-context summarize calls overflow
-  # it. Endpoint + key come from the providers.openai entry above.
   compression:
     provider: "openai"
     model: "gpt-5-mini"
+    api_key: "${env:OPENAI_API_KEY}"
   web_extract:
     provider: "custom"
     base_url: "http://smig-inference.lab.smig.tech:8080/v1"
