@@ -13,7 +13,7 @@ memory:
   provider: honcho
 
 model:
-  default: "qwen3.6-35b-a3b"
+  default: "qwen/qwen3.6-35b-a3b"
   # default: "qwen/qwen3.6-27b"
   provider: "lmstudio"
   base_url: "http://smig-mpb-llm.lab.smig.tech:1234/v1"
@@ -21,7 +21,7 @@ model:
   aliases:
     gemma: "lmstudio/unsloth/gemma-4-26b-a4b-it-qat"
     qwen-small: "qwen-small/qwen3-8b"
-    qwen-big: "lmstudio/qwen3.6-35b-a3b"
+    qwen-big: "lmstudio/qwen/qwen3.6-35b-a3b"
 
 providers:
   qwen-small:
