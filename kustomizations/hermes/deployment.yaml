@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/default-container:  hermes-agent
+        kubectl.kubernetes.io/default-container: hermes-agent
       labels:
         app: hermes-agent
     spec:
@@ -25,104 +25,104 @@ spec:
         runAsGroup: 10000
         runAsNonRoot: true
       initContainers:
-      - name: bootstrap-data
-        image: busybox:1.38@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
-        command:
-        - sh
-        - -ec
-        - |
-          uid=10000
-          gid=10000
-          data_dir=/opt/data
-          ssh_dir="${data_dir}/.ssh"
-          key_file="${ssh_dir}/hermes_ed25519"
-          tmp_key="${key_file}.tmp"
+        - name: bootstrap-data
+          image: busybox:1.38@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+          command:
+            - sh
+            - -ec
+            - |
+              uid=10000
+              gid=10000
+              data_dir=/opt/data
+              ssh_dir="${data_dir}/.ssh"
+              key_file="${ssh_dir}/hermes_ed25519"
+              tmp_key="${key_file}.tmp"
 
-          create_dir() {
-            path="${data_dir}/$1"
-            mode="$2"
-            if [ ! -d "${path}" ]; then
-              mkdir -p "${path}"
-              chmod "${mode}" "${path}"
-            fi
-            chown "${uid}:${gid}" "${path}"
-          }
+              create_dir() {
+                path="${data_dir}/$1"
+                mode="$2"
+                if [ ! -d "${path}" ]; then
+                  mkdir -p "${path}"
+                  chmod "${mode}" "${path}"
+                fi
+                chown "${uid}:${gid}" "${path}"
+              }
 
-          mkdir -p "${ssh_dir}"
+              mkdir -p "${ssh_dir}"
 
-          for dir in audio_cache cron hooks image_cache logs memories pairing sessions skills; do
-            create_dir "${dir}" 700
-          done
+              for dir in audio_cache cron hooks image_cache logs memories pairing sessions skills; do
+                create_dir "${dir}" 700
+              done
 
-          for dir in bin cache home plans sandboxes skins workspace; do
-            create_dir "${dir}" 2775
-          done
+              for dir in bin cache home plans sandboxes skins workspace; do
+                create_dir "${dir}" 2775
+              done
 
-          cat /bootstrap-secrets/ssh_private_key > "${tmp_key}"
-          test -s "${tmp_key}"
+              cat /bootstrap-secrets/ssh_private_key > "${tmp_key}"
+              test -s "${tmp_key}"
 
-          if ! cmp -s "${tmp_key}" "${key_file}"; then
-            mv "${tmp_key}" "${key_file}"
-          else
-            rm "${tmp_key}"
-          fi
+              if ! cmp -s "${tmp_key}" "${key_file}"; then
+                mv "${tmp_key}" "${key_file}"
+              else
+                rm "${tmp_key}"
+              fi
 
-          chmod 700 "${ssh_dir}"
-          chmod 600 "${key_file}"
-          chown -R "${uid}:${gid}" "${ssh_dir}"
+              chmod 700 "${ssh_dir}"
+              chmod 600 "${key_file}"
+              chown -R "${uid}:${gid}" "${ssh_dir}"
 
-          # freeze the bundled-skill set: presence of this marker disables
-          # hermes' skills seeding sync (trimmed skills stay trimmed)
-          touch "${data_dir}/.no-bundled-skills"
-          chown "${uid}:${gid}" "${data_dir}/.no-bundled-skills"
-        resources:
-          requests:
-            cpu: 25m
-            memory: 32Mi
-          limits:
-            cpu: 100m
-            memory: 128Mi
-        securityContext:
-          runAsNonRoot: false
-          runAsUser: 0
-        volumeMounts:
-        - name: data
-          mountPath: /opt/data
-        - name: bootstrap-secrets
-          mountPath: /bootstrap-secrets
-          readOnly: true
+              # freeze the bundled-skill set: presence of this marker disables
+              # hermes' skills seeding sync (trimmed skills stay trimmed)
+              touch "${data_dir}/.no-bundled-skills"
+              chown "${uid}:${gid}" "${data_dir}/.no-bundled-skills"
+          resources:
+            requests:
+              cpu: 25m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+          volumeMounts:
+            - name: data
+              mountPath: /opt/data
+            - name: bootstrap-secrets
+              mountPath: /bootstrap-secrets
+              readOnly: true
       containers:
-      - name: hermes-agent
-        image: nousresearch/hermes-agent
-        args: [gateway, run]
-        imagePullPolicy: Always
-        resources:
-          requests:
-            cpu: 1
-            memory: 1Gi
-        envFrom:
-          - secretRef:
-              name: hermes-secrets
-          - configMapRef:
-              name: hermes-configmap-1
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop: [ALL]
-        ports:
-        - containerPort: 8642
-          name: hermes-agent
-        volumeMounts:
-        - name: run
-          mountPath: /run
-        - name: data
-          mountPath: /opt/data
-        - name: managed-config
-          mountPath: /etc/hermes
-          readOnly: true
-        - name: tools
-          mountPath: /opt/tools
-          readOnly: true
+        - name: hermes-agent
+          image: nousresearch/hermes-agent
+          args: [gateway, run]
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 1
+              memory: 1Gi
+          envFrom:
+            - secretRef:
+                name: hermes-secrets
+            - configMapRef:
+                name: hermes-configmap-1
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+          ports:
+            - containerPort: 8642
+              name: hermes-agent
+          volumeMounts:
+            - name: run
+              mountPath: /run
+            - name: data
+              mountPath: /opt/data
+            - name: managed-config
+              mountPath: /etc/hermes
+              readOnly: true
+            - name: tools
+              mountPath: /opt/tools
+              readOnly: true
       volumes:
         - name: run
           emptyDir:
@@ -139,8 +139,8 @@ spec:
             name: hermes-config-file
         - name: tools
           image:
-            reference: cr.smigz.com/image-volume:latest
-            pullPolicy: Always
+            reference: cr.smigz.com/image-volume:0.1.1
+            pullPolicy: IfNotPresent
       restartPolicy: Always
       terminationGracePeriodSeconds: 60
 ---
