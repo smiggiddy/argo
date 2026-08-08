@@ -34,11 +34,14 @@ providers:
     name: "openai"
     base_url: "https://api.openai.com/v1"
     api_key: "${env:OPENAI_API_KEY}"
+    models:
+      - gpt-5.6-luna
+      - gpt-5.4-mini
 
 auxiliary:
   compression:
     provider: "openai"
-    model: "gpt-5-mini"
+    model: "gpt-5.4-mini"
     api_key: "${env:OPENAI_API_KEY}"
   web_extract:
     provider: "custom"
