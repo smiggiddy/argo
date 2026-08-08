@@ -37,6 +37,8 @@ providers:
     models:
       - gpt-5.6-luna
       - gpt-5.4-mini
+    extra_body:
+      service_tier: flex
 
 auxiliary:
   compression:
