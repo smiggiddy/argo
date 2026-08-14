@@ -4,7 +4,6 @@ metadata:
   labels:
     app: searxng
   name: searxng
-  namespace: ai
 spec:
   replicas: 1
   selector:
@@ -16,28 +15,56 @@ spec:
     metadata:
       labels:
         app: searxng
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/role: "searxng"
+        vault.hashicorp.com/agent-copy-volume-mounts: "searxng"
+        vault.hashicorp.com/agent-inject-secret-settings.yml: "k8s/data/argocd/searxng"
+        vault.hashicorp.com/agent-inject-template-file-settings.yml: "/etc/searxng-tpl/settings.yml.tpl"
+        vault.hashicorp.com/agent-run-as-user: "977"
+        vault.hashicorp.com/agent-run-as-group: "977"
+        vault.hashicorp.com/agent-inject-perms-settings.yml: "0640"
     spec:
+      serviceAccountName: searxng
       containers:
         - image: searxng/searxng:2025.8.1-3d96414@sha256:3f229455cee2e21bd9bd910fd1193687b380ebe2a083e15ad19bd5df72bab47f
           name: searxng
           ports:
             - containerPort: 8080
+          env:
+            - name: SEARXNG_SETTINGS_PATH
+              value: /vault/secrets/settings.yml
           volumeMounts:
             - name: data
               mountPath: /var/cache/searxng
-            - name: config
-              mountPath: /etc/searxng
-            - name: searxng-limiter
-              mountPath: /etc/searxng/limiter.toml
-              subPath: limiter.toml
+            - name: settings-tpl
+              mountPath: /etc/searxng-tpl
               readOnly: true
+            - name: etc-searxng
+              mountPath: /etc/searxng
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
           resources:
             requests:
-              memory: "128Mi"
+              memory: "256Mi"
               cpu: "300m"
             limits:
-              memory: "256Mi"
-              cpu: "500m"
+              memory: "1Gi"
+              cpu: "1"
           securityContext:
             allowPrivilegeEscalation: false
       securityContext:
@@ -48,10 +75,8 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: searxng-data
-        - name: config
-          persistentVolumeClaim:
-            claimName: searxng-config
-        - name: searxng-limiter
+        - name: settings-tpl
           configMap:
-            name: searxng-limiter
-status: {}
+            name: searxng-settings
+        - name: etc-searxng
+          emptyDir: {}

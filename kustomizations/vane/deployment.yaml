@@ -4,6 +4,11 @@ metadata:
   name: vane
 spec:
   replicas: 1
+  # perplexica-data is RWO on longhorn. With the default RollingUpdate the new
+  # pod cannot attach the volume while the old one still holds it, so every
+  # image bump deadlocks until the old pod is deleted by hand.
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: vane
@@ -14,19 +19,44 @@ spec:
     spec:
       containers:
         - name: vane
-          image: itzcrazykns1337/vane:slim-latest@sha256:aaf9da6bf76f01480c3e755388421029982e819773cbcecdcf0e9621a10e0690
+          image: itzcrazykns1337/vane:slim-latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 3000
           env:
+            # Vane 2.x also stores this in data/config.json (search.searxngURL);
+            # both currently agree. config.json is authoritative for the UI.
             - name: SEARXNG_API_URL
               value: "http://searxng-svc.ai.svc.cluster.local:8080"
           volumeMounts:
             - name: perplexica-data
               mountPath: /home/vane/data
+          # Vane exposes no dedicated health endpoint — / is the only path that
+          # returns 200, so probe intervals are kept wide to avoid rendering the
+          # app shell on a tight loop.
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
           securityContext:
             allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           resources:
             requests:
               memory: "256Mi"
