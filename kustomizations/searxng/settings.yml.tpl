@@ -18,7 +18,6 @@ use_default_settings:
       - wikipedia
       - yahoo
       - yep
-      - presearch
       # --- images ---
       - google images
       - bing images
@@ -225,11 +224,11 @@ engines:
     categories: [wikimedia]
 
   # -- independent fallbacks (all upstream-disabled by default) --
+  # yahoo closes HTTP/2 connections -> RemoteProtocolError; HTTP/1.1 works
   - name: yahoo
     disabled: false
+    enable_http2: false
   - name: yep
-    disabled: false
-  - name: presearch
     disabled: false
 
   - name: duckduckgo
