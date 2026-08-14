@@ -210,14 +210,19 @@ engines:
     disabled: false
   - name: wikibooks
     disabled: false
+    categories: [wikimedia]
   - name: wikiquote
     disabled: false
+    categories: [wikimedia]
   - name: wikisource
     disabled: false
+    categories: [wikimedia]
   - name: wikiversity
     disabled: false
+    categories: [wikimedia]
   - name: wikivoyage
     disabled: false
+    categories: [wikimedia]
 
   # -- independent fallbacks (all upstream-disabled by default) --
   - name: yahoo
