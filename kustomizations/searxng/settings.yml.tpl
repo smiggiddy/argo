@@ -1,25 +1,9 @@
-# SearXNG instance settings — a Vault Agent template, NOT a plain settings file.
-#
-# Shipped to the pod in a ConfigMap, then rendered by the Vault Agent init
-# container to /vault/secrets/settings.yml with its template actions resolved.
-# SEARXNG_SETTINGS_PATH points SearXNG at the rendered copy.
-#
-# Secrets live only in Vault at k8s/data/argocd/searxng — never in a Secret,
-# a ConfigMap, or git. Only the two `secret` lookups below are template actions;
-# nothing else in this file uses braces, so the renderer touches nothing else.
-# Do not write literal double-braces anywhere here, including in comments — the
-# renderer parses the whole file and an empty action is a fatal parse error.
-#
-# This file only carries DEVIATIONS from the engine/settings definitions shipped
-# in the image. Everything else (all ~281 engine definitions, plugin defaults,
-# doi resolvers, category tabs, UI defaults) is inherited via use_default_settings.
-#
-# Consequence: engine definitions track the image. When renovate bumps the tag,
-# upstream engine fixes come along for free instead of rotting in a pinned copy.
+# Vault Agent template -> rendered to /vault/secrets/settings.yml at pod start.
+# Carries only deviations; the rest comes from the image via use_default_settings.
+# No literal double-braces anywhere (including comments) - fatal parse error.
 
 use_default_settings:
   engines:
-    # Curated instance: any engine not listed here is dropped entirely.
     keep_only:
       # --- general web ---
       - duckduckgo
@@ -32,12 +16,9 @@ use_default_settings:
       - qwant
       - wikidata
       - wikipedia
-      # independent fallbacks — no captcha/ratelimit exposure, added to keep
-      # the general category alive when the scrapers get suspended
       - yahoo
       - yep
       - presearch
-      - marginalia
       # --- images ---
       - google images
       - bing images
@@ -143,21 +124,16 @@ general:
   enable_metrics: true
 
 search:
-  # 0, not 1: this instance is an API backend for Vane. Safe-search filtering
-  # trims recall before the LLM ever sees the results.
   safe_search: 0
   autocomplete: "duckduckgo"
   autocomplete_min: 4
   default_lang: "auto"
-  # json is required by Vane; do not remove.
   formats:
     - html
-    - json
+    - json   # required by Vane + hermes
   ban_time_on_fail: 5
   max_ban_time_on_fail: 120
   suspended_times:
-    # Was 86400/1296000/604800. A day-long ban meant one captcha from Startpage
-    # took it out until the next day; these retry within the hour instead.
     SearxEngineAccessDenied: 3600
     SearxEngineCaptcha: 1800
     SearxEngineTooManyRequests: 900
@@ -166,11 +142,7 @@ search:
     recaptcha_SearxEngineCaptcha: 3600
 
 server:
-  # Rendered from Vault by the agent init container.
   secret_key: "{{ with secret "k8s/data/argocd/searxng" }}{{ .Data.data.searxng_secret }}{{ end }}"
-  #
-  # port/bind_address are deliberately absent: the image's entrypoint launches
-  # granian with GRANIAN_PORT/GRANIAN_HOST, so values here never take effect.
   limiter: false
   public_instance: false
   image_proxy: false
@@ -182,12 +154,7 @@ server:
     X-Robots-Tag: noindex, nofollow
     Referrer-Policy: no-referrer
 
-valkey:
-  url: redis://searxng-redis:6379/0
-
 outgoing:
-  # Was 3.0/6.0, which silently truncated every engine configured above 3s and
-  # dropped slow-but-good results before they could be returned.
   request_timeout: 6.0
   max_request_timeout: 15.0
   useragent_suffix: "(smig homelab; admin@smig.tech)"
@@ -215,7 +182,6 @@ plugins:
   searx.plugins.tracker_url_remover.SXNGPlugin:
     active: true
 
-# Per-engine deviations from the image defaults. Merged by engine name.
 engines:
 
   # -- engines upstream ships disabled that this instance wants on --
@@ -260,23 +226,14 @@ engines:
     disabled: false
   - name: presearch
     disabled: false
-  - name: marginalia
-    disabled: false
 
-  # -- ranking --
-  # duckduckgo previously carried `enabled: false`, which is not a valid engine
-  # key and was silently ignored. It stays ON deliberately: alongside bing it is
-  # one of only two general engines currently returning results.
   - name: duckduckgo
     weight: 2
 
-  # -- rate-limit mitigation: brave 429s under parallel fan-out --
   - name: brave
     max_connections: 2
     max_keepalive_connections: 1
 
-  # -- timeouts: upstream ships crossref at 30s and gentoo at 10s, which would
-  #    now be capped at max_request_timeout (15s) and stall science searches --
   - name: crossref
     disabled: false
     timeout: 6.0
@@ -284,10 +241,10 @@ engines:
     timeout: 6
   - name: wolframalpha
     disabled: false
-    timeout: 10.0
+    timeout: 6.0
 
-  # -- extra piped mirrors for resilience (upstream ships 2) --
   - name: piped
+    inactive: false
     backend_url:
       - https://pipedapi.adminforge.de
       - https://pipedapi.nosebs.ru
@@ -303,23 +260,20 @@ engines:
   - name: wikicommons.files
     number_of_results: 10
 
-  # -- kept available but off by default --
-  # braveapi: the official Brave REST API — no captchas or 403s, unlike the
-  # `brave` scraper above. Deliberately opt-in: flip disabled to false to spend
-  # against the API quota. The key is rendered from Vault at pod start.
+  - name: yahoo news
+    inactive: false
+  - name: piped.music
+    inactive: false
+    frontend_url: https://srv.piped.video
+
+  # opt-in only; request it by NAME (engines=braveapi), not shortcut brapi
   - name: braveapi
+    inactive: false
     disabled: true
     api_key: "{{ with secret "k8s/data/argocd/searxng" }}{{ .Data.data.brave_api_key }}{{ end }}"
     results_per_page: 20
-  # qwant: upstream-disabled, returns HTML/empty -> JSONDecodeError.
   - name: qwant
     disabled: true
-  # wikidata: init crashes with "no such table: properties" on this image.
-  # Try flipping to false after an image bump and check /stats/errors.
-  - name: wikidata
-    disabled: true
-  # These two carried `disable: true` (typo, silently ignored) and were running
-  # against intent. Now actually off.
   - name: wikinews
     disabled: true
   - name: wikicommons.audio

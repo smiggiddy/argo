@@ -35,13 +35,16 @@ spec:
           env:
             - name: SEARXNG_SETTINGS_PATH
               value: /vault/secrets/settings.yml
+            # keeps the SQLite engine cache on the PVC, not ephemeral /tmp
+            - name: TMPDIR
+              value: /var/cache/searxng
           volumeMounts:
             - name: data
               mountPath: /var/cache/searxng
             - name: settings-tpl
               mountPath: /etc/searxng-tpl
               readOnly: true
-            - name: etc-searxng
+            - name: etc-searxng   # entrypoint exits 127 if it can't write here
               mountPath: /etc/searxng
           readinessProbe:
             httpGet:
