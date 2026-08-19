@@ -22,7 +22,7 @@ data:
   config.json: |-
     {
       "repositories": ["smiggiddy/argocd", "smiggiddy/oci_docker"],
-      "endpoint": "https://gitea.smigz.com",
+      "endpoint": "https://git.thecodedom.com",
       "argocd": {
       "fileMatch": ["apps/.+\\.yaml$"]
     }

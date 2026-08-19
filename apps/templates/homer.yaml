@@ -19,7 +19,7 @@ spec:
       valueFiles:
       - $values/homer/values.yaml
 
-  - repoURL: 'https://gitea.smigz.com/smiggiddy/argocd-values.git'
+  - repoURL: 'https://git.thecodedom.com/thecodedom/argocd-values.git'
     targetRevision: HEAD
     ref: values
 
