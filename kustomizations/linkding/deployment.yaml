@@ -19,7 +19,7 @@ spec:
         app: linkding
     spec:
       containers:
-        - image: sissbruecker/linkding:1.46.0@sha256:49eff0b0b90c63760fda75e615357a0e55fcb7dc51876f2a0a5dddb958bd3df4
+        - image: sissbruecker/linkding:1.46.2@sha256:0c0a9a04c7ebd644293c37f98710872fe7cdff0ea1ff7fd9be4d235e4c4678d2
           name: linkding
           ports:
             - containerPort: 9090
