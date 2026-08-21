@@ -11,7 +11,7 @@ images:
 configMapGenerator:
   - name: hermes-configmap-1
     envs:
-      - ./configmap.yaml
+      - ./env_config
   - name: hermes-config-file
     files:
       - config.yaml=./hermes-config.yaml
