@@ -8,7 +8,7 @@ metadata:
   annotations:
     {{ include "app.notifications" . | nindent 4 }}
 spec:
-  {{ include "app.syncPolicy.automated" . | nindent 2 }}
+  {{ include "app.syncPolicy.manual" . | nindent 2 }}
   destination:
     namespace: garage
     server: {{ .Values.spec.destination.server }}
