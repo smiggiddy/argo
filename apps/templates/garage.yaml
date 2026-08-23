@@ -8,11 +8,6 @@ metadata:
   annotations:
     {{ include "app.notifications" . | nindent 4 }}
 spec:
-  ignoreDifferences:
-    - group: apps
-      kind: StatefulSet
-      jsonPointers:
-        - /spec/volumeClaimTemplates
   {{ include "app.syncPolicy.automated" . | nindent 2 }}
   destination:
     namespace: garage
