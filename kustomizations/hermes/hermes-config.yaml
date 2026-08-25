@@ -22,6 +22,7 @@ model:
     gemma: "lmstudio/unsloth/gemma-4-26b-a4b-it-qat"
     qwen-small: "qwen-small/qwen3-8b"
     qwen-big: "lmstudio/qwen/qwen3.6-35b-a3b"
+    or: "openrouter/anthropic/claude-sonnet-4.6"
 
 providers:
   qwen-small:
@@ -40,6 +41,12 @@ providers:
       - gpt-5.4-mini
     extra_body:
       service_tier: flex
+
+  openrouter:
+    name: "openrouter"
+    base_url: "https://openrouter.ai/api/v1"
+    api_key: "${env:OPENROUTER_API_KEY}"
+    discover_models: true
 
 auxiliary:
   compression:
