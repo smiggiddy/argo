@@ -19,6 +19,9 @@ spec:
 
     helm:     
       values: |
+          extraArgs:
+            - --proxy-domain
+            - code-server.lab.smig.tech
           extraVars:
             - name: CODER_OIDC_ISSUER_URL
               value: "https://auth.thecodedom.com/application/o/code-server/"
@@ -53,10 +56,10 @@ spec:
               external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
             hosts:
             - host: code-server.lab.smig.tech
-              paths:
-              - /
+              paths: [/]
+            - host: "*.code-server.lab.smig.tech"
+              paths: [/]
             tls: 
             - secretName: code-server-tls
-              hosts:
-              - code-server.lab.smig.tech
+              hosts: [ code-server.lab.smig.tech ]
   {{ include "app.syncPolicy.manual" . | nindent 2 }}
