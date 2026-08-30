@@ -61,5 +61,5 @@ spec:
               paths: [/]
             tls: 
             - secretName: code-server-tls
-              hosts: [ code-server.lab.smig.tech ]
+              hosts: [ code-server.lab.smig.tech, "*.code-server.lab.smig.tech" ]
   {{ include "app.syncPolicy.manual" . | nindent 2 }}
