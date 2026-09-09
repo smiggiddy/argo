@@ -4,7 +4,7 @@ metadata:
   name: immich-pg
   namespace: immich
 spec:
-  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-1.1.1@sha256:f5a17fa05faf25e81304ee95e9f920d8ae077ac4a4ef0a1251e09c7197cbb236
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18-1.1.1@sha256:c7672bc011351a587cc292a94aac7eeebb593ed2e120077bd9c9944c9467db93
   instances: 1
   enableSuperuserAccess: true
 
