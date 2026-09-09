@@ -4,7 +4,14 @@ metadata:
   name: immich-pg
   namespace: immich
 spec:
-  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-1.1.1@sha256:f5a17fa05faf25e81304ee95e9f920d8ae077ac4a4ef0a1251e09c7197cbb236
+  # VectorChord replaced pgvecto.rs here on 2026-09-09. The postgres major lives in
+  # the catalog ref rather than inside a tag string, so renovate cannot walk this
+  # cluster across a major the way it tried to in #763.
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: vectorchord
+    major: 16
   instances: 1
   enableSuperuserAccess: true
 

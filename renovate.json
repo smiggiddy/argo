@@ -26,11 +26,15 @@
       "groupName": "argocd"
     },
     {
-      "description": "Pin each CNPG ClusterImageCatalog entry to its own postgres major",
-      "matchFileNames": ["kustomizations/cnpg-databases/image-catalog.yaml"],
-      "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
+      "description": "Pin each CNPG ClusterImageCatalog entry to its own postgres major. Every Cluster declares the major in its imageCatalogRef, so crossing it here breaks the ref -- and on CNPG 1.26+ a major image change triggers an automatic offline pg_upgrade.",
+      "matchFileNames": ["kustomizations/cnpg-databases/*image-catalog.yaml"],
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "description": "cloudnative-vectorchord tags encode the postgres major.minor as well as the extension version, and immich only accepts vchord >=0.3 <2. Never automerge it.",
+      "matchPackageNames": ["ghcr.io/tensorchord/cloudnative-vectorchord"],
+      "automerge": false
     },
     {
       "description": "Immich runs DB schema migrations on upgrade: keep server and ML in one PR, never automerge",

@@ -1,6 +1,7 @@
 resources:
   - ./image-catalog.yaml
   - ./pgvector-image-catalog.yaml
+  - ./vectorchord-image-catalog.yaml
   - ./nextcloud-cnpg-cluster.yaml
   - ./nextcloud-backup-secret.yaml
   - ./nextcloud-cnpg-backup.yaml
