@@ -1,0 +1,14 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: ClusterImageCatalog
+metadata:
+  name: vectorchord
+spec:
+  images:
+    # immich-pg only. The tag encodes the postgres major.minor AND the VectorChord
+    # version -- 16.15-1.1.1 is postgres 16.15 carrying vchord 1.1.1 -- so what
+    # renovate reads as a "major" bump here is a postgres major upgrade, not an
+    # extension bump. CNPG 1.26+ runs pg_upgrade automatically on a major change,
+    # so that must never land unattended; the renovate rule pins this file.
+    # Immich accepts vchord >=0.3 <2 (server/src/constants.ts) -- do not cross 2.x.
+    - major: 16
+      image: ghcr.io/tensorchord/cloudnative-vectorchord:16.15-1.1.1@sha256:f5a17fa05faf25e81304ee95e9f920d8ae077ac4a4ef0a1251e09c7197cbb236
