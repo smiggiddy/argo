@@ -28,6 +28,7 @@ spec:
             containers:
               main:
                 image:
+                  # renovate: datasource=docker depName=ghcr.io/immich-app/immich-server
                   tag: v2.7.5
             strategy: Recreate
         immich:
@@ -43,6 +44,7 @@ spec:
                   env:
                     MACHINE_LEARNING_RKNN_THREADS: 2
                   image: 
+                    # renovate: datasource=docker depName=ghcr.io/immich-app/immich-machine-learning
                     tag: v2.7.5-armnn
                   resources:
                     limits:

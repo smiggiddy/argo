@@ -13,6 +13,10 @@ spec:
     name: vectorchord
     major: 16
   instances: 1
+  # single instance: the default PDB has minAvailable=1 against 1 pod, so it
+  # allows 0 disruptions and blocks node drains forever while protecting
+  # nothing -- there is no second copy to keep serving.
+  enablePDB: false
   enableSuperuserAccess: true
 
   postgresql:

@@ -6,6 +6,10 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   instances: 1
+  # single instance: the default PDB has minAvailable=1 against 1 pod, so it
+  # allows 0 disruptions and blocks node drains forever while protecting
+  # nothing -- there is no second copy to keep serving.
+  enablePDB: false
   bootstrap:
     initdb:
       database: mattermost
