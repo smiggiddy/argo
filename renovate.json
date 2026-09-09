@@ -31,6 +31,16 @@
       "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "description": "Immich runs DB schema migrations on upgrade: keep server and ML in one PR, never automerge",
+      "matchPackageNames": [
+        "ghcr.io/immich-app/immich-server",
+        "ghcr.io/immich-app/immich-machine-learning"
+      ],
+      "groupName": "immich",
+      "groupSlug": "immich",
+      "automerge": false
     }
   ],
   "argocd": {
@@ -44,6 +54,15 @@
     "pinDigests": false
   },
   "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Image tags pinned inside ArgoCD Application valuesObject blocks",
+      "managerFilePatterns": ["/apps/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*tag: (?<currentValue>\\S+)"
+      ],
+      "versioningTemplate": "docker"
+    },
     {
       "customType": "regex",
       "managerFilePatterns": ["/auto_upgrades/.+\\.yaml$/"],
