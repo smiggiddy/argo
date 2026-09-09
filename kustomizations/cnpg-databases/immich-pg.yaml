@@ -1,0 +1,49 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-pg
+  namespace: immich
+spec:
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-1.1.1@sha256:f5a17fa05faf25e81304ee95e9f920d8ae077ac4a4ef0a1251e09c7197cbb236
+  instances: 1
+  enableSuperuserAccess: true
+
+  postgresql:
+    shared_preload_libraries:
+      - "vchord.so"
+
+  managed:
+    roles:
+      - name: immich
+        ensure: present
+        superuser: true
+        login: true
+        inherit: true
+        connectionLimit: -1
+
+  storage:
+    size: 8Gi
+    storageClass: longhorn
+    resizeInUseVolumes: true
+
+  bootstrap:
+    initdb:
+      database: immich
+      owner: immich
+      encoding: UTF8
+      localeCType: C
+      localeCollate: C
+      secret:
+        name: immich-postgres-user
+      postInitSQL:
+        - CREATE EXTENSION IF NOT EXISTS "vchord" CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS "cube" CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS "earthdistance" CASCADE;
+        - alter role immich set search_path TO "$user", public;
+
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      enabled: true
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: immich-pg
