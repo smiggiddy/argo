@@ -1,0 +1,53 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-pg
+  namespace: immich
+spec:
+  # Immich <v3 needs pgvecto.rs, and 16.5-v0.3.0 is the last image carrying pgvecto.rs <0.4.
+  # Immich v3.0.0 REMOVES pgvecto.rs support, so this has to move to VectorChord before
+  # the immich image can go to v3.x. No CNPG image ships both extensions, so that is a
+  # dump/restore or a custom image, not an in-place imageName swap.
+  imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.5-v0.3.0@sha256:be3f025d79aa1b747817f478e07e71be43236e14d00d8a9eb3914146245035ba
+  instances: 1
+  enableSuperuserAccess: true
+
+  postgresql:
+    shared_preload_libraries:
+      - "vectors.so"
+
+  managed:
+    roles:
+      - name: immich
+        ensure: present
+        superuser: true
+        login: true
+        inherit: true
+        connectionLimit: -1
+
+  storage:
+    size: 8Gi
+    storageClass: longhorn
+    resizeInUseVolumes: true
+
+  bootstrap:
+    initdb:
+      database: immich
+      owner: immich
+      encoding: UTF8
+      localeCType: C
+      localeCollate: C
+      secret:
+        name: immich-postgres-user
+      postInitSQL:
+        - CREATE EXTENSION IF NOT EXISTS "vectors";
+        - CREATE EXTENSION IF NOT EXISTS "cube" CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS "earthdistance" CASCADE;
+        - alter role immich set search_path TO "$user", public, vectors;
+
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      enabled: true
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: immich-pg
