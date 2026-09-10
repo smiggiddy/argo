@@ -9,36 +9,16 @@ metadata:
     {{ include "app.notifications" . | nindent 4 }}
 spec:
   project: default
-  source:
-    repoURL: https://kubernetes-sigs.github.io/external-dns
-    targetRevision: 1.21.1
-    chart: external-dns
-
-    helm:     
-      valuesObject:
-        registry: noop
-        provider:
-          name: pihole
-          pihole:
-            server: http://rpi3-ubuntu.lab.smig.tech
-        extraArgs:
-          source: 
-          - service
-          - ingress
-          - gateway-httproute
-          # - gateway-tlsroute
-          - gateway-tcproute
-          - gateway-udproute
-          pihole-api-version: 6
-          pihole-server: http://rpi3-ubuntu.lab.smig.tech:8080
-        rbac:  
-          additionalPermissions: 
-          - apiGroups: ["gateway.networking.k8s.io"]
-            resources: ["gateways","httproutes","tlsroutes","tcproutes","udproutes"] 
-            verbs: ["get","watch","list"]
-          - apiGroups: [""]
-            resources: ["namespaces"] 
-            verbs: ["get","watch","list"]
+  sources:
+    - repoURL: https://kubernetes-sigs.github.io/external-dns
+      targetRevision: 1.21.1
+      chart: external-dns
+      helm:
+        valueFiles:
+          - $values/apps-values/external-dns.yaml
+    - repoURL: {{ .Values.repoURL }}
+      targetRevision: HEAD
+      ref: values
 
         
   destination:

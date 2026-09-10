@@ -1,0 +1,14 @@
+websocket:
+  enabled: true
+ollama:
+  enabled: false
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations: 
+    cert-manager.io/cluster-issuer: cluster-ca-issuer
+    external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+  host: chat.lab.smig.tech
+  tls: true
+  existingSecret: open-webui-tls

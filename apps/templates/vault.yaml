@@ -9,43 +9,19 @@ metadata:
     {{ include "app.notifications" . | nindent 4 }}
 spec:
   project: default
-  source:
-    repoURL: https://helm.releases.hashicorp.com
-    targetRevision: 0.34.1
-    chart: vault 
-
-    helm:
-      parameters:
-        - name: server.dataStorage.storageClass
-          value: longhorn
-      valuesObject:
-        server:
-          standalone:
-            config: |-
-                ui = false
-
-                listener "tcp" {
-                  tls_disable = 1
-                  address = "[::]:8200"
-                  cluster_address = "[::]:8201"
-                }
-
-                storage "file" {
-                path = "/vault/data"
-                }
-          ingress:
-            enabled: true
-            ingressClassName: traefik
-            annotations:
-              cert-manager.io/cluster-issuer: cluster-ca-issuer
-              traefik.ingress.kubernetes.io/router.entrypoints: websecure
-              external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
-            hosts:
-            - host: vault.lab.smig.tech
-            tls:
-            - secretName: vault-tls 
-              hosts: 
-              - vault.lab.smig.tech
+  sources:
+    - repoURL: https://helm.releases.hashicorp.com
+      targetRevision: 0.34.1
+      chart: vault 
+      helm:
+        parameters:
+          - name: server.dataStorage.storageClass
+            value: longhorn
+        valueFiles:
+          - $values/apps-values/vault.yaml
+    - repoURL: {{ .Values.repoURL }}
+      targetRevision: HEAD
+      ref: values
 
 
   destination:

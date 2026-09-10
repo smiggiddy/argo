@@ -1,0 +1,120 @@
+resources: 
+  limits:
+   cpu: 1000m
+   memory: 768Mi
+  requests:
+   cpu: 500m
+   memory: 256Mi
+metrics:
+  enabled: true
+
+rbac:
+  enabled: true
+image:
+  flavor: fpm
+nginx:
+  enabled: true
+  config:
+    headers:
+      "Strict-Transport-Security": "max-age=15552000; includeSubDomains; preload;"
+phpClientHttpsFix:
+  enabled: false 
+  protocol: https
+redis:
+  enabled: false
+cronjob:
+  enabled: true
+persistence:
+  enabled: true
+  storageClass: longhorn
+  size: 30Gi
+externalDatabase:
+  enabled: true
+  host: "nextcloud-pg-rw:5432"
+  type: postgresql
+  database: app
+  existingSecret:
+    enabled: true
+    secretName: nextcloud-pg-app
+    usernameKey: username
+    passwordKey: password
+internalDatabase:
+  enabled: false
+postgresql:
+  enabled: false
+nextcloud:
+  defaultConfigs:
+    .htaccess: false
+    apache-pretty-urls.config.php: false
+    swift.config.php: false
+  configs:
+    logging.config.php: |-
+      <?php
+      $CONFIG = array (
+        'log_type' => 'file',
+        'logfile' => 'nextcloud.log',
+        'loglevel' => 2,
+        'logdateformat' => 'F d, Y H:i:s',
+        'log_rotate_size' => 10 * 1024 * 1024
+        );
+    trusted_domains.config.php: |-
+        <?php
+        $CONFIG = [
+        'trusted_domains' =>
+          array (
+            0 => 'localhost',
+            1 => 'cloud.lab.smig.tech',
+            2 => 'cloud.vpn.thecodedom.com'
+            )
+          ];
+  host: cloud.lab.smig.tech
+  existingSecret:
+    enabled: true
+    secretName: nextcloud-db
+    usernameKey: nextcloud-username
+    passwordKey: nextcloud-password
+  extraSidecarContainers:
+    - name: ts-sidecar
+      imagePullPolicy: Always
+      image: "ghcr.io/tailscale/tailscale:latest@sha256:95e528798bebe75f39b10e74e7051cf51188ee615934f232ba7ad06a3390ffa1"
+      resources:
+        limits:
+          devic.es/tun: "1"
+        requests:
+          devic.es/tun: "1"
+      env:
+      - name: TS_HOSTNAME
+        value: cloud
+      - name: TS_KUBE_SECRET
+        value: tailscale-auth-nextcloud
+      - name: TS_USERSPACE
+        value: "false"
+      - name: TS_EXTRA_ARGS
+        valueFrom:
+          secretKeyRef:
+            name: tailscale-auth-nextcloud
+            key: extra_args
+            optional: true
+      - name: TS_AUTHKEY
+        valueFrom:
+          secretKeyRef:
+            name: tailscale-auth-nextcloud
+            key: TS_AUTHKEY
+            optional: true
+      securityContext:
+        capabilities:
+          add:
+          - NET_ADMIN
+ingress:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: nextcloud-nextcloud-middleware@kubernetescrd,nextcloud-nextcloud-middleware-sts@kubernetescrd
+    external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+
+  enabled: true
+  className: traefik
+  tls:
+   - secretName: cloud-tls
+     hosts:
+     - cloud.lab.smig.tech

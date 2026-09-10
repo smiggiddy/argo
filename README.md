@@ -30,6 +30,9 @@ This homelab setup provides a complete self-hosted infrastructure including:
 2. **Application Templates** (`/apps/templates/`)
    - ArgoCD Application manifests for each service
    - Configured with upstream Helm repositories and custom values
+   - Helm values live in `/apps-values/` and are referenced with the `$values` multi-source pattern
+   - Secret values (argocd-vault-plugin `<path:...>` placeholders) stay inline in the Application CR
+     via `helm.valuesObject`, because AVP cannot substitute values files pulled in through `$values`
    - Includes notifications, health checks, and sync policies
 
 3. **Kustomizations** (`/kustomizations/`)
@@ -52,6 +55,10 @@ This homelab setup provides a complete self-hosted infrastructure including:
 │       ├── home-assistant.yaml
 │       ├── authentik.yaml
 │       └── ...
+├── apps-values/                   # Helm values referenced by child Applications via $values
+│   ├── nextcloud.yaml
+│   ├── longhorn.yaml
+│   └── ...
 ├── kustomizations/                # Custom Kubernetes resources
 │   ├── home-assistant/
 │   ├── rabbitmq-operator/

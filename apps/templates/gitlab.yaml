@@ -10,75 +10,16 @@ metadata:
 
 spec:
   project: default
-  source:
-    repoURL: https://charts.gitlab.io
-    targetRevision: 0.92.1
-    chart: gitlab-runner 
-
-    helm:
-      valuesObject: 
-        certsSecretName: certs
-        gitlabUrl: https://gitlab.lab.smig.tech
-        secrets:
-          - name: smigtech-cert
-        rbac:
-          create: true
-          rules:
-              - resources: ["events"]
-                verbs: ["list", "watch"]
-              - resources: ["pods"]
-                verbs: ["create","delete","get", "list", "watch"]
-              - apiGroups: [""]
-                resources: ["pods/attach","pods/exec"]
-                verbs: ["get","create","patch","delete"]
-              - apiGroups: [""]
-                resources: ["pods/log"]
-                verbs: ["get","list"]
-              - resources: ["secrets"]
-                verbs: ["create","delete","get","update"]
-              - resources: ["serviceaccounts"]
-                verbs: ["get"]
-              - resources: ["services"]
-                verbs: ["create","get"]
-
-        runners:
-          secret: gitlab-runner
-          name: k8s-runner
-          cache:
-            secretName: gitlab-runner
-          config: |
-                [[runners]]
-                   executor = "kubernetes"
-                   request_concurrency = 10
-                  [runners.cache]
-                    Type = "s3"
-                    Path = "gl-runners"
-                    Shared = false
-                    [runners.cache.s3]
-                      ServerAddress = "smig-zima.lab.smig.tech:9000"
-                      BucketName = "gitlab-cache"
-                      BucketLocation = "us-east-1"
-                      Insecure = true
-                      AuthenticationType = "access-key"
-                  [runners.kubernetes]
-                      namespace = "gitlab-runner"
-                      image = "registry.lab.smig.tech/smig/ci-templates/alpine:latest"
-                      privileged = true
-                      pull_policy = "if-not-present"
-                      helper_image = "registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:arm64-v${CI_RUNNER_VERSION}"
-
-                  [runners.kubernetes.pod_resources]
-                      cpu_limit = "4"
-                      memory_limit = "6Gi"
-                      cpu_request = "500m"
-                      memory_request = "1Gi"
-                  [[runners.kubernetes.volumes.secret]]
-                      name = "smigtech-cert"
-                      mount_path = "/secrets/smigtech/"
-                  [[runners.kubernetes.volumes.empty_dir]]
-                      name = "docker-certs"
-                      mount_path = "/certs/client"
-                      medium = "Memory"
+  sources:
+    - repoURL: https://charts.gitlab.io
+      targetRevision: 0.92.1
+      chart: gitlab-runner 
+      helm:
+        valueFiles:
+          - $values/apps-values/gitlab.yaml
+    - repoURL: {{ .Values.repoURL }}
+      targetRevision: HEAD
+      ref: values
 
 
   destination:

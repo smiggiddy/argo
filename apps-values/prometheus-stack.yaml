@@ -1,0 +1,139 @@
+kubeEtcd:
+  endpoints:
+    - 192.168.100.52
+    - 192.168.100.53
+    - 192.168.100.162
+kubeApiServer:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+kubeScheduler:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+kubeControllerManager:
+  enabled: false
+kubeProxy:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+kubelet:
+  serviceMonitor:
+    metricRelabelings:
+      # k3s exposes all metrics on all endpoints, relabel jobs that belong to other components
+      - sourceLabels: [__name__]
+        regex: "scheduler_(.+)"
+        targetLabel: "job"
+        replacement: "kube-scheduler"
+        action: replace
+      - sourceLabels: [__name__]
+        regex: "kubeproxy_(.+)"
+        targetLabel: "job"
+        replacement: "kube-proxy"
+        action: replace
+      - sourceLabels: [__name__]
+        regex: "apiserver_(.+)"
+        targetLabel: "job"
+        replacement: "apiserver"
+        action: replace
+      - sourceLabels: [__name__]
+        regex: "etcd_(.+)"
+        targetLabel: "job"
+        replacement: "kube-etcd"
+        action: replace
+alertmanager:
+  alertmanagerSpec:
+    replicas: 2
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: In
+              values: 
+              - "true"
+grafana:
+  plugins:
+    # Calendar heatmap panel for the-method habits dashboard.
+    - marcusolsson-calendar-panel
+  dashboards:
+    default:
+      argocd:
+        url: https://raw.githubusercontent.com/argoproj/argo-cd/master/examples/dashboard.json
+        token: ""
+        curlOptions: "-sLf"
+      nvidia:
+        url: https://raw.githubusercontent.com/NVIDIA/dcgm-exporter/refs/heads/main/grafana/dcgm-exporter-dashboard.json
+        token: ""
+        curlOptions: "-sLf"
+      loki-canary:
+        gnetId: 11489
+        revision: 4
+        datasource:
+        - name: DS_PROMETHEUS
+          value: Prometheus
+        - name: DS_LOKI
+          value: Loki
+      cnpg:
+        gnetId: 20417
+      the-method-habits:
+        url: https://raw.githubusercontent.com/smiggiddy/argo/main/grafana-dashboards/the-method/habits.json
+        token: ""
+        curlOptions: "-sLf"
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - name: "default"
+        orgId: 1
+        folder: ""  
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+  persistence:
+    enabled: true
+    type: sts
+    storageClassName: longhorn
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: cluster-ca-issuer
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+    hosts:
+    - grafana-k3s.lab.smig.tech
+    tls:
+    - secretName: smigtech-grafana-tls
+      hosts:
+      - grafana-k3s.lab.smig.tech
+  # using argocd vault plugin so yeah
+  assertNoLeakedSecrets: false
+prometheus:
+  prometheusSpec:
+    storageSpec: 
+      volumeClaimTemplate:
+        spec:
+          storageClassName: nfs-client
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+    podMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    scrapeConfigSelectorNilUsesHelmValues: false
+    probeSelectorNilUsesHelmValues: false
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: In
+              values: 
+              - "true"

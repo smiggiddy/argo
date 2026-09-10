@@ -9,27 +9,23 @@ metadata:
     {{ include "app.notifications" . | nindent 4 }}
 spec:
   project: default
-  source:
-    repoURL: https://github.com/smiggiddy/argo
-    path: charts/nfs-subdir-external-provisioner
-    targetRevision: HEAD
-    helm:
-      parameters:
-        - name: nfs.server
-          value: smigs-nas.lab.smig.tech 
-        - name: nfs.path
-          value: /volume1/kubernetes
-        - name: storageClass.defaultClass
-          value: "false"
-      values: |
-            nfs:
-              mountOptions:
-                - vers=4.1
-                - proto=tcp
-                - rsize=1048576
-                - wsize=1048576
-                - timeo=600
-            storageClassName: nfs-client 
+  sources:
+    - repoURL: https://github.com/smiggiddy/argo
+      path: charts/nfs-subdir-external-provisioner
+      targetRevision: HEAD
+      helm:
+        parameters:
+          - name: nfs.server
+            value: smigs-nas.lab.smig.tech 
+          - name: nfs.path
+            value: /volume1/kubernetes
+          - name: storageClass.defaultClass
+            value: "false"
+        valueFiles:
+          - $values/apps-values/nfs-client.yaml
+    - repoURL: {{ .Values.repoURL }}
+      targetRevision: HEAD
+      ref: values
 
   destination:
     server: {{ .Values.spec.destination.server }}

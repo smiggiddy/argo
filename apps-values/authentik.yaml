@@ -1,0 +1,52 @@
+authentik:
+  error_reporting:
+    enabled: false
+  postgresql:
+    host: authentik-pg-rw
+    user: file:///postgres-creds/username
+    password: file:///postgres-creds/password
+redis:
+  enabled: false
+
+server:
+  deploymentStrategy:
+    type: Recreate
+  securityContext:
+    fsGroup: 1000
+  volumes:
+    - name: postgres-creds
+      secret:
+        secretName: authentik-postgres-credentials
+    - name: authentik-data
+      persistentVolumeClaim:
+        claimName: authentik-data
+  volumeMounts:
+    - name: postgres-creds
+      mountPath: /postgres-creds
+      readOnly: true
+    - name: authentik-data
+      mountPath: /data
+  resources:
+    requests:
+      cpu: 300m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2Gi
+
+worker:
+  volumes:
+    - name: postgres-creds
+      secret:
+        secretName: authentik-postgres-credentials
+  volumeMounts:
+    - name: postgres-creds
+      mountPath: /postgres-creds
+      readOnly: true
+  resources:
+    requests:
+      cpu: 300m
+      memory: 768Mi
+    limits:
+      cpu: 2
+      memory: 1536Mi

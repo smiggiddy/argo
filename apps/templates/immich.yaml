@@ -14,102 +14,24 @@ spec:
   {{ include "app.syncPolicy.automated" . | nindent 2 }}
 
   project: default
-  source:
-    repoURL: https://immich-app.github.io/immich-charts
-    targetRevision: 0.12.0
-    chart: immich
-    helm:
-      valuesObject:
-        valkey:
-          enabled: true
-
-        controllers:
-          main:
-            containers:
+  sources:
+    - repoURL: https://immich-app.github.io/immich-charts
+      targetRevision: 0.12.0
+      chart: immich
+      helm:
+        valueFiles:
+          - $values/apps-values/immich.yaml
+        valuesObject:
+          server:
+            controllers:
               main:
-                image:
-                  # renovate: datasource=docker depName=ghcr.io/immich-app/immich-server
-                  tag: v3.1.0
-            strategy: Recreate
-        immich:
-          persistence:
-            library:
-              existingClaim: immich
-
-        machine-learning:
-          controllers:
-            main:
-              containers:
-                main:
-                  env:
-                    MACHINE_LEARNING_RKNN_THREADS: 2
-                  image: 
-                    # renovate: datasource=docker depName=ghcr.io/immich-app/immich-machine-learning
-                    tag: v3.1.0-armnn
-                  resources:
-                    limits:
-                      devic.es/mali: 1
-          persistence:
-            cache:
-              type: persistentVolumeClaim
-              storageClass: longhorn
-            fw:
-              enabled: true
-              type: hostPath
-              hostPath: /lib/firmware/mali_csffw.bin
-              hostPathType: File
-              readOnly: true
-            driver:
-              enabled: true
-              type: hostPath
-              hostPath: /usr/lib/libmali.so
-              hostPathType: File
-              readOnly: true
-                  
-        server:
-          controllers:
-            main:
-              containers:
-                main:
-                  env:
-                    DB_HOSTNAME: immich-pg-rw.immich.svc.cluster.local 
-                    DB_USERNAME: immich
-                    DB_DATABASE_NAME: immich
-                    DB_PASSWORD: <path:k8s/data/argocd/immich#password>
-                  resources:
-                    limits:
-                      devic.es/video: 1
-                      cpu: "4"
-                      memory: "7Gi"
-                    requests:
-                      cpu: "2"
-                      memory: "4Gi"
-          ingress:
-            main:
-              enabled: true
-              annotations:
-                cert-manager.io/cluster-issuer: cluster-ca-issuer
-                traefik.ingress.kubernetes.io/router.entrypoints: websecure
-                external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
-              hosts:
-                - host: immich.lab.smig.tech
-                  paths:
-                    - path: "/"
-              tls: 
-               - secretName: immich-tls
-                 hosts:
-                 - immich.lab.smig.tech
-            
-          persistence:
-            driver:
-              enabled: true
-              type: hostPath
-              hostPath: /usr/lib/aarch64-linux-gnu/libmali.so.1
-              hostPathType: File
-              readOnly: true
-            opencl:
-              enabled: true
-              type: hostPath
-              hostPath: /etc/OpenCL
-              hostPathType: Directory
-              readOnly: true
+                containers:
+                  main:
+                    env:
+                      DB_HOSTNAME: immich-pg-rw.immich.svc.cluster.local 
+                      DB_USERNAME: immich
+                      DB_DATABASE_NAME: immich
+                      DB_PASSWORD: <path:k8s/data/argocd/immich#password>
+    - repoURL: {{ .Values.repoURL }}
+      targetRevision: HEAD
+      ref: values

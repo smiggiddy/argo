@@ -1,0 +1,40 @@
+image:
+  repository: dxflrs/arm64_garage
+garage:
+  replicationFactor: 3
+  s3:
+    api:
+      region: "us-east-2"
+      rootDomain: "s3.lab.smig.tech"
+deployment:
+  replicaCount: 4
+monitoring:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+persistence:
+  meta:
+    storageClass: "longhorn"
+    size: 500Mi
+  data:
+    storageClass: "longhorn-noreplicas"
+    size: 20Gi
+ingress:
+  s3:
+    api:
+      enabled: true
+      className: "traefik"
+      annotations:
+        cert-manager.io/cluster-issuer: cluster-ca-issuer
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+      hosts:
+        - host: s3.lab.smig.tech
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: garage-ingress-cert
+          hosts:
+            - s3.lab.smig.tech

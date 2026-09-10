@@ -1,0 +1,17 @@
+image:
+  tag: 2024.10.22-7ca5933
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations: 
+    cert-manager.io/cluster-issuer: cluster-ca-issuer
+    external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+  hosts:
+  - host: it-tools.lab.smig.tech
+    paths:
+    - path: /
+      pathType: Prefix
+  tls: 
+  - secretName: it-tools-tls
+    hosts:
+    - it-tools.lab.smig.tech

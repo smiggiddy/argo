@@ -13,34 +13,16 @@ spec:
     namespace: longhorn-system
     server: {{ .Values.spec.destination.server }}
   project: default
-  source:
-    repoURL: https://charts.longhorn.io
-    targetRevision: 1.12.1
-    chart: longhorn
-    helm:
-      valuesObject:
-        preUpgradeChecker:
-          upgradeVersionCheck: false
-        upgradeCheck:
-          enabled: false
-        ingress:
-          enabled: true
-          ingressClassName: traefik
-          tls: true
-          tlsSecret: longhorn-tls
-          host: longhorn.lab.smig.tech
-          annotations:
-            cert-manager.io/cluster-issuer: cluster-ca-issuer
-            external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
-        defaultSettings:
-          nodeDrainPolicy: allow-if-replica-is-stopped
-          detachManuallyAttachedVolumesWhenCordoned: true
-        persistence:
-          defaultClassReplicaCount: 2
-          defaultDataLocality: "best-effort"
-        metrics:
-          serviceMonitor:
-            enabled: true
+  sources:
+    - repoURL: https://charts.longhorn.io
+      targetRevision: 1.12.1
+      chart: longhorn
+      helm:
+        valueFiles:
+          - $values/apps-values/longhorn.yaml
+    - repoURL: {{ .Values.repoURL }}
+      targetRevision: HEAD
+      ref: values
 
   ignoreDifferences:
     - group: apiextensions.k8s.io
