@@ -1,0 +1,29 @@
+extraArgs:
+  - --proxy-domain
+  - code-server.lab.smig.tech
+extraImageVolumes: 
+  - name: tools
+    mountPath: /opt/tools
+    reference: cr.smigz.com/image-volume:0.1.1
+    pullPolicy: IfNotPresent 
+
+# password: <path:k8s/data/argocd/code-server#password>
+image:
+  tag: 'latest'
+persistence: 
+  storageClass: longhorn
+ingress:
+  enabled: true
+  ingressClassName: "traefik"
+  annotations: 
+    cert-manager.io/cluster-issuer: cluster-ca-issuer
+    traefik.ingress.kubernetes.io/router.middlewares: apps-code-server@kubernetescrd
+    external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+  hosts:
+  - host: code-server.lab.smig.tech
+    paths: [/]
+  - host: "*.code-server.lab.smig.tech"
+    paths: [/]
+  tls: 
+  - secretName: code-server-tls
+    hosts: [ code-server.lab.smig.tech, "*.code-server.lab.smig.tech" ]

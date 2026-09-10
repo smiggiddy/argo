@@ -17,7 +17,5 @@ spec:
     repoURL: https://helm.mattermost.com
     targetRevision: 1.0.5
     chart: mattermost-operator
-    helm:
-      valuesObject:
 
   {{ include "app.syncPolicy.manual" . | nindent 2 }}

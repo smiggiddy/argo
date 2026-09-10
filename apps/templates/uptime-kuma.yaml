@@ -10,34 +10,16 @@ metadata:
     {{ include "app.notifications" . | nindent 4 }}
 spec:
   project: default
-  source:
-    repoURL: 'https://smiggiddy.github.io'
-    targetRevision: 0.0.21
-    chart: uptime-kuma
-    helm:
-      valuesObject:
-        image:
-          tag: 2.4.0
-        storageSize: "5Gi"
-        storageClassName: "longhorn"
-        tailscale:
-          enabled: true
-          authSecretName: "tailscale-auth"
-        ingress:
-          enabled: true
-          className: "traefik"
-          annotations: 
-            cert-manager.io/cluster-issuer: cluster-ca-issuer
-            external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
-          hosts:
-            - host: uptimekuma.lab.smig.tech
-              paths:
-                - path: /
-                  pathType: Prefix
-          tls:
-            - secretName: uptime-kuma-tls
-              hosts:
-                - uptimekuma.lab.smig.tech
+  sources:
+    - repoURL: 'https://smiggiddy.github.io'
+      targetRevision: 0.0.21
+      chart: uptime-kuma
+      helm:
+        valueFiles:
+          - $values/apps-values/uptime-kuma.yaml
+    - repoURL: {{ .Values.repoURL }}
+      targetRevision: HEAD
+      ref: values
 
 
   destination:

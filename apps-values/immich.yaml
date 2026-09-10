@@ -1,0 +1,88 @@
+valkey:
+  enabled: true
+
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          # renovate: datasource=docker depName=ghcr.io/immich-app/immich-server
+          tag: v3.1.0
+    strategy: Recreate
+immich:
+  persistence:
+    library:
+      existingClaim: immich
+
+machine-learning:
+  controllers:
+    main:
+      containers:
+        main:
+          env:
+            MACHINE_LEARNING_RKNN_THREADS: 2
+          image: 
+            # renovate: datasource=docker depName=ghcr.io/immich-app/immich-machine-learning
+            tag: v3.1.0-armnn
+          resources:
+            limits:
+              devic.es/mali: 1
+  persistence:
+    cache:
+      type: persistentVolumeClaim
+      storageClass: longhorn
+    fw:
+      enabled: true
+      type: hostPath
+      hostPath: /lib/firmware/mali_csffw.bin
+      hostPathType: File
+      readOnly: true
+    driver:
+      enabled: true
+      type: hostPath
+      hostPath: /usr/lib/libmali.so
+      hostPathType: File
+      readOnly: true
+          
+server:
+  controllers:
+    main:
+      containers:
+        main:
+          resources:
+            limits:
+              devic.es/video: 1
+              cpu: "4"
+              memory: "7Gi"
+            requests:
+              cpu: "2"
+              memory: "4Gi"
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: cluster-ca-issuer
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+      hosts:
+        - host: immich.lab.smig.tech
+          paths:
+            - path: "/"
+      tls: 
+       - secretName: immich-tls
+         hosts:
+         - immich.lab.smig.tech
+    
+  persistence:
+    driver:
+      enabled: true
+      type: hostPath
+      hostPath: /usr/lib/aarch64-linux-gnu/libmali.so.1
+      hostPathType: File
+      readOnly: true
+    opencl:
+      enabled: true
+      type: hostPath
+      hostPath: /etc/OpenCL
+      hostPathType: Directory
+      readOnly: true

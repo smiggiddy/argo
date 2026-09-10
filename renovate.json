@@ -51,7 +51,7 @@
     "managerFilePatterns": ["/apps/.+\\.ya?ml$/", "/awx/.+\\.yaml$/"]
   },
   "helm-values": {
-    "managerFilePatterns": ["/apps/.+\\.ya?ml$/"]
+    "managerFilePatterns": ["/apps/.+\\.ya?ml$/", "/apps-values/.+\\.ya?ml$/"]
   },
   "kustomize": {
     "managerFilePatterns": ["/(^|/)kustomization\\.ya?ml$/"],
@@ -60,8 +60,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Image tags pinned inside ArgoCD Application valuesObject blocks",
-      "managerFilePatterns": ["/apps/.+\\.ya?ml$/"],
+      "description": "Image tags pinned inside app values files",
+      "managerFilePatterns": ["/apps/.+\\.ya?ml$/", "/apps-values/.+\\.ya?ml$/"],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*tag: (?<currentValue>\\S+)"
       ],

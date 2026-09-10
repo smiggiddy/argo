@@ -1,0 +1,23 @@
+crds:
+  full: true
+workflow:
+  serviceAccount:
+    create: true
+    name: "argo-workflow"
+  rbac:
+    create: true
+  workflowNamespaces:
+    - default
+server:
+  authModes:
+    - server
+  httproute:
+    enabled: true
+    parentRefs:
+      - name: traefik-gateway
+        kind: Gateway
+        group: gateway.networking.k8s.io
+        namespace: kube-system
+        sectionName: websecure
+    hostnames:
+      - argoworkflows.lab.smig.tech

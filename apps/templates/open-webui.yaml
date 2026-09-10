@@ -9,31 +9,18 @@ metadata:
     {{ include "app.notifications" . | nindent 4 }}
 spec:
   project: default
-  source:
-    repoURL: https://helm.openwebui.com/
-    targetRevision: 16.5.0
-    chart: open-webui
-    helm:
-      valuesObject:
-          websocket:
-            enabled: true
-          ollama:
-            enabled: false
+  sources:
+    - repoURL: https://helm.openwebui.com/
+      targetRevision: 16.5.0
+      chart: open-webui
+      helm:
+        valueFiles:
+          - $values/apps-values/open-webui.yaml
+        valuesObject:
           databaseUrl: <path:k8s/data/argocd/openwebui#postgresql>
-
-          ingress:
-            enabled: true
-            className: "traefik"
-            annotations: 
-              cert-manager.io/cluster-issuer: cluster-ca-issuer
-              external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
-            host: chat.lab.smig.tech
-            tls: true
-            existingSecret: open-webui-tls
-
-
-
-
+    - repoURL: {{ .Values.repoURL }}
+      targetRevision: HEAD
+      ref: values
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: apps
