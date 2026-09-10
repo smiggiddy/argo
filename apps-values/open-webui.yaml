@@ -1,9 +1,22 @@
 extraEnvVars:
-  - name: DATABASE_URL
+  - name: DATABASE_TYPE
+    value: postgresql
+  - name: DATABASE_USER
     valueFrom:
       secretKeyRef:
         name: openwebui-db-secret
-        key: uri
+        key: username
+  - name: DATABASE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: openwebui-db-secret
+        key: password
+  - name: DATABASE_HOST
+    value: openwebui-db-rw.apps.svc.cluster.local
+  - name: DATABASE_PORT
+    value: "5432"
+  - name: DATABASE_NAME
+    value: openwebui
 websocket:
   enabled: true
 ollama:
