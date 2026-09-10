@@ -1,0 +1,9 @@
+apiVersion: v1
+stringData:
+  accessKeyId: <path:k8s/data/argocd/minio#accessKeyId>
+  secretAccessKey: <path:k8s/data/argocd/minio#secretAccessKey>
+kind: Secret
+metadata:
+  name: loki-s3
+  namespace: loki
+type: Opaque

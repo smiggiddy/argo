@@ -43,6 +43,8 @@ kubelet:
         action: replace
 alertmanager:
   alertmanagerSpec:
+    useExistingSecret: true
+    configSecret: alertmanager-config
     replicas: 2
     affinity:
       nodeAffinity:
@@ -55,6 +57,7 @@ alertmanager:
               values: 
               - "true"
 grafana:
+  envFromSecret: grafana-secrets
   plugins:
     # Calendar heatmap panel for the-method habits dashboard.
     - marcusolsson-calendar-panel
@@ -112,6 +115,53 @@ grafana:
       - grafana-k3s.lab.smig.tech
   # using argocd vault plugin so yeah
   assertNoLeakedSecrets: false
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      access: proxy
+      basicAuth: false
+      url: http://loki-gateway.loki
+      jsonData:
+        timeout: 300
+        maxLines: 1000
+    # the-method habits dashboard queries the app's CNPG database
+    # directly. Reuses the app-owner credentials from Vault — fine
+    # for a single-user homelab dashboard; revisit with a read-only
+    # role if more dashboards start hitting this DB.
+    - name: TheMethod-PG
+      uid: the-method-pg
+      type: postgres
+      access: proxy
+      url: the-method-pg-rw.smigz.svc.cluster.local:5432
+      user: the_method
+      secureJsonData:
+        password: $THEMETHOD_PG_PASSWORD
+      jsonData:
+        database: the_method
+        sslmode: require
+        postgresVersion: 1700
+        maxOpenConns: 2
+  grafana.ini:
+    auth:
+        signout_redirect_url: "https://auth.thecodedom.com/application/o/grafana-k3s/end-session/"
+        oauth_auto_login: true
+    users:
+        allow_sign_up: false
+    auth.generic_oauth:
+        name: authentik
+        enabled: true
+        allow_sign_up: true
+        scopes: "openid profile email"
+        auth_url: "https://auth.thecodedom.com/application/o/authorize/"
+        token_url: "https://auth.thecodedom.com/application/o/token/"
+        api_url: "https://auth.thecodedom.com/application/o/userinfo/"
+        login_attribute_path: preferred_username
+        email_attribute_path: email
+        name_attribute_path: name
+        # Optionally map user groups to Grafana roles
+        role_attribute_path: contains(groups, 'Grafana Admins') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor' || 'Viewer'
+    server:
+        root_url: "https://grafana-k3s.lab.smig.tech"
 prometheus:
   prometheusSpec:
     storageSpec: 

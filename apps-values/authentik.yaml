@@ -1,10 +1,18 @@
 authentik:
+  secret_key: "env://AUTHENTIK_SECRET_KEY"
   error_reporting:
     enabled: false
   postgresql:
     host: authentik-pg-rw
     user: file:///postgres-creds/username
     password: file:///postgres-creds/password
+global:
+  env:
+    - name: AUTHENTIK_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: authentik-secrets
+          key: secret_key
 redis:
   enabled: false
 

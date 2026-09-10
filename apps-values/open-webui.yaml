@@ -1,3 +1,9 @@
+extraEnvVars:
+  - name: DATABASE_URL
+    valueFrom:
+      secretKeyRef:
+        name: openwebui-db-secret
+        key: uri
 websocket:
   enabled: true
 ollama:
