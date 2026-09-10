@@ -16,8 +16,6 @@ spec:
       helm:
         valueFiles:
           - $values/apps-values/open-webui.yaml
-        valuesObject:
-          databaseUrl: <path:k8s/data/argocd/openwebui#postgresql>
     - repoURL: {{ .Values.repoURL }}
       targetRevision: HEAD
       ref: values

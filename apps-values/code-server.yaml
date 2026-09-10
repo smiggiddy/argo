@@ -1,13 +1,31 @@
 extraArgs:
   - --proxy-domain
   - code-server.lab.smig.tech
+extraVars:
+  - name: CODER_OIDC_ISSUER_URL
+    value: "https://auth.thecodedom.com/application/o/code-server/"
+  - name: CODER_OIDC_EMAIL_DOMAIN
+    value: "gmail.com"
+  - name: CODER_OIDC_CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        name: code-server-oidc
+        key: client_id
+  - name: CODER_OIDC_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: code-server-oidc
+        key: client_secret
+  - name: CODER_OIDC_SIGN_IN_TEXT
+    value: "Log in with authentic"
+  - name: PATH
+    value: /opt/tools/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 extraImageVolumes: 
   - name: tools
     mountPath: /opt/tools
     reference: cr.smigz.com/image-volume:0.1.1
     pullPolicy: IfNotPresent 
 
-# password: <path:k8s/data/argocd/code-server#password>
 image:
   tag: 'latest'
 persistence: 

@@ -19,20 +19,6 @@ spec:
       helm:
         valueFiles:
           - $values/apps-values/code-server.yaml
-        valuesObject:
-          extraVars:
-            - name: CODER_OIDC_ISSUER_URL
-              value: "https://auth.thecodedom.com/application/o/code-server/"
-            - name: CODER_OIDC_EMAIL_DOMAIN
-              value: "gmail.com"
-            - name: CODER_OIDC_CLIENT_ID
-              value: "<path:k8s/data/argocd/code-server#client_id>"
-            - name: CODER_OIDC_CLIENT_SECRET
-              value: "<path:k8s/data/argocd/code-server#client_secret>"
-            - name: CODER_OIDC_SIGN_IN_TEXT
-              value: "Log in with authentic"
-            - name: PATH
-              value: /opt/tools/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     - repoURL: {{ .Values.repoURL }}
       targetRevision: HEAD
       ref: values

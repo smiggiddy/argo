@@ -31,8 +31,9 @@ This homelab setup provides a complete self-hosted infrastructure including:
    - ArgoCD Application manifests for each service
    - Configured with upstream Helm repositories and custom values
    - Helm values live in `/apps-values/` and are referenced with the `$values` multi-source pattern
-   - Secret values (argocd-vault-plugin `<path:...>` placeholders) stay inline in the Application CR
-     via `helm.valuesObject`, because AVP cannot substitute values files pulled in through `$values`
+   - Secrets are not stored in values: charts reference on-cluster Secrets by name (`secretKeyRef`,
+     `envFromSecret`, `configSecret`, ...), and those Secrets are created from Vault by the
+     `app-secrets` kustomization via argocd-vault-plugin
    - Includes notifications, health checks, and sync policies
 
 3. **Kustomizations** (`/kustomizations/`)
@@ -60,6 +61,7 @@ This homelab setup provides a complete self-hosted infrastructure including:
 │   ├── longhorn.yaml
 │   └── ...
 ├── kustomizations/                # Custom Kubernetes resources
+│   ├── app-secrets/               # Vault-backed Secrets consumed by the Helm apps
 │   ├── home-assistant/
 │   ├── rabbitmq-operator/
 │   └── ...
