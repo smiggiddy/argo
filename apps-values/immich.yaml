@@ -7,7 +7,7 @@ controllers:
       main:
         image:
           # renovate: datasource=docker depName=ghcr.io/immich-app/immich-server
-          tag: v3.1.0
+          tag: v3.2.0
     strategy: Recreate
 immich:
   persistence:
@@ -23,7 +23,7 @@ machine-learning:
             MACHINE_LEARNING_RKNN_THREADS: 2
           image: 
             # renovate: datasource=docker depName=ghcr.io/immich-app/immich-machine-learning
-            tag: v3.1.0-armnn
+            tag: v3.2.0-armnn
           resources:
             limits:
               devic.es/mali: 1
