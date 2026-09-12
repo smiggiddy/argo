@@ -5,6 +5,15 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
+  # was an undeclared spec.imageName of 18.0-system-trixie, set imperatively and
+  # absent from git -- the catalog puts the image back under version control.
+  # The catalog is cluster-scoped, so it resolves even though it is applied by
+  # the cnpg-databases app rather than this one.
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: postgresql
+    major: 18
   instances: 1
   # single instance: the default PDB has minAvailable=1 against 1 pod, so it
   # allows 0 disruptions and blocks node drains forever while protecting

@@ -3,12 +3,22 @@ kind: ClusterImageCatalog
 metadata:
   name: postgresql
 spec:
+  # minimal, not system: system images are deprecated upstream and add only the
+  # barman-cloud binaries on top of standard, which every cluster here bypasses
+  # by backing up through the barman-cloud *plugin* sidecar. Nothing in this repo
+  # needs standard's extras either (pgaudit, pg_failover_slots, pgvector, all
+  # locales) -- pgvector and vchord have their own catalogs.
+  #
+  # pg18 minimal ships no LLVM JIT (postgresql-18-jit is a separate package that
+  # --no-install-recommends drops). That is a no-op here: only llvmjit.so links
+  # LLVM, so PostgreSQL silently disables JIT when it is absent, and these are
+  # OLTP databases whose heaviest plan costs ~6k against jit_above_cost=100000.
   images:
     - major: 15
-      image: ghcr.io/cloudnative-pg/postgresql:15.19-system-trixie@sha256:1a22f1d946ecc1b308b7f8087e6d4ccbb21f75e0001d0a69c7d7fcffdc2a0b1b
+      image: ghcr.io/cloudnative-pg/postgresql:15.19-minimal-trixie@sha256:5cf5a9e916f1120e4c8165c96fbc0abc526cba28265a22e71faace576b6b3c91
     - major: 16
-      image: ghcr.io/cloudnative-pg/postgresql:16.15-system-trixie@sha256:dcaa69582efb8b9fb1de72f0b8e5d9235a7a0a49ca5f1f1a400b2824a0d1b261
+      image: ghcr.io/cloudnative-pg/postgresql:16.15-minimal-trixie@sha256:92f7c8bc5b482f71be8014e218799aaba952d1ae96951f72b06b1d719cd89be7
     - major: 17
-      image: ghcr.io/cloudnative-pg/postgresql:17.11-system-trixie@sha256:362b039f643f1c09a34edd63d9a78903e5f1f4f43c24236cc8459621eb676d12
+      image: ghcr.io/cloudnative-pg/postgresql:17.11-minimal-trixie@sha256:3c8907d7725e93568134c32799bf235f75a9fd509cdcadb25bca706d94249327
     - major: 18
-      image: ghcr.io/cloudnative-pg/postgresql:18.6-system-trixie@sha256:5a6a677d3fa2bc3fdc61874e0de8324b5a987eb676ddca133e71365a8467d6c1
+      image: ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie@sha256:d67f21ed2110b1f59349217760e389f1bded54cd0b6dee485ed152b4c8a8b9e2
