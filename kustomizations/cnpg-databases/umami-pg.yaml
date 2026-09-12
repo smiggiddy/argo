@@ -21,7 +21,7 @@ spec:
   bootstrap:
     initdb:
       database: umami
-      owner: app
+      owner: umami
 
   plugins:
     - name: barman-cloud.cloudnative-pg.io
