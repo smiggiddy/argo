@@ -16,7 +16,7 @@ spec:
         app: umami
     spec:
       containers:
-        - image: ghcr.io/umami-software/umami:postgresql-latest
+        - image: ghcr.io/umami-software/umami:postgresql-latest@sha256:fa32d116cf20cad52cbc3fad9a63b46e7fa02299d8f967168eb453d49c476b4a
           name: umami
           ports:
             - containerPort: 3000
