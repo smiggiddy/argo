@@ -18,6 +18,10 @@ spec:
       memory: "512Mi"
     limits:
       memory: "512Mi"
+  bootstrap:
+    initdb:
+      database: umami
+      owner: app
 
   plugins:
     - name: barman-cloud.cloudnative-pg.io
