@@ -5,6 +5,7 @@ metadata:
   namespace: nextcloud
 spec:
   instances: 2
+  primaryUpdateMethod: switchover
   storage:
     size: 4Gi
 
