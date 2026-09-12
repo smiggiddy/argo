@@ -2,3 +2,4 @@ repo_secrets
 test
 testing/
 .vscode/
+kustomizations/cnpg-databases/immich-vectorchord-migration.md
