@@ -1,0 +1,38 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: umami-pg
+  namespace: umami
+spec:
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: postgresql
+    major: 15
+  instances: 1
+  enablePDB: false
+  storage:
+    size: 1Gi
+  resources:
+    requests:
+      memory: "512Mi"
+    limits:
+      memory: "512Mi"
+  bootstrap:
+    initdb:
+      database: umami
+      import:
+        type: microservice
+        databases:
+          - umami_db
+        source:
+          externalCluster: umami
+  externalClusters:
+    - name: umami
+      connectionParameters:
+        host: pve-apps2.lab.smig.tech
+        user: umami_user
+        dbname: umami_db
+      password:
+        name: umami-import
+        key: password

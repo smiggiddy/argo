@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: umami
+  namespace: argocd
+  labels:
+    apps: observability
+  annotations:
+    {{ include "app.notifications" . | nindent 4 }}
+spec:
+  project: default
+  source:
+    repoURL: {{ .Values.repoURL }}
+    targetRevision: HEAD
+    path: ./kustomizations/umami
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: umami
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: umami
+  name: umami
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: umami
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: umami
+    spec:
+      containers:
+        - image: ghcr.io/umami-software/umami:postgresql-latest
+          name: umami
+          ports:
+            - containerPort: 3000
+          resources: {}
+          env:
+            - name: DATABASE_TYPE
+              value: postgresql
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: umami-pg-app
+                  key: uri
+            - name: HASH_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: umami-secrets
+                  key: hash-salt
