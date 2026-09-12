@@ -9,14 +9,14 @@ spec:
     endpointURL: http://garage.garage:3900
     s3Credentials:
       accessKeyId:
-        name: the-method-backup-credentials
+        name: umami-backup-credentials
         key: ACCESS_KEY_ID
       secretAccessKey:
-        name: the-method-backup-credentials
+        name: umami-backup-credentials
         key: ACCESS_SECRET_KEY
       region:
         key: region
-        name: the-method-backup-credentials
+        name: umami-backup-credentials
     wal:
       compression: gzip
   retentionPolicy: "7d"
