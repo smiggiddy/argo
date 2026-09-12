@@ -20,7 +20,16 @@ spec:
           name: umami
           ports:
             - containerPort: 3000
-          resources: {}
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 300m
+            limits:
+              memory: 1Gi
+              cpu: 1
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
           env:
             - name: DATABASE_TYPE
               value: postgresql
