@@ -21,6 +21,7 @@ resources:
   - ./honcho-pg.yaml
   - ./immich-pg.yaml
   - ./immich-cnpg-backup.yaml
+  - ./immich-backup-secret.yaml
   - ./umami-pg.yaml
   - ./umami-cnpg-backup.yaml
   - ./umami-backup-secret.yaml
