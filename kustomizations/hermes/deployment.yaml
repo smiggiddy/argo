@@ -139,7 +139,7 @@ spec:
             name: hermes-config-file
         - name: tools
           image:
-            reference: cr.smigz.com/image-volume:0.1.1
+            reference: cr.smigz.com/image-volume:0.2.0-dev
             pullPolicy: IfNotPresent
       restartPolicy: Always
       terminationGracePeriodSeconds: 60

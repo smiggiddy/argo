@@ -20,28 +20,28 @@ extraVars:
     value: "Log in with authentic"
   - name: PATH
     value: /opt/tools/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-extraImageVolumes: 
+extraImageVolumes:
   - name: tools
     mountPath: /opt/tools
-    reference: cr.smigz.com/image-volume:0.1.1
-    pullPolicy: IfNotPresent 
+    reference: cr.smigz.com/image-volume:0.2.0-dev
+    pullPolicy: IfNotPresent
 
 image:
-  tag: 'latest'
-persistence: 
+  tag: "latest"
+persistence:
   storageClass: longhorn
 ingress:
   enabled: true
   ingressClassName: "traefik"
-  annotations: 
+  annotations:
     cert-manager.io/cluster-issuer: cluster-ca-issuer
     traefik.ingress.kubernetes.io/router.middlewares: apps-code-server@kubernetescrd
     external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
   hosts:
-  - host: code-server.lab.smig.tech
-    paths: [/]
-  - host: "*.code-server.lab.smig.tech"
-    paths: [/]
-  tls: 
-  - secretName: code-server-tls
-    hosts: [ code-server.lab.smig.tech, "*.code-server.lab.smig.tech" ]
+    - host: code-server.lab.smig.tech
+      paths: [/]
+    - host: "*.code-server.lab.smig.tech"
+      paths: [/]
+  tls:
+    - secretName: code-server-tls
+      hosts: [code-server.lab.smig.tech, "*.code-server.lab.smig.tech"]
