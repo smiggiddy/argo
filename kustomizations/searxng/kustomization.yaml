@@ -19,4 +19,4 @@ images:
   # original image is image: searxng/searxng:2025.8.1-3d96414@sha256:3f229455cee2e21bd9bd910fd1193687b380ebe2a083e15ad19bd5df72bab47f
   - name: searxng/searxng
     newName: ghcr.io/searxng/searxng
-    newTag: 2026.9.13-96479fff6
+    newTag: 2026.9.13-96479fff6@sha256:ef87e0f28f21f069fbf8c3742da8648edcdc2dccc9232732d35fce1eb41b7861
