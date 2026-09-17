@@ -11,3 +11,4 @@ resources:
   - ./storage-class.yaml
   - ./the-method-gitlab-deploy.yaml
   - ./traefik-overlay.yaml
+  - ./code-server-netpol.yaml
