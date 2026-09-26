@@ -15,10 +15,10 @@ spec:
   # OLTP databases whose heaviest plan costs ~6k against jit_above_cost=100000.
   images:
     - major: 15
-      image: ghcr.io/cloudnative-pg/postgresql:15.19-minimal-trixie@sha256:5cf5a9e916f1120e4c8165c96fbc0abc526cba28265a22e71faace576b6b3c91
+      image: ghcr.io/cloudnative-pg/postgresql:15.19-minimal-trixie@sha256:ec168ebce71eb35154a6292818006036d406abd4443a7e31410c6c1689673510
     - major: 16
-      image: ghcr.io/cloudnative-pg/postgresql:16.15-minimal-trixie@sha256:92f7c8bc5b482f71be8014e218799aaba952d1ae96951f72b06b1d719cd89be7
+      image: ghcr.io/cloudnative-pg/postgresql:16.15-minimal-trixie@sha256:0b3082c00f138c3d859bf495bccf77785a61ca03f876a72ca6826a6d9df5f528
     - major: 17
-      image: ghcr.io/cloudnative-pg/postgresql:17.11-minimal-trixie@sha256:3c8907d7725e93568134c32799bf235f75a9fd509cdcadb25bca706d94249327
+      image: ghcr.io/cloudnative-pg/postgresql:17.11-minimal-trixie@sha256:cfc42005357630d2c0bfca095c93a6abe44884486acb0de2e5e511a087b7eb15
     - major: 18
-      image: ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie@sha256:d67f21ed2110b1f59349217760e389f1bded54cd0b6dee485ed152b4c8a8b9e2
+      image: ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie@sha256:0fae0cb527912426a889ec0b21b9733e5b76fdc6ad8909914a6e8a6c8ba4f64b
