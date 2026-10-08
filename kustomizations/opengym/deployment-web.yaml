@@ -31,7 +31,7 @@ spec:
         # (c) Gym visual and are fetched from upstream, not redistributed here; see
         # the project's NOTICE.md. Skipped once the volume has content.
         - name: media-download
-          image: alpine/git:2.52.0
+          image: alpine/git:v2.54.0@sha256:a4bb51f1a3553df194ce679fc1db721d8bfba2046fa1a88fe9d4ac551ffbce25
           command: ["/bin/sh", "-c"]
           args:
             - |
