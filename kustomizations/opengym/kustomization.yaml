@@ -26,6 +26,6 @@ configMapGenerator:
 # web images of one release belong to the same version.
 images:
   - name: ghcr.io/duartesantos8/opengym-api
-    newTag: "1.3.10"
+    newTag: "1.3.10@sha256:1a0428ac9bc99717b53051ceb473fe1998d4e3b45a802a20db1f218b1765d8b2"
   - name: ghcr.io/duartesantos8/opengym-web
-    newTag: "1.3.10"
+    newTag: "1.3.10@sha256:d3ebd3e51d8eb2bfc25d95092a71f7827db8cc169feec48001dfbf8e76069ad5"
