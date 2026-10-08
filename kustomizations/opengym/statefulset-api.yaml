@@ -25,7 +25,7 @@ spec:
           type: RuntimeDefault
       initContainers:
         - name: fix-permissions
-          image: busybox:1.38
+          image: busybox:1.38@sha256:fd7dc98638c8e305f4dc34e979f1c0fdfdcaeb0fbf8fcff77ae834b6da3d7e6e
           command: ["sh", "-c", "chown -R 1000:1000 /data"]
           securityContext:
             runAsNonRoot: false
@@ -41,7 +41,7 @@ spec:
               mountPath: /data
       containers:
         - name: api
-          image: ghcr.io/duartesantos8/opengym-api:1.3.10
+          image: ghcr.io/duartesantos8/opengym-api:1.3.10@sha256:1a0428ac9bc99717b53051ceb473fe1998d4e3b45a802a20db1f218b1765d8b2
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
