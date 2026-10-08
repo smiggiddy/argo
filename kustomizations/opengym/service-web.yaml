@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: opengym-web
+  labels:
+    app: opengym-web
+spec:
+  selector:
+    app: opengym-web
+  ports:
+    - name: web
+      protocol: TCP
+      port: 80
+      targetPort: web

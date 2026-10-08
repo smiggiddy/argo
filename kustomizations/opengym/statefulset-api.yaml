@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: opengym-api
+  labels:
+    app: opengym-api
+spec:
+  serviceName: opengym-api
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opengym-api
+  template:
+    metadata:
+      labels:
+        app: opengym-api
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/duartesantos8/opengym-api:1.3.10
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: opengym-api-config
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 30
+          resources:
+            requests:
+              memory: 128Mi
+            limits:
+              memory: 512Mi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+  # users, passkeys, per-user state and uploads. The only volume worth backing up.
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: longhorn
+        resources:
+          requests:
+            storage: 2Gi

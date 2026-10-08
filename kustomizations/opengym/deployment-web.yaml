@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opengym-web
+  labels:
+    app: opengym-web
+spec:
+  replicas: 1
+  # The exercise media lives on a ReadWriteOnce volume, so only one web pod can run
+  # at a time; Recreate avoids a second pod trying to mount it mid-rollout.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: opengym-web
+  template:
+    metadata:
+      labels:
+        app: opengym-web
+    spec:
+      initContainers:
+        # One-time download of the exercise images and GIFs (~140 MB). They are
+        # (c) Gym visual and are fetched from upstream, not redistributed here; see
+        # the project's NOTICE.md. Skipped once the volume has content.
+        - name: media-download
+          image: alpine/git:2.52.0
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              mkdir -p /out/img /out/gif
+              if [ -z "$(ls -A /out/img 2>/dev/null)" ]; then
+                git clone --depth 1 https://github.com/hasaneyldrm/exercises-dataset /tmp/ds
+                cp /tmp/ds/images/*.jpg /out/img/ && cp /tmp/ds/videos/*.gif /out/gif/
+              fi
+          volumeMounts:
+            - name: media
+              mountPath: /out
+          resources:
+            requests:
+              memory: 128Mi
+            limits:
+              memory: 256Mi
+      containers:
+        - name: web
+          image: ghcr.io/duartesantos8/opengym-web:1.3.10
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: web
+              containerPort: 80
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: opengym-web-config
+          readinessProbe:
+            httpGet:
+              path: /
+              port: web
+          livenessProbe:
+            httpGet:
+              path: /
+              port: web
+            initialDelaySeconds: 30
+          resources:
+            requests:
+              memory: 32Mi
+            limits:
+              memory: 128Mi
+          volumeMounts:
+            - name: media
+              mountPath: /usr/share/nginx/html/img
+              subPath: img
+            - name: media
+              mountPath: /usr/share/nginx/html/gif
+              subPath: gif
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: opengym-media
