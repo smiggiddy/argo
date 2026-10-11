@@ -18,7 +18,7 @@ spec:
       - name: base-image-tag
         value: "26.04"
       - name: base-image-arm64-digest
-        value: "sha256:513c074113a871b51a8d16ab445c88779d6452d937a164fb5cc479f32668a41d"
+        value: "sha256:f144425ff09be612d6d9ad965196e9cdc23dae1f42110a8a11a3e9a8198759f7"
 
   templates:
     - name: main
@@ -46,7 +46,7 @@ spec:
           secret:
             secretName: smigtech-ca-cert
       container:
-        image: quay.io/buildah/stable:v1.43.4@sha256:2d4ddc6de2f3b563716d74d0c8b1b24f29f63cf591a3aa7e1d00b4d33787452f
+        image: quay.io/buildah/stable:v1.43.4@sha256:b1899f37300ac68c25a2175eac31506e0541bb4fa8156c40ee5120a6194d20cf
         volumeMounts:
           - name: docker-config
             mountPath: /.docker
