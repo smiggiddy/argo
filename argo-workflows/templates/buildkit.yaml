@@ -85,7 +85,7 @@ spec:
         readinessProbe:
           exec:
             command: [sh, -c, "buildctl debug workers"]
-        image: moby/buildkit:rootless@sha256:80b15f0735e87bab7bf59ec4d695dfb4a7cfb25521cf56dc75d6f256285b63ef
+        image: moby/buildkit:rootless@sha256:65eca3c01cd1180c8f64565c4e3c5983af5145818b0e6fa863385d099eb73855
         volumeMounts:
           # - name: work
           #   mountPath: /work
