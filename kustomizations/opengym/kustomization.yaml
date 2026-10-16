@@ -28,4 +28,4 @@ images:
   - name: ghcr.io/duartesantos8/opengym-api
     newTag: "1.3.10"
   - name: ghcr.io/duartesantos8/opengym-web
-    newTag: "1.3.10"
+    newTag: "1.4.1@sha256:e32cae9d2f4aad0c5e1b7888c9bfc712b2306ddfe3c65bc4cfefd4b0002e86d3"
