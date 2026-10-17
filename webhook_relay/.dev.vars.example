@@ -1,0 +1,2 @@
+DEV=true
+GITHUB_WEBHOOK_SECRET=changeme

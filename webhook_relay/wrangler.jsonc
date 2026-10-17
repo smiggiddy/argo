@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "argocd_webhook_relay",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-16",
+  "upload_source_maps": true,
+  "vars": {
+    "ARGOCD_WEBHOOK_URL": "http://argocd-server.argocd.svc.cluster.local/api/webhook",
+  },
+  "routes": [
+    {
+      "pattern": "acd-hook.smig.tech",
+      "custom_domain": true,
+    },
+  ],
+  "vpc_services": [
+    {
+      "binding": "VPC_SERVICE",
+      "service_id": "01a14777-9090-72f3-9ada-b2e895672086",
+    },
+  ],
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+    },
+  },
+}

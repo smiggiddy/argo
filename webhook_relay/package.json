@@ -1,0 +1,22 @@
+{
+  "name": "argocd_webhook_relay",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify"
+  },
+  "keywords": [],
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "smee-client": "^5.0.0",
+    "typescript": "^7.0.2",
+    "wrangler": "^4.151.1"
+  },
+  "dependencies": {
+    "@hono/cloudflare-workers": "^1.0.1",
+    "hono": "^4.13.13"
+  }
+}
