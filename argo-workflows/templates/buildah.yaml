@@ -51,7 +51,7 @@ spec:
           secret:
             secretName: cr-smigz-com-registry
       container:
-        image: quay.io/buildah/stable:v1.43.4@sha256:07e637ad7a1df37f44afea8287935b350224ac193d63e5cc96debb50a366853c
+        image: quay.io/buildah/stable:v1.43.5@sha256:4cb71c73553ba30c0891a004636a43ee3e0aa0a04ef6cba760404b2c87949d5c
         volumeMounts:
           - name: docker-config
             mountPath: /.docker
