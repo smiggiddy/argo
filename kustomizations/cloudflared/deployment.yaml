@@ -1,0 +1,51 @@
+# path for secret k8s/data/cloudflare-tunnel-rpi-k3s
+# account-id
+# api-token
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflared
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudflared
+
+  template:
+    metadata:
+      labels:
+        app: cloudflared
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/role: "cloudflared"
+        vault.hashicorp.com/agent-inject-secret-token: "k8s/data/cloudflare-tunnel-rpi-k3s"
+        vault.hashicorp.com/agent-inject-template-token: |
+          {{- with secret "k8s/data/cloudflare-tunnel-rpi-k3s" -}}{{ .Data.data.token }}{{- end -}}
+        # cloudflared image runs as distroless nonroot
+        vault.hashicorp.com/agent-run-as-user: "65532"
+        vault.hashicorp.com/agent-run-as-group: "65532"
+        vault.hashicorp.com/agent-inject-perms-token: "0400"
+    spec:
+      serviceAccountName: cloudflared
+      containers:
+        - name: cloudflared
+          image: cloudflare/cloudflared:latest
+          args:
+            [
+              "tunnel",
+              "--no-autoupdate",
+              "--config",
+              "/etc/cloudflared/config.yaml",
+              "run",
+              "--token-file",
+              "/vault/secrets/token",
+            ]
+          volumeMounts:
+            - name: config
+              mountPath: /etc/cloudflared
+      volumes:
+        - name: config
+          configMap:
+            name: cloudflared-config

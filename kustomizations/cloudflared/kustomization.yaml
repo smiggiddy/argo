@@ -1,0 +1,9 @@
+resources:
+  - ./deployment.yaml
+  - ./netpol.yml
+  - ./serviceaccount.yaml
+
+configMapGenerator:
+  - name: cloudflared-config
+    files:
+      - ./config.yaml

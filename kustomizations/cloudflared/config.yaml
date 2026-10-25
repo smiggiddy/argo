@@ -1,0 +1,9 @@
+tunnel: smigtech-k3s
+ingress:
+  - hostname: mattermost.thecodedom.com
+    service: http://smigtech.mattermost.svc.cluster.local:8065
+  - hostname: unami.smigz.com
+    service: http://umami-svc.umami.svc.cluster.local:3000
+  - hostname: auth.thecodedom.com
+    service: http://authentik-server.authentik.svc.cluster.local:80
+  - service: http_status:404
