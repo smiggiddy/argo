@@ -1,0 +1,32 @@
+# Public DNS in Cloudflare. Only DNSEndpoint objects are published, so
+# ingress/service hostnames (*.lab.smig.tech) never leak to public DNS.
+provider:
+  name: cloudflare
+sources:
+  - crd
+registry: txt
+txtOwnerId: k3s-cloudflare
+policy: sync
+domainFilters:
+  - thecodedom.com
+  - smigz.com
+extraArgs:
+  cloudflare-proxied: true
+
+env:
+  - name: CF_API_TOKEN
+    value: file:/vault/secrets/cf-api-token
+
+# Token needs Zone:DNS:Edit + Zone:Zone:Read on the zones above.
+# Vault role `external-dns-cloudflare` must bind SA external-dns-cloudflare in kube-system.
+podAnnotations:
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/agent-pre-populate-only: "true"
+  vault.hashicorp.com/role: "external-dns-cloudflare"
+  vault.hashicorp.com/agent-inject-secret-cf-api-token: "k8s/data/argocd/external-dns-cloudflare"
+  vault.hashicorp.com/agent-inject-template-cf-api-token: |
+    {{- with secret "k8s/data/argocd/external-dns-cloudflare" -}}{{ index .Data.data "api-token" }}{{- end -}}
+  # chart runs the container as 65532
+  vault.hashicorp.com/agent-run-as-user: "65532"
+  vault.hashicorp.com/agent-run-as-group: "65532"
+  vault.hashicorp.com/agent-inject-perms-cf-api-token: "0400"
