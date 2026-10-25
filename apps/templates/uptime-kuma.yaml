@@ -8,6 +8,7 @@ metadata:
     smig: charts
   annotations:
     {{ include "app.notifications" . | nindent 4 }}
+    {{ include "app.notifications.github" . | nindent 4 }}
 spec:
   project: default
   sources:

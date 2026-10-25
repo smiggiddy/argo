@@ -10,6 +10,17 @@ argocd.argoproj.io/compare-options: ServerSideDiff=true
 {{- end }}
 
 {{/*
+GitHub commit status annotations. Only for Applications with a
+github.com/smiggiddy/argo source, since statuses are posted to that repo.
+Usage: {{ include "app.notifications.github" . | nindent 4 }}
+*/}}
+{{- define "app.notifications.github" -}}
+notifications.argoproj.io/subscribe.on-sync-running-github.github: ""
+notifications.argoproj.io/subscribe.on-deployed-github.github: ""
+notifications.argoproj.io/subscribe.on-sync-failed-github.github: ""
+{{- end }}
+
+{{/*
 Standard automated sync policy with prune, selfHeal, CreateNamespace,
 ApplyOutOfSyncOnly, and ServerSideApply.
 Usage: {{ include "app.syncPolicy.automated" . | nindent 2 }}

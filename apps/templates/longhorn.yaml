@@ -8,6 +8,7 @@ metadata:
   annotations:
     avp.kubernetes.io/ignore: "true"
     {{ include "app.notifications" . | nindent 4 }}
+    {{ include "app.notifications.github" . | nindent 4 }}
 spec:
   destination:
     namespace: longhorn-system
