@@ -8,6 +8,7 @@ metadata:
   annotations:
     avp.kubernetes.io/path: "k8s/data/argocd/test"
     {{ include "app.notifications" . | nindent 4 }}
+    {{ include "app.notifications.github" . | nindent 4 }}
 
 spec:
   project: default
