@@ -1,0 +1,178 @@
+# Build Mattermost Team Edition for linux/arm64 and push to cr.smigz.com.
+#
+# Runs on PRs that touch this file (Renovate bumps MM_VERSION / the base
+# image below), so the image exists before the PR is merged. The job is the
+# PR's status check.
+#
+# Repo settings needed:
+#   secrets.CR_SMIGZ_USERNAME / secrets.CR_SMIGZ_PASSWORD  registry push creds
+#   vars.SMIGTECH_CA_PEM                                   smigtech CA cert (public)
+name: build-mattermost-te
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/build-mattermost-te.yaml
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Rebuild even if the tag already exists with the same base image
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  IMAGE: cr.smigz.com/mattermost-te
+  # renovate: datasource=github-releases depName=mattermost/mattermost
+  MM_VERSION: "v12.0.0"
+  # renovate: datasource=docker depName=ubuntu
+  BASE_IMAGE_TAG: "26.04"
+  BASE_IMAGE_ARM64_DIGEST: "sha256:f144425ff09be612d6d9ad965196e9cdc23dae1f42110a8a11a3e9a8198759f7"
+
+jobs:
+  build:
+    # Fork PRs get no secrets; skip them rather than fail on login.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Log in to cr.smigz.com
+        env:
+          CR_USERNAME: ${{ secrets.CR_SMIGZ_USERNAME }}
+          CR_PASSWORD: ${{ secrets.CR_SMIGZ_PASSWORD }}
+        run: printf '%s' "${CR_PASSWORD}" | docker login cr.smigz.com -u "${CR_USERNAME}" --password-stdin
+
+      # Skip when the tag already exists and was built from the same base
+      # image digest. Digest-only bumps (and unrelated edits to this file)
+      # still rebuild only if the base actually changed.
+      - name: Check for existing image
+        id: existing
+        env:
+          FORCE: ${{ inputs.force || false }}
+        run: |
+          set -euo pipefail
+
+          TAG="${IMAGE}:${MM_VERSION#v}"
+          if [ "${FORCE}" = "true" ]; then
+            echo "Forced rebuild of ${TAG}"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if ! image=$(docker buildx imagetools inspect "${TAG}" --format '{{json .Image}}' 2>/dev/null); then
+            echo "${TAG} not found, building"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # .Image is the config for a single manifest, or a platform map for an index
+          existing_base=$(jq -r '
+            (if has("config") then . else (.["linux/arm64"] // {}) end)
+            | .config.Labels["org.opencontainers.image.base.digest"] // ""' <<< "${image}")
+          if [ "${existing_base}" = "${BASE_IMAGE_ARM64_DIGEST}" ]; then
+            echo "${TAG} already built from ${existing_base}, skipping" | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "${TAG} exists but base is '${existing_base:-unknown}', rebuilding"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.existing.outputs.skip != 'true'
+        with:
+          repository: mattermost/mattermost
+          ref: ${{ env.MM_VERSION }}
+          sparse-checkout: server/build
+          persist-credentials: false
+
+      - name: Patch Dockerfile for ARM64
+        if: steps.existing.outputs.skip != 'true'
+        working-directory: server/build
+        env:
+          SMIGTECH_CA_PEM: ${{ vars.SMIGTECH_CA_PEM }}
+        run: |
+          set -euo pipefail
+
+          # 1. Replace base image tag and pin ARM64 digest
+          sed -i "s|FROM ubuntu:[^@]*@sha256:[a-f0-9]*|FROM ubuntu:${BASE_IMAGE_TAG}@${BASE_IMAGE_ARM64_DIGEST}|" Dockerfile
+
+          # 2. Replace individual library COPY lines with ldd-based approach
+          #    The upstream paths (/usr/lib/libpng.so*) don't match arm64 naming
+          #    (e.g. libpng16.so* at /usr/lib/aarch64-linux-gnu/), so we gather
+          #    all needed libs dynamically using ldd in the builder stage.
+          cat > /tmp/patch.awk << 'AWKEOF'
+          /^# Final stage/ {
+            print "# Add self-signed CA cert"
+            print "COPY smigtech.pem /usr/local/share/ca-certificates/ca.crt"
+            print "RUN update-ca-certificates"
+            print ""
+            print "# Gather shared libraries needed by document processing binaries"
+            print "RUN mkdir -p /staging/usr/lib && \\"
+            print "  for bin in /usr/bin/pdftotext /usr/bin/wvText /usr/bin/wvWare /usr/bin/unrtf /usr/bin/tidy; do \\"
+            print "    for lib in $(ldd \"$bin\" 2>/dev/null | grep -oE \"/usr/lib/[^ ]+\" || true); do \\"
+            print "      cp -L \"$lib\" /staging/usr/lib/ 2>/dev/null || true; \\"
+            print "    done; \\"
+            print "  done"
+            print ""
+          }
+          /^COPY --from=builder \/usr\/lib\/lib/ { next }
+          /^# Copy necessary libraries/ {
+            print "# Copy necessary libraries for document processing utilities"
+            print "COPY --from=builder /staging/usr/lib/ /usr/lib/"
+            next
+          }
+          { print }
+          AWKEOF
+          awk -f /tmp/patch.awk Dockerfile > Dockerfile.tmp && mv Dockerfile.tmp Dockerfile
+
+          # --- Verify patches applied ---
+          if ! grep -q "FROM ubuntu:${BASE_IMAGE_TAG}@${BASE_IMAGE_ARM64_DIGEST}" Dockerfile; then
+            echo "::error::Failed to set ARM64 base image digest"
+            echo "FROM line is: $(grep '^FROM' Dockerfile | head -1)"
+            exit 1
+          fi
+
+          if ! grep -q '/staging/usr/lib/' Dockerfile; then
+            echo "::error::Failed to patch library gathering step"
+            exit 1
+          fi
+
+          echo "=== Patched Dockerfile ==="
+          cat Dockerfile
+          echo "=========================="
+
+          if [ -z "${SMIGTECH_CA_PEM}" ]; then
+            echo "::error::vars.SMIGTECH_CA_PEM is not set"
+            exit 1
+          fi
+          printf '%s\n' "${SMIGTECH_CA_PEM}" > smigtech.pem
+
+      - name: Build and push
+        if: steps.existing.outputs.skip != 'true'
+        working-directory: server/build
+        run: |
+          set -euo pipefail
+
+          MM_VERSION_NUM="${MM_VERSION#v}"
+          TAG="${IMAGE}:${MM_VERSION_NUM}"
+          MM_PACKAGE="https://releases.mattermost.com/${MM_VERSION_NUM}/mattermost-team-${MM_VERSION_NUM}-linux-arm64.tar.gz"
+
+          echo "Building Mattermost Team Edition ${MM_VERSION_NUM} for linux/arm64"
+          echo "Package URL: ${MM_PACKAGE}"
+
+          docker build --platform=linux/arm64 \
+            --build-arg MM_PACKAGE="${MM_PACKAGE}" \
+            --label org.opencontainers.image.base.digest="${BASE_IMAGE_ARM64_DIGEST}" \
+            -t "${TAG}" .
+          docker push "${TAG}"
+
+          echo "Pushed ${TAG}" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Log out
+        if: always()
+        run: docker logout cr.smigz.com
