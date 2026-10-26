@@ -17,7 +17,7 @@ spec:
   sources:
     - repoURL: https://git.deuxfleurs.fr/Deuxfleurs/garage
       path: script/helm/garage
-      targetRevision: v2.4.1
+      targetRevision: v2.5.0
       helm:
         valueFiles:
           - $values/apps-values/garage.yaml
