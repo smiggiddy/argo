@@ -30,7 +30,7 @@ concurrency:
 env:
   IMAGE: cr.smigz.com/mattermost-te
   # renovate: datasource=github-releases depName=mattermost/mattermost
-  MM_VERSION: "v12.0.0"
+  MM_VERSION: "v12.0.1"
   # renovate: datasource=docker depName=ubuntu
   BASE_IMAGE_TAG: "26.04"
   BASE_IMAGE_ARM64_DIGEST: "sha256:f144425ff09be612d6d9ad965196e9cdc23dae1f42110a8a11a3e9a8198759f7"

@@ -8,7 +8,7 @@ spec:
   image: cr.smigz.com/mattermost-te
   imagePullPolicy: Always
   # renovate: datasource=github-releases depName=mattermost/mattermost
-  version: 11.10.1
+  version: 12.0.1
   replicas: 1
   mattermostEnv:
     - name: MM_SERVICESETTINGS_SITEURL
