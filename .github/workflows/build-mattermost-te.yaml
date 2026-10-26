@@ -14,6 +14,11 @@ on:
     paths:
       - .github/workflows/build-mattermost-te.yaml
   workflow_dispatch:
+    inputs:
+      force:
+        description: Rebuild even if the tag already exists with the same base image
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -36,7 +41,49 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04-arm
     steps:
+      - name: Log in to cr.smigz.com
+        env:
+          CR_USERNAME: ${{ secrets.CR_SMIGZ_USERNAME }}
+          CR_PASSWORD: ${{ secrets.CR_SMIGZ_PASSWORD }}
+        run: printf '%s' "${CR_PASSWORD}" | docker login cr.smigz.com -u "${CR_USERNAME}" --password-stdin
+
+      # Skip when the tag already exists and was built from the same base
+      # image digest. Digest-only bumps (and unrelated edits to this file)
+      # still rebuild only if the base actually changed.
+      - name: Check for existing image
+        id: existing
+        env:
+          FORCE: ${{ inputs.force || false }}
+        run: |
+          set -euo pipefail
+
+          TAG="${IMAGE}:${MM_VERSION#v}"
+          if [ "${FORCE}" = "true" ]; then
+            echo "Forced rebuild of ${TAG}"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if ! image=$(docker buildx imagetools inspect "${TAG}" --format '{{json .Image}}' 2>/dev/null); then
+            echo "${TAG} not found, building"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # .Image is the config for a single manifest, or a platform map for an index
+          existing_base=$(jq -r '
+            (if has("config") then . else (.["linux/arm64"] // {}) end)
+            | .config.Labels["org.opencontainers.image.base.digest"] // ""' <<< "${image}")
+          if [ "${existing_base}" = "${BASE_IMAGE_ARM64_DIGEST}" ]; then
+            echo "${TAG} already built from ${existing_base}, skipping" | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "${TAG} exists but base is '${existing_base:-unknown}', rebuilding"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.existing.outputs.skip != 'true'
         with:
           repository: mattermost/mattermost
           ref: ${{ env.MM_VERSION }}
@@ -44,6 +91,7 @@ jobs:
           persist-credentials: false
 
       - name: Patch Dockerfile for ARM64
+        if: steps.existing.outputs.skip != 'true'
         working-directory: server/build
         env:
           SMIGTECH_CA_PEM: ${{ vars.SMIGTECH_CA_PEM }}
@@ -104,13 +152,8 @@ jobs:
           fi
           printf '%s\n' "${SMIGTECH_CA_PEM}" > smigtech.pem
 
-      - name: Log in to cr.smigz.com
-        env:
-          CR_USERNAME: ${{ secrets.CR_SMIGZ_USERNAME }}
-          CR_PASSWORD: ${{ secrets.CR_SMIGZ_PASSWORD }}
-        run: printf '%s' "${CR_PASSWORD}" | docker login cr.smigz.com -u "${CR_USERNAME}" --password-stdin
-
       - name: Build and push
+        if: steps.existing.outputs.skip != 'true'
         working-directory: server/build
         run: |
           set -euo pipefail
@@ -122,7 +165,10 @@ jobs:
           echo "Building Mattermost Team Edition ${MM_VERSION_NUM} for linux/arm64"
           echo "Package URL: ${MM_PACKAGE}"
 
-          docker build --platform=linux/arm64 --build-arg MM_PACKAGE="${MM_PACKAGE}" -t "${TAG}" .
+          docker build --platform=linux/arm64 \
+            --build-arg MM_PACKAGE="${MM_PACKAGE}" \
+            --label org.opencontainers.image.base.digest="${BASE_IMAGE_ARM64_DIGEST}" \
+            -t "${TAG}" .
           docker push "${TAG}"
 
           echo "Pushed ${TAG}" >> "$GITHUB_STEP_SUMMARY"

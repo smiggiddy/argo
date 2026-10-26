@@ -186,6 +186,18 @@
         "# renovate: datasource=docker depName=(?<depName>\\S+)\\n\\s*BASE_IMAGE_TAG: \"(?<currentValue>[^\"]+)\"\\n\\s*BASE_IMAGE_ARM64_DIGEST: \"(?<currentDigest>sha256:[a-f0-9]+)\""
       ],
       "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Mattermost Team Edition version deployed by the Mattermost operator. Releases are tagged vX.Y.Z, the CR wants X.Y.Z.",
+      "managerFilePatterns": [
+        "/kustomizations/mattermost/.+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*version: (?<currentValue>\\S+)"
+      ],
+      "extractVersionTemplate": "^v(?<version>.+)$",
+      "versioningTemplate": "semver-coerced"
     }
   ],
   "customDatasources": {

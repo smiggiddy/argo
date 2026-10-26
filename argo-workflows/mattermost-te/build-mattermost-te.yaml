@@ -134,6 +134,7 @@ spec:
             buildah build \
               --platform=linux/arm64 \
               --build-arg MM_PACKAGE="${MM_PACKAGE}" \
+              --label org.opencontainers.image.base.digest="${ARM64_DIGEST}" \
               -t "${IMAGE}" \
               .
 
