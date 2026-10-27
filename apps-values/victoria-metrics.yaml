@@ -7,18 +7,28 @@ fullnameOverride: vm
 # for shared families (workqueue_, rest_client_, go_, process_).
 # Requires the bind-address flags from the homelab ansible repo
 # (playbooks/k3s-metrics.yml) on the nodes.
-x-control-plane: &controlPlane
-  - 192.168.100.52
-  - 192.168.100.53
-  - 192.168.100.162
+#
+# Argo CD excludes Endpoints globally (argocd-cm resource.exclusions), so the
+# chart's Service+Endpoints scrapes for out-of-cluster components never get
+# created. The components stay enabled for their rules and dashboards, the
+# chart's scrape objects are switched off, and the VMNodeScrapes in
+# extraObjects discover node IPs from the Node objects (no static IPs) and
+# scrape them under the job names the rules use.
+x-chart-scrape-off: &chartScrapeOff
+  service:
+    enabled: false
+  vmScrape:
+    enabled: false
 x-k3s-https: &k3sHttps
-  port: http-metrics
   scheme: https
   interval: 60s
   bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
   tlsConfig:
     # k3s serves these with self-signed certs
     insecureSkipVerify: true
+x-control-plane-nodes: &controlPlaneNodes
+  matchLabels:
+    node-role.kubernetes.io/control-plane: "true"
 
 victoria-metrics-operator:
   operator:
@@ -154,62 +164,88 @@ kubeApiServer:
           provider: kubernetes
 
 kubeScheduler:
-  endpoints: *controlPlane
-  vmScrape:
-    spec:
-      endpoints:
-        - <<: *k3sHttps
-          metricRelabelConfigs:
-            - action: keep
-              source_labels: [__name__]
-              regex: scheduler_.*
+  <<: *chartScrapeOff
 
 kubeControllerManager:
-  endpoints: *controlPlane
-  vmScrape:
-    spec:
-      endpoints:
-        - <<: *k3sHttps
-          metricRelabelConfigs:
-            - action: keep
-              source_labels: [__name__]
-              regex: (.+_controller_.+|node_collector_.+|garbagecollector_.+|pv_collector_.+|attachdetach_.+|root_ca_cert_publisher_.+|ephemeral_volume_.+)
+  <<: *chartScrapeOff
 
 kubeProxy:
   enabled: true
-  # embedded in k3s server and agent, so every node
-  endpoints:
-    - 192.168.100.52
-    - 192.168.100.53
-    - 192.168.100.162
-    - 192.168.100.140
-    - 192.168.100.112
-    - 192.168.100.113
-    - 192.168.100.144
-    - 192.168.100.111
-    - 192.168.100.108
-  vmScrape:
-    spec:
-      endpoints:
-        - port: http-metrics
-          scheme: http
-          interval: 60s
-          metricRelabelConfigs:
-            - action: keep
-              source_labels: [__name__]
-              regex: kubeproxy_.*
+  <<: *chartScrapeOff
 
 kubeEtcd:
-  endpoints: *controlPlane
-  service:
-    # k3s --etcd-expose-metrics serves plain http on 2381
-    port: 2381
-    targetPort: 2381
-  vmScrape:
+  <<: *chartScrapeOff
+
+extraObjects:
+  - apiVersion: operator.victoriametrics.com/v1beta1
+    kind: VMNodeScrape
+    metadata:
+      name: vm-kube-scheduler
     spec:
-      endpoints:
-        - port: http-metrics
-          scheme: http
+      <<: *k3sHttps
+      port: "10259"
+      selector: *controlPlaneNodes
+      relabelConfigs:
+        - sourceLabels: [__meta_kubernetes_node_name]
+          targetLabel: node
+        - targetLabel: job
+          replacement: kube-scheduler
+      metricRelabelConfigs:
+        - action: keep
+          source_labels: [__name__]
+          regex: scheduler_.*
+
+  - apiVersion: operator.victoriametrics.com/v1beta1
+    kind: VMNodeScrape
+    metadata:
+      name: vm-kube-controller-manager
+    spec:
+      <<: *k3sHttps
+      port: "10257"
+      selector: *controlPlaneNodes
+      relabelConfigs:
+        - sourceLabels: [__meta_kubernetes_node_name]
+          targetLabel: node
+        - targetLabel: job
+          replacement: kube-controller-manager
+      metricRelabelConfigs:
+        - action: keep
+          source_labels: [__name__]
+          regex: (.+_controller_.+|node_collector_.+|garbagecollector_.+|pv_collector_.+|attachdetach_.+|root_ca_cert_publisher_.+|ephemeral_volume_.+)
+
+  # embedded in k3s server and agent, so every node
+  - apiVersion: operator.victoriametrics.com/v1beta1
+    kind: VMNodeScrape
+    metadata:
+      name: vm-kube-proxy
+    spec:
+      scheme: http
+      interval: 60s
+      port: "10249"
+      relabelConfigs:
+        - sourceLabels: [__meta_kubernetes_node_name]
+          targetLabel: node
+        - targetLabel: job
+          replacement: kube-proxy
+      metricRelabelConfigs:
+        - action: keep
+          source_labels: [__name__]
+          regex: kubeproxy_.*
+
+  # k3s --etcd-expose-metrics serves plain http on 2381
+  - apiVersion: operator.victoriametrics.com/v1beta1
+    kind: VMNodeScrape
+    metadata:
+      name: vm-kube-etcd
+    spec:
+      scheme: http
+      port: "2381"
+      selector: *controlPlaneNodes
+      relabelConfigs:
+        - sourceLabels: [__meta_kubernetes_node_name]
+          targetLabel: node
+        - targetLabel: job
+          replacement: kube-etcd
 
 grafana:
   fullnameOverride: prometheus-grafana # reuses the existing storage-prometheus-grafana-0 PVC
