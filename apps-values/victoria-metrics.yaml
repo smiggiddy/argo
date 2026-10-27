@@ -171,20 +171,6 @@ kubelet:
           - action: labeldrop
             regex: (id|name)
 
-prometheus-node-exporter:
-  # TEMP: smig-ca02 is hung (storage suspected) and can't start its pod, which
-  # keeps the DaemonSet unhealthy and blocks the sync-job PostSync hook
-  # (upstream rules + dashboards). Remove once ca02 is back.
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: NotIn
-                values:
-                  - smig-ca02
-
 kubeApiServer:
   vmScrape:
     spec:
