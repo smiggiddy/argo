@@ -133,6 +133,57 @@ kubelet:
         - action: drop
           source_labels: [__name__]
           regex: (apiserver|apiextensions|aggregator|authentication|authorization|etcd|scheduler|kubeproxy|workqueue|watch_cache|field_validation|lasso)_.*
+  vmScrapes:
+    cadvisor:
+      spec:
+        # replaces the shared list above for cadvisor only. Drops are
+        # kube-prometheus-stack's cAdvisorMetricRelabelings defaults, and they
+        # must run before the id labeldrop or the non-pod cgroup drop can't match.
+        metricRelabelConfigs:
+          - action: drop
+            source_labels: [__name__]
+            regex: container_cpu_(cfs_throttled_seconds_total|load_average_10s|system_seconds_total|user_seconds_total)
+          - action: drop
+            source_labels: [__name__]
+            regex: container_fs_(io_current|io_time_seconds_total|io_time_weighted_seconds_total|reads_merged_total|sector_reads_total|sector_writes_total|writes_merged_total)
+          - action: drop
+            source_labels: [__name__]
+            regex: container_memory_(mapped_file|swap)
+          - action: drop
+            source_labels: [__name__]
+            regex: container_(file_descriptors|tasks_state|threads_max)
+          - action: drop
+            source_labels: [__name__, scope]
+            regex: container_memory_failures_total;hierarchy
+          - action: drop
+            source_labels: [__name__, interface]
+            regex: container_network_.*;(cali|cilium|cni|lxc|nodelocaldns|tunl).*
+          - action: drop
+            source_labels: [__name__]
+            regex: container_spec.*
+          # cgroups that aren't pods (system.slice etc.)
+          - action: drop
+            source_labels: [id, pod]
+            regex: .+;
+          # chart defaults
+          - action: labeldrop
+            regex: (uid)
+          - action: labeldrop
+            regex: (id|name)
+
+prometheus-node-exporter:
+  # TEMP: smig-ca02 is hung (storage suspected) and can't start its pod, which
+  # keeps the DaemonSet unhealthy and blocks the sync-job PostSync hook
+  # (upstream rules + dashboards). Remove once ca02 is back.
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                  - smig-ca02
 
 kubeApiServer:
   vmScrape:
