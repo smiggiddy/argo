@@ -1,0 +1,298 @@
+fullnameOverride: vm
+
+# k3s runs apiserver, scheduler, controller-manager and kube-proxy in one
+# process sharing one metrics registry, so every component endpoint
+# (including the kubelet's /metrics) returns everyone's metrics. Each scrape
+# below keeps only its own component's metrics; the apiserver job is the home
+# for shared families (workqueue_, rest_client_, go_, process_).
+# Requires the bind-address flags from the homelab ansible repo
+# (playbooks/k3s-metrics.yml) on the nodes.
+x-control-plane: &controlPlane
+  - 192.168.100.52
+  - 192.168.100.53
+  - 192.168.100.162
+x-k3s-https: &k3sHttps
+  port: http-metrics
+  scheme: https
+  interval: 60s
+  bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+  tlsConfig:
+    # k3s serves these with self-signed certs
+    insecureSkipVerify: true
+
+victoria-metrics-operator:
+  operator:
+    disable_prometheus_converter: false
+
+defaultDatasources:
+  victoriametrics:
+    # name/uid kept from kube-prometheus-stack so existing dashboards resolve
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        uid: prometheus
+        isDefault: true
+  alertmanager:
+    datasources:
+      - name: Alertmanager
+        access: proxy
+        uid: alertmanager
+        jsonData:
+          implementation: prometheus
+  extra:
+    - name: Loki
+      type: loki
+      access: proxy
+      basicAuth: false
+      url: http://loki-gateway.loki
+      jsonData:
+        timeout: 300
+        maxLines: 1000
+    # the-method habits dashboard queries the app's CNPG database
+    # directly. Reuses the app-owner credentials from Vault — fine
+    # for a single-user homelab dashboard; revisit with a read-only
+    # role if more dashboards start hitting this DB.
+    - name: TheMethod-PG
+      uid: the-method-pg
+      type: postgres
+      access: proxy
+      url: the-method-pg-rw.smigz.svc.cluster.local:5432
+      user: the_method
+      secureJsonData:
+        password: $THEMETHOD_PG_PASSWORD
+      jsonData:
+        database: the_method
+        sslmode: require
+        postgresVersion: 1700
+        maxOpenConns: 2
+
+vmsingle:
+  spec:
+    retentionPeriod: 30d
+    storage:
+      storageClassName: longhorn
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 20Gi
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: In
+              values:
+              - "true"
+
+vmagent:
+  spec:
+    scrapeInterval: 30s
+
+alertmanager:
+  spec:
+    replicaCount: 2
+    configSecret: alertmanager-config
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: In
+              values:
+              - "true"
+
+kubelet:
+  vmScrape:
+    spec:
+      metricRelabelConfigs:
+        # chart defaults
+        - action: labeldrop
+          regex: (uid)
+        - action: labeldrop
+          regex: (id|name)
+        - action: drop
+          source_labels: [__name__]
+          regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
+        # k3s: other components' metrics, scraped by their own jobs.
+        # ~225k of the old Prometheus's 359k head series came from here.
+        - action: drop
+          source_labels: [__name__]
+          regex: (apiserver|apiextensions|aggregator|authentication|authorization|etcd|scheduler|kubeproxy|workqueue|watch_cache|field_validation|lasso)_.*
+
+kubeApiServer:
+  vmScrape:
+    spec:
+      endpoints:
+        - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+          port: https
+          scheme: https
+          tlsConfig:
+            caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            serverName: kubernetes
+          metricRelabelConfigs:
+            - action: drop
+              source_labels: [__name__]
+              regex: (scheduler|kubeproxy|kubelet)_.*
+            # high-cardinality histograms no rule uses (checked against the
+            # live kube-prometheus rules); _sum/_count are kept.
+            # apiserver_request_sli_duration_seconds_bucket stays: SLO burn-rate rules.
+            - action: drop
+              source_labels: [__name__]
+              regex: (apiserver_request_duration_seconds|etcd_request_duration_seconds|apiserver_request_body_size_bytes|apiserver_watch_list_duration_seconds|apiserver_watch_cache_read_wait_seconds|apiserver_response_sizes|apiserver_watch_events_sizes|apiserver_admission_controller_admission_duration_seconds)_bucket
+      jobLabel: component
+      namespaceSelector:
+        matchNames:
+          - default
+      selector:
+        matchLabels:
+          component: apiserver
+          provider: kubernetes
+
+kubeScheduler:
+  endpoints: *controlPlane
+  vmScrape:
+    spec:
+      endpoints:
+        - <<: *k3sHttps
+          metricRelabelConfigs:
+            - action: keep
+              source_labels: [__name__]
+              regex: scheduler_.*
+
+kubeControllerManager:
+  endpoints: *controlPlane
+  vmScrape:
+    spec:
+      endpoints:
+        - <<: *k3sHttps
+          metricRelabelConfigs:
+            - action: keep
+              source_labels: [__name__]
+              regex: (.+_controller_.+|node_collector_.+|garbagecollector_.+|pv_collector_.+|attachdetach_.+|root_ca_cert_publisher_.+|ephemeral_volume_.+)
+
+kubeProxy:
+  enabled: true
+  # embedded in k3s server and agent, so every node
+  endpoints:
+    - 192.168.100.52
+    - 192.168.100.53
+    - 192.168.100.162
+    - 192.168.100.140
+    - 192.168.100.112
+    - 192.168.100.113
+    - 192.168.100.144
+    - 192.168.100.111
+    - 192.168.100.108
+  vmScrape:
+    spec:
+      endpoints:
+        - port: http-metrics
+          scheme: http
+          interval: 60s
+          metricRelabelConfigs:
+            - action: keep
+              source_labels: [__name__]
+              regex: kubeproxy_.*
+
+kubeEtcd:
+  endpoints: *controlPlane
+  service:
+    # k3s --etcd-expose-metrics serves plain http on 2381
+    port: 2381
+    targetPort: 2381
+  vmScrape:
+    spec:
+      endpoints:
+        - port: http-metrics
+          scheme: http
+
+grafana:
+  fullnameOverride: prometheus-grafana # reuses the existing storage-prometheus-grafana-0 PVC
+  sidecar:
+    dashboards:
+      # keep sidecar dashboards out of the file provider's path below
+      folder: /tmp/dashboards
+  envFromSecret: grafana-secrets
+  plugins:
+    # Calendar heatmap panel for the-method habits dashboard.
+    - marcusolsson-calendar-panel
+  dashboards:
+    default:
+      argocd:
+        url: https://raw.githubusercontent.com/argoproj/argo-cd/master/examples/dashboard.json
+        token: ""
+        curlOptions: "-sLf"
+      nvidia:
+        url: https://raw.githubusercontent.com/NVIDIA/dcgm-exporter/refs/heads/main/grafana/dcgm-exporter-dashboard.json
+        token: ""
+        curlOptions: "-sLf"
+      loki-canary:
+        gnetId: 11489
+        revision: 4
+        datasource:
+        - name: DS_PROMETHEUS
+          value: Prometheus
+        - name: DS_LOKI
+          value: Loki
+      cnpg:
+        gnetId: 20417
+      the-method-habits:
+        url: https://raw.githubusercontent.com/smiggiddy/argo/main/grafana-dashboards/the-method/habits.json
+        token: ""
+        curlOptions: "-sLf"
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - name: "remote"
+        orgId: 1
+        folder: ""
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+  persistence:
+    enabled: true
+    type: sts
+    storageClassName: longhorn
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: cluster-ca-issuer
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+    hosts:
+    - grafana-k3s.lab.smig.tech
+    tls:
+    - secretName: smigtech-grafana-tls
+      hosts:
+      - grafana-k3s.lab.smig.tech
+  # using argocd vault plugin so yeah
+  assertNoLeakedSecrets: false
+  grafana.ini:
+    auth:
+        signout_redirect_url: "https://auth.thecodedom.com/application/o/grafana-k3s/end-session/"
+        oauth_auto_login: true
+    users:
+        allow_sign_up: false
+    auth.generic_oauth:
+        name: authentik
+        enabled: true
+        allow_sign_up: true
+        scopes: "openid profile email"
+        auth_url: "https://auth.thecodedom.com/application/o/authorize/"
+        token_url: "https://auth.thecodedom.com/application/o/token/"
+        api_url: "https://auth.thecodedom.com/application/o/userinfo/"
+        login_attribute_path: preferred_username
+        email_attribute_path: email
+        name_attribute_path: name
+        # Optionally map user groups to Grafana roles
+        role_attribute_path: contains(groups, 'Grafana Admins') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor' || 'Viewer'
+    server:
+        root_url: "https://grafana-k3s.lab.smig.tech"

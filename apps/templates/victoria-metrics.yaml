@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: victoria-metrics
+  namespace: argocd
+  labels:
+    apps: utilities
+  annotations:
+    {{ include "app.notifications" . | nindent 4 }}
+    {{ include "app.notifications.github" . | nindent 4 }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+  sources:
+    - repoURL: https://victoriametrics.github.io/helm-charts/
+      targetRevision: 0.97.0
+      chart: victoria-metrics-k8s-stack
+      helm:
+        valueFiles:
+          - $values/apps-values/victoria-metrics.yaml
+    - repoURL: {{ .Values.repoURL }}
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: monitoring
+
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}
