@@ -1,5 +1,9 @@
 tunnel: smigtech-k3s
 ingress:
+  # scanner probes for secrets/dev files; never served by these apps.
+  # dot-segments are blocked except /.well-known (RE2 has no lookahead).
+  - path: '(/\.([^w/]|w[^e])|\.env([._]|$)|/@fs/|\.(key|pem|php|ya?ml|toml|tfvars|tfstate|properties|sh|bak|log|sql|conf|cfg|ini)$|aws_credentials|/wp-(admin|login|content|includes)|/cgi-bin/)'
+    service: http_status:404
   - hostname: mattermost.thecodedom.com
     service: http://smigtech.mattermost.svc.cluster.local:8065
   - hostname: unami.smigz.com
