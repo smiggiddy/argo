@@ -291,6 +291,12 @@ grafana:
       # keep sidecar dashboards out of the file provider's path below
       folder: /tmp/dashboards
   envFromSecret: grafana-secrets
+  # fixed admin creds (AVP, kustomizations/misc/grafana-secret.yaml); without
+  # this the chart renders a random password every sync and the sts rolls
+  admin:
+    existingSecret: grafana-admin
+    userKey: admin-user
+    passwordKey: admin-password
   plugins:
     # Calendar heatmap panel for the-method habits dashboard.
     - marcusolsson-calendar-panel
@@ -352,6 +358,9 @@ grafana:
     auth:
         signout_redirect_url: "https://auth.thecodedom.com/application/o/grafana-k3s/end-session/"
         oauth_auto_login: true
+        disable_login_form: true
+    auth.basic:
+        enabled: false
     users:
         allow_sign_up: false
     auth.generic_oauth:
