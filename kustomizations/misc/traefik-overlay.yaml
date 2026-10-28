@@ -9,9 +9,47 @@ spec:
       kubernetesGateway:
         enabled: true
         experimentalChannel: true
+    ports:
+      # cloudflared-only entrypoint; on the ClusterIP service, never the LB.
+      # see cloudflared/traefik-netpol.yaml
+      cloudflare:
+        port: 8085
+        expose:
+          default: false
+          internal: true
+        exposedPort: 8085
+        protocol: TCP
+        forwardedHeaders:
+          # peer is the cloudflared pod; keep its X-Forwarded-* (proto, client ip)
+          trustedIPs:
+            - 10.42.0.0/16
+      web:
+        observability:
+          accessLogs: false
+      websecure:
+        observability:
+          accessLogs: false
+      traefik:
+        observability:
+          accessLogs: false
+      metrics:
+        observability:
+          accessLogs: false
+    logs:
+      access:
+        enabled: true
+        format: json
+        fields:
+          headers:
+            names:
+              Cf-Connecting-Ip: keep
+              User-Agent: keep
     service:
-      annotations: 
+      annotations:
         external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+      additionalServices:
+        internal:
+          type: ClusterIP
     gateway:
       annotations:
         cert-manager.io/cluster-issuer: cluster-ca-issuer
@@ -28,13 +66,3 @@ spec:
           hostname: "*.lab.smig.tech"
           port: 8443
           protocol: HTTPS
-
-# - "--entryPoints.cloudflare.address=:8085"
-# - "--entryPoints.cloudflare.forwardedHeaders.trustedIPs=103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17"
-# - "--entryPoints.cloudflare.proxyProtocol.trustedIPs=103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17"
-# cloudflare:
-#   port: 8085
-#   expose:
-#     default: true
-#   exposedPort: 8085
-#   protocol: TCP

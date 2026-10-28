@@ -8,44 +8,14 @@ spec:
     - Ingress
     - Egress
   egress:
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: umami
-
-          podSelector:
-            matchLabels:
-              app: umami
-
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: argocd
-
-          podSelector:
-            matchLabels:
-              app.kubernetes.io/name: argocd-server
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: authentik
-
-          podSelector:
-            matchLabels:
-              app.kubernetes.io/component: server
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: mattermost
-
-          podSelector:
-            matchLabels:
-              app: mattermost
-
+    # every public host goes via traefik's cloudflare entrypoint
     - to:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
       ports:
         - protocol: TCP
           port: 8085

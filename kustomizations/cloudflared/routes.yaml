@@ -1,0 +1,96 @@
+# Public routes, served only on traefik's `cloudflare` entrypoint (reached
+# solely by cloudflared). IngressRoute rather than Ingress so the pihole
+# external-dns (which watches ingress) never publishes these hosts to the LAN.
+#
+# Middlewares can't be referenced across namespaces, so each app namespace
+# gets its own copy of public-ratelimit. Limits key on the real client IP
+# from Cloudflare, not the cloudflared pod.
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: public-ratelimit
+  namespace: mattermost
+spec:
+  rateLimit:
+    average: 50
+    period: 1s
+    burst: 200
+    sourceCriterion:
+      requestHeaderName: Cf-Connecting-Ip
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: mattermost-public
+  namespace: mattermost
+spec:
+  entryPoints:
+    - cloudflare
+  routes:
+    - match: Host(`mattermost.thecodedom.com`)
+      kind: Rule
+      middlewares:
+        - name: public-ratelimit
+      services:
+        - name: smigtech
+          port: 8065
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: public-ratelimit
+  namespace: umami
+spec:
+  rateLimit:
+    average: 50
+    period: 1s
+    burst: 200
+    sourceCriterion:
+      requestHeaderName: Cf-Connecting-Ip
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: umami-public
+  namespace: umami
+spec:
+  entryPoints:
+    - cloudflare
+  routes:
+    - match: Host(`unami.smigz.com`)
+      kind: Rule
+      middlewares:
+        - name: public-ratelimit
+      services:
+        - name: umami-svc
+          port: 3000
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: public-ratelimit
+  namespace: authentik
+spec:
+  rateLimit:
+    average: 50
+    period: 1s
+    burst: 200
+    sourceCriterion:
+      requestHeaderName: Cf-Connecting-Ip
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: authentik-public
+  namespace: authentik
+spec:
+  entryPoints:
+    - cloudflare
+  routes:
+    - match: Host(`auth.thecodedom.com`)
+      kind: Rule
+      middlewares:
+        - name: public-ratelimit
+      services:
+        - name: authentik-server
+          port: 80
