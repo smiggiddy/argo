@@ -7,7 +7,7 @@ A comprehensive Kubernetes homelab deployment using GitOps principles with ArgoC
 This homelab setup provides a complete self-hosted infrastructure including:
 - **Identity & Authentication**: Authentik SSO
 - **Storage**: Longhorn distributed storage
-- **Monitoring**: Prometheus, Grafana, Loki stack
+- **Monitoring**: VictoriaMetrics, VictoriaLogs, Grafana
 - **Productivity**: Nextcloud, Mattermost, GitLab
 - **Home Automation**: Home Assistant
 - **Development**: Code Server, LocalStack

@@ -1,6 +1,5 @@
 resources:
   - ./authentik-secrets.yaml
   - ./code-server-oidc.yaml
-  - ./loki-s3.yaml
   - ./grafana-secrets.yaml
   - ./alertmanager-config.yaml

@@ -51,14 +51,6 @@ defaultDatasources:
         jsonData:
           implementation: prometheus
   extra:
-    - name: Loki
-      type: loki
-      access: proxy
-      basicAuth: false
-      url: http://loki-gateway.loki
-      jsonData:
-        timeout: 300
-        maxLines: 1000
     - name: VictoriaLogs
       type: victoriametrics-logs-datasource
       access: proxy
@@ -316,14 +308,6 @@ grafana:
         url: https://raw.githubusercontent.com/NVIDIA/dcgm-exporter/refs/heads/main/grafana/dcgm-exporter-dashboard.json
         token: ""
         curlOptions: "-sLf"
-      loki-canary:
-        gnetId: 11489
-        revision: 4
-        datasource:
-        - name: DS_PROMETHEUS
-          value: Prometheus
-        - name: DS_LOKI
-          value: Loki
       cnpg:
         gnetId: 20417
       the-method-habits:
