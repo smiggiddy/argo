@@ -14,6 +14,23 @@ image:
   flavor: fpm
 nginx:
   enabled: true
+  # unprivileged variant keeps its pid/temp files in /tmp so it can run as 101
+  image:
+    repository: nginxinc/nginx-unprivileged
+    tag: alpine
+  resources:
+    requests:
+      cpu: 10m
+      memory: 16Mi
+    limits:
+      memory: 128Mi
+  securityContext:
+    runAsUser: 101
+    runAsGroup: 101
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: [ALL]
   config:
     headers:
       "Strict-Transport-Security": "max-age=15552000; includeSubDomains; preload;"
@@ -22,8 +39,40 @@ phpClientHttpsFix:
   protocol: https
 redis:
   enabled: false
+# With nginx enabled the chart only puts liveness on the nginx container, so a
+# slow PHP-FPM gets nginx killed (exit 0 "Completed") and never restarts PHP.
+# Readiness still pulls the pod from the service when status.php fails.
+livenessProbe:
+  enabled: false
+# crond needs root, so run cron.php from a CronJob as www-data instead of the
+# sidecar
 cronjob:
   enabled: true
+  type: cronjob
+  cronjob:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        # php memory_limit is 512M
+        memory: 768Mi
+    securityContext:
+      runAsUser: 33
+      runAsGroup: 33
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: [ALL]
+    # longhorn RWO volume: must land on the same node as the app pod
+    affinity:
+      podAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: nextcloud
+                app.kubernetes.io/component: app
+            topologyKey: kubernetes.io/hostname
 persistence:
   enabled: true
   storageClass: longhorn
@@ -43,6 +92,25 @@ internalDatabase:
 postgresql:
   enabled: false
 nextcloud:
+  # www-data in the debian fpm image; php-fpm workers already ran as this user
+  securityContext:
+    runAsUser: 33
+    runAsGroup: 33
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: [ALL]
+  podSecurityContext:
+    # keep the chart's existing group so the volume isn't re-chgrp'd, and stop
+    # the recursive chgrp of the whole volume on every pod start
+    fsGroup: 82
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile:
+      type: RuntimeDefault
+    # lets nginx bind :80 as non-root (tailnet clients reach the pod on 80)
+    sysctls:
+      - name: net.ipv4.ip_unprivileged_port_start
+        value: "0"
   defaultConfigs:
     .htaccess: false
     apache-pretty-urls.config.php: false
@@ -80,8 +148,11 @@ nextcloud:
       resources:
         limits:
           devic.es/tun: "1"
+          memory: 128Mi
         requests:
           devic.es/tun: "1"
+          cpu: 10m
+          memory: 32Mi
       env:
       - name: TS_HOSTNAME
         value: cloud
