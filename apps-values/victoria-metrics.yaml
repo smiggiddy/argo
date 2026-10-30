@@ -59,6 +59,11 @@ defaultDatasources:
       jsonData:
         timeout: 300
         maxLines: 1000
+    - name: VictoriaLogs
+      type: victoriametrics-logs-datasource
+      access: proxy
+      uid: victorialogs
+      url: http://victoria-logs-victoria-logs-single-server.victoria-logs.svc.cluster.local:9428
     # the-method habits dashboard queries the app's CNPG database
     # directly. Reuses the app-owner credentials from Vault — fine
     # for a single-user homelab dashboard; revisit with a read-only
@@ -300,6 +305,7 @@ grafana:
   plugins:
     # Calendar heatmap panel for the-method habits dashboard.
     - marcusolsson-calendar-panel
+    - victoriametrics-logs-datasource
   dashboards:
     default:
       argocd:

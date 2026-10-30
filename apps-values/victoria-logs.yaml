@@ -1,0 +1,16 @@
+server:
+  retentionPeriod: 7d
+  # GiB; safety cap so a log storm can't fill the disk before retention kicks in
+  retentionDiskSpaceUsage: 18
+  persistentVolume:
+    enabled: true
+    size: 20Gi
+    storageClassName: longhorn-noreplicas
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 1Gi
+  vmServiceScrape:
+    enabled: true

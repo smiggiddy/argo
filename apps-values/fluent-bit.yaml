@@ -1,0 +1,210 @@
+kind: DaemonSet
+
+testFramework:
+  enabled: false
+
+tolerations:
+  - key: "node-role.kubernetes.io/master"
+    operator: "Equal"
+    value: "true"
+    effect: "NoSchedule"
+  - key: "not-enough-ram"
+    operator: "Equal"
+    value: "true"
+    effect: "NoSchedule"
+
+# Root is required: containerd writes pod logs root:root 0640. Everything
+# else is stripped; root owns the pod logs and journal files, so plain owner
+# perms suffice and no capabilities are needed.
+securityContext:
+  runAsUser: 0
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: [ALL]
+  seccompProfile:
+    type: RuntimeDefault
+
+resources:
+  requests:
+    cpu: 20m
+    memory: 32Mi
+  limits:
+    memory: 128Mi
+
+serviceMonitor:
+  enabled: true
+
+# /var/log covers /var/log/containers, /var/log/pods and /var/log/journal.
+# /var/lib/fluent-bit holds tail/journal cursors and the filesystem buffer so
+# both survive pod restarts.
+daemonSetVolumes:
+  - name: varlog
+    hostPath:
+      path: /var/log
+  - name: etcmachineid
+    hostPath:
+      path: /etc/machine-id
+      type: File
+  - name: state
+    hostPath:
+      path: /var/lib/fluent-bit
+      type: DirectoryOrCreate
+
+daemonSetVolumeMounts:
+  - name: varlog
+    mountPath: /var/log
+    readOnly: true
+  - name: etcmachineid
+    mountPath: /etc/machine-id
+    readOnly: true
+  - name: state
+    mountPath: /var/lib/fluent-bit
+
+# Reshape records into flat VictoriaLogs fields; _msg is VL's message field.
+luaScripts:
+  reshape.lua: |
+    function kube(tag, ts, record)
+      local k = record["kubernetes"]
+      if k == nil then return 0, ts, record end
+      local labels = k["labels"] or {}
+      return 2, ts, {
+        _msg      = record["log"],
+        stream    = record["stream"],
+        cluster   = "rpi-cluster",
+        namespace = k["namespace_name"],
+        pod       = k["pod_name"],
+        container = k["container_name"],
+        node      = k["host"],
+        app       = labels["app.kubernetes.io/name"] or labels["app"],
+      }
+    end
+
+    local ident_units = { sshd = true, ["sshd-session"] = true, sudo = true }
+
+    function host(tag, ts, record)
+      local ident = record["SYSLOG_IDENTIFIER"]
+      local unit = record["SYSTEMD_UNIT"]
+      if record["TRANSPORT"] == "kernel" then
+        unit = "kernel"
+      elseif ident_units[ident] then
+        unit = ident
+      end
+      return 2, ts, {
+        _msg     = record["MESSAGE"],
+        cluster  = "rpi-cluster",
+        hostname = record["HOSTNAME"],
+        unit     = unit,
+        ident    = ident,
+        priority = record["PRIORITY"],
+      }
+    end
+
+config:
+  service: |
+    [SERVICE]
+        Daemon Off
+        Flush {{ .Values.flush }}
+        Log_Level {{ .Values.logLevel }}
+        Parsers_File /fluent-bit/etc/parsers.conf
+        Parsers_File /fluent-bit/etc/conf/custom_parsers.conf
+        HTTP_Server On
+        HTTP_Listen 0.0.0.0
+        HTTP_Port {{ .Values.metricsPort }}
+        Health_Check On
+        storage.path /var/lib/fluent-bit/buffer
+        storage.sync normal
+        storage.backlog.mem_limit 5M
+
+  inputs: |
+    [INPUT]
+        Name tail
+        Tag kube.*
+        Path /var/log/containers/*.log
+        multiline.parser cri
+        DB /var/lib/fluent-bit/kube.db
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+        storage.type filesystem
+
+    [INPUT]
+        Name systemd
+        Tag host.*
+        Path /var/log/journal
+        DB /var/lib/fluent-bit/journal.db
+        Read_From_Tail On
+        Strip_Underscores On
+        storage.type filesystem
+        Systemd_Filter_Type Or
+        # k3s (includes embedded containerd + etcd)
+        Systemd_Filter _SYSTEMD_UNIT=k3s.service
+        Systemd_Filter _SYSTEMD_UNIT=k3s-agent.service
+        # access
+        Systemd_Filter SYSLOG_IDENTIFIER=sshd
+        Systemd_Filter SYSLOG_IDENTIFIER=sshd-session
+        Systemd_Filter SYSLOG_IDENTIFIER=sudo
+        # longhorn storage path
+        Systemd_Filter _SYSTEMD_UNIT=iscsid.service
+        Systemd_Filter _SYSTEMD_UNIT=multipathd.service
+        # time sync (etcd/TLS are skew-sensitive, Pis have no RTC)
+        Systemd_Filter _SYSTEMD_UNIT=systemd-timesyncd.service
+        Systemd_Filter _SYSTEMD_UNIT=chrony.service
+        # networking (mixed across nodes)
+        Systemd_Filter _SYSTEMD_UNIT=NetworkManager.service
+        Systemd_Filter _SYSTEMD_UNIT=systemd-networkd.service
+        # kernel ring buffer
+        Systemd_Filter _TRANSPORT=kernel
+
+  filters: |
+    [FILTER]
+        Name kubernetes
+        Match kube.*
+        Merge_Log Off
+        Keep_Log On
+        Annotations Off
+        Buffer_Size 0
+        K8S-Logging.Exclude On
+
+    [FILTER]
+        Name grep
+        Match kube.*
+        Exclude log kube-probe
+
+    [FILTER]
+        Name lua
+        Match kube.*
+        script /fluent-bit/scripts/reshape.lua
+        call kube
+
+    [FILTER]
+        Name lua
+        Match host.*
+        script /fluent-bit/scripts/reshape.lua
+        call host
+
+  outputs: |
+    [OUTPUT]
+        Name http
+        Match kube.*
+        Host victoria-logs-victoria-logs-single-server.victoria-logs.svc.cluster.local
+        Port 9428
+        URI /insert/jsonline?_stream_fields=cluster,namespace,pod,container&_msg_field=_msg&_time_field=date
+        Format json_lines
+        Json_Date_Key date
+        Json_Date_Format iso8601
+        Compress gzip
+        Retry_Limit False
+        storage.total_limit_size 1G
+
+    [OUTPUT]
+        Name http
+        Match host.*
+        Host victoria-logs-victoria-logs-single-server.victoria-logs.svc.cluster.local
+        Port 9428
+        URI /insert/jsonline?_stream_fields=cluster,hostname,unit&_msg_field=_msg&_time_field=date
+        Format json_lines
+        Json_Date_Key date
+        Json_Date_Format iso8601
+        Compress gzip
+        Retry_Limit False
+        storage.total_limit_size 1G

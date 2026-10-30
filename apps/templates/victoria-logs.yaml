@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: victoria-logs
+  namespace: argocd
+  labels:
+    utilities: kube-system
+  annotations:
+    {{ include "app.notifications" . | nindent 4 }}
+    {{ include "app.notifications.github" . | nindent 4 }}
+
+spec:
+  destination:
+    namespace: victoria-logs
+    server: {{ .Values.spec.destination.server }}
+  project: default
+  sources:
+    - repoURL: https://victoriametrics.github.io/helm-charts/
+      targetRevision: 0.13.10
+      chart: victoria-logs-single
+      helm:
+        valueFiles:
+          - $values/apps-values/victoria-logs.yaml
+    - repoURL: {{ .Values.repoURL }}
+      targetRevision: HEAD
+      ref: values
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}

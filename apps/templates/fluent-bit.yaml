@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fluent-bit
+  namespace: argocd
+  labels:
+    utilities: kube-system
+  annotations:
+    {{ include "app.notifications" . | nindent 4 }}
+    {{ include "app.notifications.github" . | nindent 4 }}
+
+spec:
+  destination:
+    namespace: victoria-logs
+    server: {{ .Values.spec.destination.server }}
+  project: default
+  sources:
+    - repoURL: https://fluent.github.io/helm-charts
+      targetRevision: 0.58.3
+      chart: fluent-bit
+      helm:
+        valueFiles:
+          - $values/apps-values/fluent-bit.yaml
+    - repoURL: {{ .Values.repoURL }}
+      targetRevision: HEAD
+      ref: values
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}
