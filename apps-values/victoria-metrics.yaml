@@ -314,6 +314,18 @@ grafana:
         url: https://raw.githubusercontent.com/smiggiddy/argo/main/grafana-dashboards/the-method/habits.json
         token: ""
         curlOptions: "-sLf"
+      logs:
+        url: https://raw.githubusercontent.com/smiggiddy/argo/main/grafana-dashboards/logs/logs.json
+        token: ""
+        curlOptions: "-sLf"
+      # health of the log store itself, not the logs
+      victorialogs:
+        url: https://raw.githubusercontent.com/VictoriaMetrics/VictoriaLogs/master/dashboards/victorialogs.json
+        token: ""
+        curlOptions: "-sLf"
+        datasource:
+        - name: DS_PROMETHEUS
+          value: Prometheus
   dashboardProviders:
     dashboardproviders.yaml:
       apiVersion: 1

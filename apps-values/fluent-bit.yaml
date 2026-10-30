@@ -35,6 +35,11 @@ resources:
 serviceMonitor:
   enabled: true
 
+# grafana's dashboard sidecar only watches its own namespace
+dashboards:
+  enabled: true
+  namespace: monitoring
+
 # /var/log covers /var/log/containers, /var/log/pods and /var/log/journal.
 # /var/lib/fluent-bit holds tail/journal cursors and the filesystem buffer so
 # both survive pod restarts.
