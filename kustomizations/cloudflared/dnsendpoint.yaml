@@ -1,0 +1,29 @@
+# Public CNAMEs for the tunnel, published by the external-dns-cloudflare
+# release (sources: crd). Tunnel CNAMEs only resolve when proxied.
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: cloudflared-tunnel
+spec:
+  endpoints:
+    - dnsName: mattermost.thecodedom.com
+      recordType: CNAME
+      targets:
+        - 7ab819f4-284f-4b82-b3d8-845207359168.cfargotunnel.com
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"
+    - dnsName: auth.thecodedom.com
+      recordType: CNAME
+      targets:
+        - 7ab819f4-284f-4b82-b3d8-845207359168.cfargotunnel.com
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"
+    - dnsName: unami.smigz.com
+      recordType: CNAME
+      targets:
+        - 7ab819f4-284f-4b82-b3d8-845207359168.cfargotunnel.com
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"
