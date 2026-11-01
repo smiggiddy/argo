@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns-cloudflare
+  namespace: argocd
+  labels:
+    appType: network
+  annotations:
+    {{ include "app.notifications" . | nindent 4 }}
+    {{ include "app.notifications.github" . | nindent 4 }}
+spec:
+  project: default
+  sources:
+    # own namespace: the vault injector won't inject into kube-system
+    - repoURL: https://kubernetes-sigs.github.io/external-dns
+      targetRevision: 1.23.0
+      chart: external-dns
+      helm:
+        releaseName: external-dns-cloudflare
+        # CRDs are owned by the pihole release in the external-dns app
+        skipCrds: true
+        valueFiles:
+          - $values/apps-values/external-dns-cloudflare.yaml
+    - repoURL: {{ .Values.repoURL }}
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: external-dns-cloudflare
+
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}

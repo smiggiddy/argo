@@ -18,7 +18,8 @@ env:
     value: file:/vault/secrets/cf-api-token
 
 # Token needs Zone:DNS:Edit + Zone:Zone:Read on the zones above.
-# Vault role `external-dns-cloudflare` must bind SA external-dns-cloudflare in kube-system.
+# Vault role `external-dns-cloudflare` must bind SA external-dns-cloudflare in
+# namespace external-dns-cloudflare (the injector refuses kube-system).
 podAnnotations:
   vault.hashicorp.com/agent-inject: "true"
   vault.hashicorp.com/agent-pre-populate-only: "true"
