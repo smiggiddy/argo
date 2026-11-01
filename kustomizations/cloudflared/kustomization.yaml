@@ -1,0 +1,11 @@
+resources:
+  - ./deployment.yaml
+  - ./netpol.yml
+  - ./serviceaccount.yaml
+  - ./routes.yaml
+  - ./traefik-netpol.yaml
+
+configMapGenerator:
+  - name: cloudflared-config
+    files:
+      - ./config.yaml

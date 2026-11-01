@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudflared
+  namespace: argocd
+  labels:
+    appType: network
+  annotations:
+    {{ include "app.notifications" . | nindent 4 }}
+spec:
+  project: default
+  source:
+    repoURL: {{ .Values.repoURL }}
+    targetRevision: HEAD
+    path: ./kustomizations/cloudflared
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: cloudflared
+  {{ include "app.syncPolicy.automated" . | nindent 2 }}

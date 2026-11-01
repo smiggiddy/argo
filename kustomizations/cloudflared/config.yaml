@@ -1,0 +1,15 @@
+tunnel: k3s
+ingress:
+  # scanner probes for secrets/dev files; never served by these apps.
+  # dot-segments are blocked except /.well-known (RE2 has no lookahead).
+  - path: '(/\.([^w/]|w[^e])|\.env([._]|$)|/@fs/|\.(key|pem|php|ya?ml|toml|tfvars|tfstate|properties|sh|bak|log|sql|conf|cfg|ini)$|aws_credentials|/wp-(admin|login|content|includes)|/cgi-bin/)'
+    service: http_status:404
+  # all public hosts go through traefik's cloudflare entrypoint; routing,
+  # rate limits and access logs live in routes.yaml
+  - hostname: mattermost.thecodedom.com
+    service: http://traefik-internal.kube-system.svc.cluster.local:8085
+  - hostname: unami.smigz.com
+    service: http://traefik-internal.kube-system.svc.cluster.local:8085
+  - hostname: auth.thecodedom.com
+    service: http://traefik-internal.kube-system.svc.cluster.local:8085
+  - service: http_status:404
