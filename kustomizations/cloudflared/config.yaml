@@ -1,4 +1,4 @@
-tunnel: smigtech-k3s
+tunnel: k3s
 ingress:
   # scanner probes for secrets/dev files; never served by these apps.
   # dot-segments are blocked except /.well-known (RE2 has no lookahead).
