@@ -4,6 +4,7 @@ resources:
   - ./serviceaccount.yaml
   - ./routes.yaml
   - ./traefik-netpol.yaml
+  - ./dnsendpoint.yaml
 
 configMapGenerator:
   - name: cloudflared-config
