@@ -1,0 +1,10 @@
+# Gateway API CRDs. k3s's traefik-crd chart ships these today but Traefik is
+# dropping them in a future major; its copies carry helm.sh/resource-policy:
+# keep, so this app takes over cleanly when that happens. Keep the version
+# in step with the bundled one until then, or selfHeal fights the chart.
+resources:
+  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.1/standard-install.yaml
+
+# never let Argo delete these: every Gateway/HTTPRoute in the cluster goes with them
+commonAnnotations:
+  argocd.argoproj.io/sync-options: Prune=false,Delete=false
