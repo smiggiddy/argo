@@ -1,5 +1,6 @@
-# Vault secret k8s/data/cloudflare-tunnel-rpi-k3s: key api-token holds the
-# tunnel token (cloudflared --token-file); account-id is unused here.
+# Vault secret k8s/data/cloudflare-tunnel-rpi-k3s: key token is the tunnel
+# run token (cloudflared --token-file). api-token is the account API token
+# for managing tunnels and account-id its account; neither is used here.
 
 apiVersion: apps/v1
 kind: Deployment
@@ -21,7 +22,7 @@ spec:
         vault.hashicorp.com/role: "cloudflared"
         vault.hashicorp.com/agent-inject-secret-token: "k8s/data/cloudflare-tunnel-rpi-k3s"
         vault.hashicorp.com/agent-inject-template-token: |
-          {{- with secret "k8s/data/cloudflare-tunnel-rpi-k3s" -}}{{ index .Data.data "api-token" }}{{- end -}}
+          {{- with secret "k8s/data/cloudflare-tunnel-rpi-k3s" -}}{{ .Data.data.token }}{{- end -}}
         # cloudflared image runs as distroless nonroot
         vault.hashicorp.com/agent-run-as-user: "65532"
         vault.hashicorp.com/agent-run-as-group: "65532"
