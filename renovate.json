@@ -27,7 +27,7 @@
     },
     {
       "description": "Pin each CNPG ClusterImageCatalog entry to its own postgres major. Every Cluster declares the major in its imageCatalogRef, so crossing it here breaks the ref -- and on CNPG 1.26+ a major image change triggers an automatic offline pg_upgrade.",
-      "matchFileNames": ["kustomizations/cnpg-databases/*image-catalog.yaml"],
+      "matchFileNames": ["kubernetes/kustomizations/cnpg-databases/*image-catalog.yaml"],
       "matchUpdateTypes": ["major"],
       "enabled": false
     },
