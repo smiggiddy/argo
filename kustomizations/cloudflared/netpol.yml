@@ -19,6 +19,17 @@ spec:
       ports:
         - protocol: TCP
           port: 8085
+    # Workers VPC service for the argocd webhook relay (webhook_relay/)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: argocd
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: argocd-server
+      ports:
+        - protocol: TCP
+          port: 8080
     # vault agent init container
     - to:
         - namespaceSelector:
