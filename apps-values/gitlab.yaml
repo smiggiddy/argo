@@ -44,7 +44,7 @@ runners:
           AuthenticationType = "access-key"
       [runners.kubernetes]
           namespace = "gitlab-runner"
-          image = "registry.lab.smig.tech/smig/ci-templates/alpine:3.24.3"
+          image = "registry.lab.smig.tech/smig/ci-templates/alpine:latest"
           privileged = true
           pull_policy = "if-not-present"
           poll_interval = 1
