@@ -18,15 +18,6 @@ spec:
         releaseName: external-dns
         valueFiles:
           - $values/apps-values/external-dns.yaml
-    - repoURL: https://kubernetes-sigs.github.io/external-dns
-      targetRevision: 1.23.0
-      chart: external-dns
-      helm:
-        releaseName: external-dns-cloudflare
-        # CRDs are already owned by the pihole release above
-        skipCrds: true
-        valueFiles:
-          - $values/apps-values/external-dns-cloudflare.yaml
     - repoURL: {{ .Values.repoURL }}
       targetRevision: HEAD
       ref: values
