@@ -87,10 +87,7 @@ app.post("/api/webhook", async (c) => {
   // regenerates ApplicationSets. Each VPC service routes to one host.
   const targets = [
     { service: c.env.VPC_SERVICE, url: c.env.ARGOCD_WEBHOOK_URL },
-    // skipped until the VPC_APPSET_SERVICE binding is added to wrangler.jsonc
-    ...(c.env.VPC_APPSET_SERVICE
-      ? [{ service: c.env.VPC_APPSET_SERVICE, url: c.env.ARGOCD_APPSET_WEBHOOK_URL }]
-      : []),
+    { service: c.env.VPC_APPSET_SERVICE, url: c.env.ARGOCD_APPSET_WEBHOOK_URL },
   ];
 
   const results = await Promise.all(

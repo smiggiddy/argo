@@ -3,7 +3,7 @@
 // Runtime types generated with workerd@1.20261012.1 2026-10-16
 interface __BaseEnv_CloudflareBindings {
 	VPC_SERVICE: Fetcher;
-	VPC_APPSET_SERVICE?: Fetcher;
+	VPC_APPSET_SERVICE: Fetcher;
 	ARGOCD_WEBHOOK_URL: "http://argocd-server.argocd.svc.cluster.local/api/webhook";
 	ARGOCD_APPSET_WEBHOOK_URL: "http://argocd-applicationset-controller.argocd.svc.cluster.local:7000/api/webhook";
 	DEV: string;

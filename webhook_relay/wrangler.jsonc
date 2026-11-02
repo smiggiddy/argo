@@ -19,6 +19,10 @@
       "binding": "VPC_SERVICE",
       "service_id": "01a14777-9090-72f3-9ada-b2e895672086",
     },
+    {
+      "binding": "VPC_APPSET_SERVICE",
+      "service_id": "01a199f2-5368-7402-91ec-f054c79439cc",
+    },
   ],
   "observability": {
     "logs": {
