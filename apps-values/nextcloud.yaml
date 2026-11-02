@@ -17,7 +17,7 @@ nginx:
   # unprivileged variant keeps its pid/temp files in /tmp so it can run as 101
   image:
     repository: nginxinc/nginx-unprivileged
-    tag: alpine
+    tag: alpine@sha256:b5047b9b76845eac124358373c6852377c52e4b05834a47647e955dd91cb8f1e
   resources:
     requests:
       cpu: 10m
