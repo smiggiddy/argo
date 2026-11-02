@@ -343,7 +343,7 @@ repoServer:
           value: 4.3.1
         # renovate: datasource=github-releases depName=kubernetes-sigs/kustomize extractVersion=^kustomize/v(?<version>.+)$
         - name: KUSTOMIZE_VERSION
-          value: 5.6.0
+          value: 5.8.3
       command:
         - sh
         - "-c"
