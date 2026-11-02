@@ -335,10 +335,13 @@ repoServer:
     - name: download-tools
       image: alpine/curl
       env:
+        # renovate: datasource=github-releases depName=argoproj-labs/argocd-vault-plugin extractVersion=^v(?<version>.+)$
         - name: AVP_VERSION
           value: 1.18.1
+        # renovate: datasource=github-releases depName=helm/helm extractVersion=^v(?<version>.+)$
         - name: HELM_VERSION
           value: 4.1.0
+        # renovate: datasource=github-releases depName=kubernetes-sigs/kustomize extractVersion=^kustomize/v(?<version>.+)$
         - name: KUSTOMIZE_VERSION
           value: 5.6.0
       command:
