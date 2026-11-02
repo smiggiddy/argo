@@ -1,0 +1,44 @@
+# Argo CD itself: a plain Application synced by root, since it carries the
+# cluster kustomization as a third source.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+  labels:
+    apps: utilities
+  annotations:
+    avp.kubernetes.io/ignore: "true"
+    notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-sync-running-github.github: ""
+    notifications.argoproj.io/subscribe.on-deployed-github.github: ""
+    notifications.argoproj.io/subscribe.on-sync-failed-github.github: ""
+    argocd.argoproj.io/compare-options: ServerSideDiff=true
+spec:
+  project: default
+  sources:
+    - repoURL: https://argoproj.github.io/argo-helm
+      chart: argo-cd
+      targetRevision: 10.11.6
+      helm:
+        valueFiles:
+          - $values/kubernetes/argocd/values.yaml
+    - repoURL: https://github.com/smiggiddy/argo
+      targetRevision: HEAD
+      ref: values
+    - repoURL: https://github.com/smiggiddy/argo
+      targetRevision: HEAD
+      path: kubernetes/kustomizations/clusters
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
+    automated:
+      prune: true
+      selfHeal: true

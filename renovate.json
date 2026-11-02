@@ -48,10 +48,10 @@
     }
   ],
   "argocd": {
-    "managerFilePatterns": ["/apps/.+\\.ya?ml$/", "/awx/.+\\.yaml$/"]
+    "managerFilePatterns": ["/apps/.+\\.ya?ml$/", "/awx/.+\\.yaml$/", "/^kubernetes/argocd\\.yaml$/"]
   },
   "helm-values": {
-    "managerFilePatterns": ["/^kubernetes/helm/.+/values\\.ya?ml$/"]
+    "managerFilePatterns": ["/^kubernetes/helm/.+/values\\.ya?ml$/", "/^kubernetes/argocd/values\\.ya?ml$/"]
   },
   "kustomize": {
     "managerFilePatterns": ["/(^|/)kustomization\\.ya?ml$/"],

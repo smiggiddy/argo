@@ -3,3 +3,4 @@ resources:
   - ./code-server-oidc.yaml
   - ./grafana-secrets.yaml
   - ./alertmanager-config.yaml
+  - ./argocd-notifications-secret.yaml
