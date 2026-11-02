@@ -1,0 +1,70 @@
+# One Application per kubernetes/kustomizations/**/app.yaml.
+#
+# app.yaml keys:
+#   namespace          destination namespace (required)
+#   group              value of the `apps` label (required)
+#   name               Application name, defaults to the directory name
+#   sync: manual       drop the automated sync policy
+#   avpIgnore: true    skip argocd-vault-plugin substitution
+#   ignoreDifferences  passed through to spec.ignoreDifferences
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kustomizations
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/smiggiddy/argo
+        revision: HEAD
+        files:
+          - path: kubernetes/kustomizations/**/app.yaml
+  syncPolicy:
+    # Apps are removed by hand, not by deleting their app.yaml
+    applicationsSync: create-update
+    preserveResourcesOnDeletion: true
+  template:
+    metadata:
+      name: '{{ default .path.basename .name }}'
+      namespace: argocd
+      labels:
+        apps: '{{ .group }}'
+      annotations:
+        notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-sync-running-github.github: ""
+        notifications.argoproj.io/subscribe.on-deployed-github.github: ""
+        notifications.argoproj.io/subscribe.on-sync-failed-github.github: ""
+        argocd.argoproj.io/compare-options: ServerSideDiff=true
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/smiggiddy/argo
+        targetRevision: HEAD
+        path: '{{ .path.path }}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ .namespace }}'
+  templatePatch: |
+    {{- if .avpIgnore }}
+    metadata:
+      annotations:
+        avp.kubernetes.io/ignore: "true"
+    {{- end }}
+    spec:
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true
+          - ServerSideApply=true
+        {{- if ne (default "" .sync) "manual" }}
+        automated:
+          prune: true
+          selfHeal: true
+        {{- end }}
+      {{- with .ignoreDifferences }}
+      ignoreDifferences:
+        {{- toYaml . | nindent 4 }}
+      {{- end }}

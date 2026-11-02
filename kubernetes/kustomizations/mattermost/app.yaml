@@ -1,0 +1,3 @@
+name: mattermost-root
+namespace: mattermost
+group: utilities

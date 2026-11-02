@@ -1,2 +1,0 @@
-resources:
-  - https://github.com/rabbitmq/cluster-operator/releases/download/v2.23.1/cluster-operator.yml

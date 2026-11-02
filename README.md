@@ -36,9 +36,11 @@ This homelab setup provides a complete self-hosted infrastructure including:
      `app-secrets` kustomization via argocd-vault-plugin
    - Includes notifications, health checks, and sync policies
 
-3. **Kustomizations** (`/kustomizations/`)
+3. **Kustomizations** (`/kubernetes/kustomizations/`)
    - Kubernetes resource customizations for specific applications
    - Used for complex configurations requiring custom manifests
+   - Each directory with an `app.yaml` becomes an Application via the `kustomizations`
+     ApplicationSet (`kubernetes/kustomizations.yaml`); `kubernetes/root.yaml` bootstraps it
 
 4. **Automated Updates**
    - **Renovate Bot**: Automatically creates PRs for dependency updates
@@ -60,11 +62,14 @@ This homelab setup provides a complete self-hosted infrastructure including:
 │   ├── nextcloud.yaml
 │   ├── longhorn.yaml
 │   └── ...
-├── kustomizations/                # Custom Kubernetes resources
-│   ├── app-secrets/               # Vault-backed Secrets consumed by the Helm apps
-│   ├── home-assistant/
-│   ├── rabbitmq-operator/
-│   └── ...
+├── kubernetes/
+│   ├── root.yaml                  # Bootstrap Application for this directory
+│   ├── kustomizations.yaml        # ApplicationSet over kustomizations/**/app.yaml
+│   └── kustomizations/            # Custom Kubernetes resources
+│       ├── app-secrets/           # Vault-backed Secrets consumed by the Helm apps
+│       ├── home-assistant/
+│       ├── rabbitmq-operator/
+│       └── ...
 ├── auto_upgrades/                # K3s system upgrade configurations
 └── renovate.json                 # Automated dependency updates
 ```

@@ -29,7 +29,7 @@ spec:
     ref: values
   - repoURL: https://github.com/smiggiddy/argo.git
     targetRevision: HEAD
-    path: kustomizations/clusters
+    path: kubernetes/kustomizations/clusters
 
 
 

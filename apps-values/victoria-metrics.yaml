@@ -288,7 +288,7 @@ grafana:
       # keep sidecar dashboards out of the file provider's path below
       folder: /tmp/dashboards
   envFromSecret: grafana-secrets
-  # fixed admin creds (AVP, kustomizations/misc/grafana-secret.yaml); without
+  # fixed admin creds (AVP, kubernetes/kustomizations/misc/grafana-secret.yaml); without
   # this the chart renders a random password every sync and the sts rolls
   admin:
     existingSecret: grafana-admin
