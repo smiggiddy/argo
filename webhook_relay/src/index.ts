@@ -83,18 +83,31 @@ app.post("/api/webhook", async (c) => {
     if (value) headers.set(name, value);
   }
 
-  try {
-    const response = await c.env.VPC_SERVICE.fetch(c.env.ARGOCD_WEBHOOK_URL, {
-      method: "POST",
-      headers,
-      body: rawPayload,
-    });
-    console.log({ relay_status_code: response.status, relay_url: c.env.ARGOCD_WEBHOOK_URL });
-    return response;
-  } catch (err) {
-    console.error({ relay_error: String(err), relay_url: c.env.ARGOCD_WEBHOOK_URL });
-    return c.json({ error: "upstream unavailable" }, 502);
-  }
+  // argocd-server refreshes Applications; the applicationset controller
+  // regenerates ApplicationSets. Each VPC service routes to one host.
+  const targets = [
+    { service: c.env.VPC_SERVICE, url: c.env.ARGOCD_WEBHOOK_URL },
+    // skipped until the VPC_APPSET_SERVICE binding is added to wrangler.jsonc
+    ...(c.env.VPC_APPSET_SERVICE
+      ? [{ service: c.env.VPC_APPSET_SERVICE, url: c.env.ARGOCD_APPSET_WEBHOOK_URL }]
+      : []),
+  ];
+
+  const results = await Promise.all(
+    targets.map(async ({ service, url }) => {
+      try {
+        const response = await service.fetch(url, { method: "POST", headers, body: rawPayload });
+        console.log({ relay_status_code: response.status, relay_url: url });
+        return { url, status: response.status, ok: response.ok };
+      } catch (err) {
+        console.error({ relay_error: String(err), relay_url: url });
+        return { url, status: 0, ok: false };
+      }
+    }),
+  );
+
+  // 502 lets GitHub's redelivery retry both; argo treats a repeat push as a refresh
+  return c.json({ relayed: results }, results.every((r) => r.ok) ? 200 : 502);
 });
 
 export default app;

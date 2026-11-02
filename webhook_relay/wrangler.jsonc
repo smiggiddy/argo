@@ -6,6 +6,7 @@
   "upload_source_maps": true,
   "vars": {
     "ARGOCD_WEBHOOK_URL": "http://argocd-server.argocd.svc.cluster.local/api/webhook",
+    "ARGOCD_APPSET_WEBHOOK_URL": "http://argocd-applicationset-controller.argocd.svc.cluster.local:7000/api/webhook",
   },
   "routes": [
     {
