@@ -1,0 +1,34 @@
+persistence:
+  config:
+    enabled: true
+    # type: persistentVolumeClaim
+    storageClass: longhorn
+    retain: true
+    globalMounts:
+      - path: /www/assets
+        readOnly: false
+
+ingress:
+  main:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: cluster-ca-issuer
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+    hosts:
+      - host: homer.lab.smig.tech
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - hosts:
+          - homer.lab.smig.tech
+        secretName: homer-tls
+resources:
+  requests:
+    cpu: 100m
+    memory: 16Mi
+  limits:
+    cpu: 100m
+    memory: 16Mi

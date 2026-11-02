@@ -48,10 +48,10 @@
     }
   ],
   "argocd": {
-    "managerFilePatterns": ["/apps/.+\\.ya?ml$/", "/awx/.+\\.yaml$/"]
+    "managerFilePatterns": ["/apps/.+\\.ya?ml$/", "/awx/.+\\.yaml$/", "/^kubernetes/argocd\\.yaml$/"]
   },
   "helm-values": {
-    "managerFilePatterns": ["/^kubernetes/helm/.+/values\\.ya?ml$/"]
+    "managerFilePatterns": ["/^kubernetes/helm/.+/values\\.ya?ml$/", "/^kubernetes/argocd/values\\.ya?ml$/"]
   },
   "kustomize": {
     "managerFilePatterns": ["/(^|/)kustomization\\.ya?ml$/"],
@@ -74,6 +74,14 @@
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*tag: (?<currentValue>\\S+)"
       ],
       "versioningTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Tool versions the argocd repo-server downloads for the vault plugin sidecars",
+      "managerFilePatterns": ["/^kubernetes/argocd/values\\.ya?ml$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+) extractVersion=(?<extractVersion>\\S+)\\n\\s*- name: \\S+\\n\\s*value: \"?(?<currentValue>[^\"\\s]+)\"?"
+      ]
     },
     {
       "customType": "regex",

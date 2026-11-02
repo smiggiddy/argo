@@ -1,0 +1,480 @@
+notifications:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      memory: 128Mi
+  # Subscriptions are per-Application annotations, set in kubernetes/argocd.yaml
+  # and the ApplicationSet templates under kubernetes/
+  secret:
+    # argocd-notifications-secret (mattermost-token, github-token) comes from
+    # Vault via the app-secrets kustomization
+    create: false
+  notifiers:
+    service.mattermost: |
+      apiURL: http://smigtech.mattermost.svc.cluster.local:8065
+      token: $mattermost-token
+    service.webhook.github: |
+      url: https://api.github.com
+      headers:
+      - name: Authorization
+        value: token $github-token
+  triggers:
+    # Mattermost
+    trigger.on-health-degraded: |
+      - description: Application has degraded
+        send:
+        - app-health-degraded
+        when: app.status.health.status == 'Degraded'
+    trigger.on-sync-failed: |
+      - description: Application syncing has failed
+        send:
+        - app-sync-failed
+        when: app.status.operationState != nil and app.status.operationState.phase in ['Error', 'Failed']
+    trigger.on-sync-status-unknown: |
+      - description: Application status is 'Unknown'
+        send:
+        - app-sync-status-unknown
+        when: app.status.sync.status == 'Unknown'
+    # GitHub commit statuses
+    trigger.on-sync-running-github: |
+      - description: Application sync started
+        oncePer: app.status.operationState?.startedAt
+        send:
+        - github-commit-status
+        when: app.status.operationState != nil and app.status.operationState.phase in ['Running']
+    trigger.on-deployed-github: |
+      - description: Application is synced and healthy. Triggered once per commit.
+        oncePer: app.status.operationState?.syncResult?.revisions ?? app.status.operationState?.syncResult?.revision
+        send:
+        - github-commit-status
+        when: app.status.operationState != nil and app.status.operationState.phase in ['Succeeded']
+          and app.status.health.status == 'Healthy' and (!time.Parse(app.status.health.lastTransitionTime).Add(1
+          * time.Minute).Before(time.Parse(app.status.operationState.finishedAt)) or time.Parse(app.status.health.lastTransitionTime).Before(time.Parse(app.status.operationState.startedAt)))
+    trigger.on-sync-failed-github: |
+      - description: Application syncing has failed
+        oncePer: app.status.operationState?.startedAt
+        send:
+        - github-commit-status
+        when: app.status.operationState != nil and app.status.operationState.phase in ['Error', 'Failed']
+    defaultTriggers: |
+      - on-sync-status-unknown
+
+  templates:
+    template.github-commit-status: |
+      webhook:
+        github:
+          method: POST
+          # Single-source apps use status.sync.revision; multi-source apps use the
+          # revisions entry that belongs to the smiggiddy/argo source.
+          path: >-
+            /repos/smiggiddy/argo/statuses/
+            {{- $sha := .app.status.sync.revision -}}
+            {{- range $i, $s := .app.spec.sources -}}
+            {{- if eq (trimSuffix ".git" $s.repoURL) "https://github.com/smiggiddy/argo" -}}
+            {{- $sha = index $.app.status.sync.revisions $i -}}
+            {{- end -}}
+            {{- end -}}
+            {{ $sha }}
+          body: |
+            {{- $phase := .app.status.operationState.phase -}}
+            {{- $state := "pending" -}}
+            {{- if eq $phase "Succeeded" }}{{ $state = "success" }}{{ end -}}
+            {{- if or (eq $phase "Error") (eq $phase "Failed") }}{{ $state = "failure" }}{{ end -}}
+            {
+              "state": "{{ $state }}",
+              "description": "Argo CD sync {{ $phase }} for {{ .app.metadata.name }}",
+              "target_url": "{{ .context.argocdUrl }}/applications/{{ .app.metadata.name }}",
+              "context": "argocd/{{ .app.metadata.name }}"
+            }
+    template.app-health-degraded: |
+      mattermost:
+        attachments: |-
+          [{
+            "title": "{{ .app.metadata.name}}",
+            "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+            "color": "#f4c030",
+            "fields": [
+            {
+              "title": "Sync Status",
+              "value": "{{.app.status.sync.status}}",
+              "short": true
+            },
+            {
+              "title": "Repository",
+              "value": "{{.app.spec.source.repoURL}}",
+              "short": true
+            }
+            {{range $index, $c := .app.status.conditions}}
+            {{if not $index}},{{end}}
+            {{if $index}},{{end}}
+            {
+              "title": "{{$c.type}}",
+              "value": "{{$c.message}}",
+              "short": true
+            }
+            {{end}}
+            ]
+          }]
+    template.app-sync-failed: |
+      mattermost:
+        attachments: |-
+          [{
+            "title": "{{ .app.metadata.name}}",
+            "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+            "color": "#E96D76",
+            "fields": [
+            {
+              "title": "Sync Status",
+              "value": "{{.app.status.sync.status}}",
+              "short": true
+            },
+            {
+              "title": "Repository",
+              "value": "{{.app.spec.source.repoURL}}",
+              "short": true
+            }
+            {{range $index, $c := .app.status.conditions}}
+            {{if not $index}},{{end}}
+            {{if $index}},{{end}}
+            {
+              "title": "{{$c.type}}",
+              "value": "{{$c.message}}",
+              "short": true
+            }
+            {{end}}
+            ]
+          }]
+    template.app-sync-status-unknown: |
+      mattermost:
+        attachments: |-
+          [{
+            "title": "{{ .app.metadata.name}}",
+            "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+            "color": "#E96D76",
+            "fields": [
+            {
+              "title": "Sync Status",
+              "value": "{{.app.status.sync.status}}",
+              "short": true
+            },
+            {
+              "title": "Repository",
+              "value": "{{.app.spec.source.repoURL}}",
+              "short": true
+            }
+            {{range $index, $c := .app.status.conditions}}
+            {{if not $index}},{{end}}
+            {{if $index}},{{end}}
+            {
+              "title": "{{$c.type}}",
+              "value": "{{$c.message}}",
+              "short": true
+            }
+            {{end}}
+            ]
+          }]
+
+applicationSet:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      memory: 256Mi
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: In
+                values:
+                  - "true"
+
+controller:
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      memory: 3Gi
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
+    replicas: 2
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: In
+                values:
+                  - "true"
+
+repoServer:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 768Mi
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
+    replicas: 2
+  serviceAccount:
+    automountServiceAccountToken: true
+  volumes:
+    - configMap:
+        name: argocd-cmp-cm
+      name: cmp-plugin
+    - name: custom-tools
+      emptyDir: {}
+  extraContainers:
+    - name: argocd-vault-plugin
+      command:
+        - /var/run/argocd/argocd-cmp-server
+      image: registry.access.redhat.com/ubi10-minimal
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+      volumeMounts:
+        - mountPath: /var/run/argocd
+          name: var-files
+        - mountPath: /home/argocd/cmp-server/plugins
+          name: plugins
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+          subPath: argocd-vault-plugin.yaml
+          name: cmp-plugin
+        - name: custom-tools
+          subPath: argocd-vault-plugin
+          mountPath: /usr/local/bin/argocd-vault-plugin
+        - mountPath: /usr/local/bin/helm
+          subPath: helm
+          name: custom-tools
+        - mountPath: /usr/local/bin/kustomize
+          subPath: kustomize
+          name: custom-tools
+    - name: argocd-vault-plugin-helm
+      command:
+        - /var/run/argocd/argocd-cmp-server
+      image: registry.access.redhat.com/ubi10-minimal
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+      volumeMounts:
+        - mountPath: /var/run/argocd
+          name: var-files
+        - mountPath: /home/argocd/cmp-server/plugins
+          name: plugins
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+          subPath: argocd-vault-plugin-helm.yaml
+          name: cmp-plugin
+        - name: custom-tools
+          subPath: argocd-vault-plugin
+          mountPath: /usr/local/bin/argocd-vault-plugin
+        - mountPath: /usr/local/bin/helm
+          subPath: helm
+          name: custom-tools
+    - name: argocd-vault-plugin-kustomize
+      command:
+        - /var/run/argocd/argocd-cmp-server
+      image: registry.access.redhat.com/ubi10-minimal
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+      volumeMounts:
+        - mountPath: /var/run/argocd
+          name: var-files
+        - mountPath: /home/argocd/cmp-server/plugins
+          name: plugins
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+          subPath: argocd-vault-plugin-kustomize.yaml
+          name: cmp-plugin
+        - name: custom-tools
+          subPath: argocd-vault-plugin
+          mountPath: /usr/local/bin/argocd-vault-plugin
+        - mountPath: /usr/local/bin/kustomize
+          subPath: kustomize
+          name: custom-tools
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: In
+                values:
+                  - "true"
+
+  initContainers:
+    - name: download-tools
+      image: alpine/curl
+      env:
+        # renovate: datasource=github-releases depName=argoproj-labs/argocd-vault-plugin extractVersion=^v(?<version>.+)$
+        - name: AVP_VERSION
+          value: 1.18.1
+        # renovate: datasource=github-releases depName=helm/helm extractVersion=^v(?<version>.+)$
+        - name: HELM_VERSION
+          value: 4.1.0
+        # renovate: datasource=github-releases depName=kubernetes-sigs/kustomize extractVersion=^kustomize/v(?<version>.+)$
+        - name: KUSTOMIZE_VERSION
+          value: 5.6.0
+      command:
+        - sh
+        - "-c"
+      args:
+        - >-
+          curl -L
+          https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$(AVP_VERSION)/argocd-vault-plugin_$(AVP_VERSION)_linux_arm64
+          -o argocd-vault-plugin && chmod +x argocd-vault-plugin && mv
+          argocd-vault-plugin /custom-tools/ &&
+
+          curl -sL https://get.helm.sh/helm-v$(HELM_VERSION)-linux-arm64.tar.gz
+          | tar -xz --strip-components=1 -C /custom-tools linux-arm64/helm &&
+
+          curl -sL
+          https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv$(KUSTOMIZE_VERSION)/kustomize_v$(KUSTOMIZE_VERSION)_linux_arm64.tar.gz
+          | tar -xz -C /custom-tools
+      volumeMounts:
+        - mountPath: /custom-tools
+          name: custom-tools
+global:
+  domain: argocd.lab.smig.tech
+configs:
+  rbac:
+    create: true
+    policy.csv: |
+      g, ArgoCD Admins, role:admin
+      g, ArgoCD Viewers, role:readonly
+    policy.default: role:readonly
+    scopes: "[groups]"
+  cm:
+    admin.enabled: false
+    oidc.config: |
+      name: authentik
+      issuer: https://auth.thecodedom.com/application/o/argo-cd-k3s/
+      clientID: 4e1ebe14-d2f5-4163-a643-9f49793c5645
+      cliClientID: 4e1ebe14-d2f5-4163-a643-9f49793c5645
+      requestedScopes: [openid, profile, email]
+      enablePKCEAuthentication: true
+  params:
+    server.insecure: true
+  cmp:
+    create: yes
+    plugins:
+      argocd-vault-plugin:
+        allowConcurrency: true
+        discover:
+          find:
+            command:
+              - sh
+              - "-c"
+              - "test ! -f kustomization.yaml && test ! -f Chart.yaml && find .
+                -name '*.yaml' | xargs -I {} grep
+                \"<path\\|avp\\.kubernetes\\.io\" {} | grep ."
+        generate:
+          command:
+            - argocd-vault-plugin
+            - generate
+            - "."
+            - "-s"
+            - vault-configuration
+        lockRepo: false
+      argocd-vault-plugin-helm:
+        allowConcurrency: true
+        discover:
+          find:
+            command:
+              - sh
+              - "-c"
+              - "find . -name 'Chart.yaml' && find . -name 'values.yaml'"
+        generate:
+          command:
+            - sh
+            - "-c"
+            - |
+              helm template $ARGOCD_APP_NAME -n $ARGOCD_APP_NAMESPACE -f <(echo "$ARGOCD_ENV_HELM_VALUES") . |
+              argocd-vault-plugin -s vault-configuration generate -
+        lockRepo: false
+      argocd-vault-plugin-kustomize:
+        allowConcurrency: true
+        discover:
+          find:
+            command:
+              - find
+              - "."
+              - -name
+              - kustomization.y?ml
+        generate:
+          command:
+            - sh
+            - "-c"
+            - "kustomize build . | argocd-vault-plugin -s vault-configuration
+              generate -"
+        lockRepo: false
+
+dex:
+  enabled: false
+
+server:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
+    replicas: 2
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: cluster-ca-issuer
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      external-dns.alpha.kubernetes.io/target: "k3s.lab.smig.tech."
+    enabled: true
+    hostname: argocd.lab.smig.tech
+    ingressClassName: traefik
+    tls: true
+
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: In
+                values:
+                  - "true"
+
+redis:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi

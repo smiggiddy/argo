@@ -1,0 +1,7 @@
+namespace: apps
+group: utilities
+chart:
+  repo: https://djjudas21.github.io/charts/
+  name: homer
+  # renovate: datasource=helm depName=homer registryUrl=https://djjudas21.github.io/charts/
+  version: 8.2.4

@@ -31,8 +31,9 @@ This homelab setup provides a complete self-hosted infrastructure including:
      `envFromSecret`, `configSecret`, ...), and those Secrets are created from Vault by the
      `app-secrets` kustomization via argocd-vault-plugin
 
-2. **Legacy Apps Chart** (`/apps/`)
-   - Still holds the `argocd` and `homer` Applications, whose values live in an external repo
+2. **Argo CD** (`/kubernetes/argocd.yaml`)
+   - Plain Application synced by `root`, with values in `kubernetes/argocd/values.yaml`
+   - Notification tokens come from Vault via the `app-secrets` kustomization
 
 3. **Kustomizations** (`/kubernetes/kustomizations/`)
    - Kubernetes resource customizations for specific applications
@@ -48,10 +49,10 @@ This homelab setup provides a complete self-hosted infrastructure including:
 ## 📁 Repository Structure
 
 ```
-├── apps/                          # Legacy chart: argocd and homer Applications
 ├── charts/                        # Local charts used by kubernetes/helm apps
 ├── kubernetes/
 │   ├── root.yaml                  # Bootstrap Application for this directory
+│   ├── argocd.yaml                # Argo CD itself; values in argocd/
 │   ├── helm.yaml                  # ApplicationSet over helm/**/app.yaml
 │   ├── kustomizations.yaml        # ApplicationSet over kustomizations/**/app.yaml
 │   ├── helm/                      # One directory per Helm release
