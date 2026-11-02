@@ -8,8 +8,6 @@ metadata:
   annotations:
     {{ include "app.notifications" . | nindent 4 }}
     {{ include "app.notifications.github" . | nindent 4 }}
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 
 spec:
   project: default
