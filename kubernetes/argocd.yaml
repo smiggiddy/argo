@@ -16,6 +16,7 @@ metadata:
     notifications.argoproj.io/subscribe.on-deployed-github.github: ""
     notifications.argoproj.io/subscribe.on-sync-failed-github.github: ""
     argocd.argoproj.io/compare-options: ServerSideDiff=true
+    argocd.argoproj.io/manifest-generate-paths: /kubernetes/argocd;/kubernetes/kustomizations/clusters
 spec:
   project: default
   sources:

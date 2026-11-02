@@ -38,6 +38,8 @@ spec:
         notifications.argoproj.io/subscribe.on-deployed-github.github: ""
         notifications.argoproj.io/subscribe.on-sync-failed-github.github: ""
         argocd.argoproj.io/compare-options: ServerSideDiff=true
+        # webhook pushes only refresh apps whose directory changed
+        argocd.argoproj.io/manifest-generate-paths: .
     spec:
       project: default
       source:

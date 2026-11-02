@@ -51,11 +51,14 @@ spec:
         server: https://kubernetes.default.svc
         namespace: '{{ .namespace }}'
   templatePatch: |
-    {{- if .avpIgnore }}
     metadata:
       annotations:
+        {{- if .avpIgnore }}
         avp.kubernetes.io/ignore: "true"
-    {{- end }}
+        {{- end }}
+        # webhook pushes only refresh apps whose values (or local chart) changed;
+        # paths are repo-root absolute since the values source has no path
+        argocd.argoproj.io/manifest-generate-paths: '/{{ .path.path }}{{ if .chart.path }};/{{ .chart.path }}{{ end }}'
     spec:
       sources:
         - repoURL: '{{ .chart.repo }}'
