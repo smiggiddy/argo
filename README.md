@@ -32,7 +32,7 @@ This homelab setup provides a complete self-hosted infrastructure including:
      `app-secrets` kustomization via argocd-vault-plugin
 
 2. **Legacy Apps Chart** (`/apps/`)
-   - Still holds the `argocd` and `homer` Applications, whose values live in an external repo
+   - Still holds the `argocd` Application, whose values live in an external repo
 
 3. **Kustomizations** (`/kubernetes/kustomizations/`)
    - Kubernetes resource customizations for specific applications
@@ -48,7 +48,7 @@ This homelab setup provides a complete self-hosted infrastructure including:
 ## 📁 Repository Structure
 
 ```
-├── apps/                          # Legacy chart: argocd and homer Applications
+├── apps/                          # Legacy chart: argocd Application
 ├── charts/                        # Local charts used by kubernetes/helm apps
 ├── kubernetes/
 │   ├── root.yaml                  # Bootstrap Application for this directory
