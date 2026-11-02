@@ -1,0 +1,7 @@
+namespace: monitoring
+group: utilities
+chart:
+  repo: https://prometheus-community.github.io/helm-charts
+  name: prometheus-operator-crds
+  # renovate: datasource=helm depName=prometheus-operator-crds registryUrl=https://prometheus-community.github.io/helm-charts
+  version: 32.0.2

@@ -1,0 +1,7 @@
+namespace: garage
+group: storage
+chart:
+  repo: https://git.deuxfleurs.fr/Deuxfleurs/garage
+  path: script/helm/garage
+  # renovate: datasource=git-tags depName=https://git.deuxfleurs.fr/Deuxfleurs/garage
+  version: v2.5.0

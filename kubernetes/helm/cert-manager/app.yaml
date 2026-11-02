@@ -1,0 +1,8 @@
+namespace: utilities
+group: utilities
+avpIgnore: true
+chart:
+  repo: https://charts.jetstack.io
+  name: cert-manager
+  # renovate: datasource=helm depName=cert-manager registryUrl=https://charts.jetstack.io
+  version: v1.21.3

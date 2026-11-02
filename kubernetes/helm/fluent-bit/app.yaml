@@ -1,0 +1,7 @@
+namespace: victoria-logs
+group: utilities
+chart:
+  repo: https://fluent.github.io/helm-charts
+  name: fluent-bit
+  # renovate: datasource=helm depName=fluent-bit registryUrl=https://fluent.github.io/helm-charts
+  version: 0.58.3

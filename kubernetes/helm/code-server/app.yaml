@@ -1,0 +1,8 @@
+namespace: apps
+group: utilities
+sync: manual
+chart:
+  repo: https://smiggiddy.github.io
+  name: code-server
+  # renovate: datasource=helm depName=code-server registryUrl=https://smiggiddy.github.io
+  version: 3.17.3

@@ -1,0 +1,94 @@
+# One Application per kubernetes/helm/**/app.yaml, with the values.yaml
+# next to it (optional).
+#
+# app.yaml keys:
+#   namespace          destination namespace (required)
+#   group              value of the `apps` label (required)
+#   name               Application name, defaults to the directory name
+#   chart.repo         Helm repo, OCI registry or git repo (required)
+#   chart.name         chart name in a Helm repo
+#   chart.path         chart directory in a git repo, instead of chart.name
+#   chart.version      chart version or git revision (required)
+#   sync: manual       drop the automated sync policy
+#   avpIgnore: true    skip argocd-vault-plugin substitution
+#   skipCrds: true     don't install the chart's CRDs
+#   syncOptions        extra spec.syncPolicy.syncOptions
+#   ignoreDifferences  passed through to spec.ignoreDifferences
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: helm
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/smiggiddy/argo
+        revision: HEAD
+        files:
+          - path: kubernetes/helm/**/app.yaml
+  syncPolicy:
+    # Apps are removed by hand, not by deleting their app.yaml
+    applicationsSync: create-update
+    preserveResourcesOnDeletion: true
+  template:
+    metadata:
+      name: '{{ default .path.basename .name }}'
+      namespace: argocd
+      labels:
+        apps: '{{ .group }}'
+      annotations:
+        notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-sync-running-github.github: ""
+        notifications.argoproj.io/subscribe.on-deployed-github.github: ""
+        notifications.argoproj.io/subscribe.on-sync-failed-github.github: ""
+        argocd.argoproj.io/compare-options: ServerSideDiff=true
+    spec:
+      project: default
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ .namespace }}'
+  templatePatch: |
+    {{- if .avpIgnore }}
+    metadata:
+      annotations:
+        avp.kubernetes.io/ignore: "true"
+    {{- end }}
+    spec:
+      sources:
+        - repoURL: '{{ .chart.repo }}'
+          targetRevision: '{{ .chart.version }}'
+          {{- if .chart.path }}
+          path: '{{ .chart.path }}'
+          {{- else }}
+          chart: '{{ .chart.name }}'
+          {{- end }}
+          helm:
+            {{- if .skipCrds }}
+            skipCrds: true
+            {{- end }}
+            ignoreMissingValueFiles: true
+            valueFiles:
+              - '$values/{{ .path.path }}/values.yaml'
+        - repoURL: https://github.com/smiggiddy/argo
+          targetRevision: HEAD
+          ref: values
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true
+          - ServerSideApply=true
+          {{- range .syncOptions }}
+          - {{ . }}
+          {{- end }}
+        {{- if ne (default "" .sync) "manual" }}
+        automated:
+          prune: true
+          selfHeal: true
+        {{- end }}
+      {{- with .ignoreDifferences }}
+      ignoreDifferences:
+        {{- toYaml . | nindent 4 }}
+      {{- end }}

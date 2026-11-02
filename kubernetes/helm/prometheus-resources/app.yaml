@@ -1,0 +1,6 @@
+namespace: monitoring
+group: utilities
+chart:
+  repo: https://github.com/smiggiddy/argo.git
+  path: charts/prometheus-resources
+  version: HEAD

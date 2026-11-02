@@ -1,0 +1,7 @@
+namespace: immich
+group: homelab
+chart:
+  repo: https://immich-app.github.io/immich-charts
+  name: immich
+  # renovate: datasource=helm depName=immich registryUrl=https://immich-app.github.io/immich-charts
+  version: 0.12.0
