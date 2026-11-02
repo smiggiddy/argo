@@ -30,6 +30,16 @@ spec:
       ports:
         - protocol: TCP
           port: 8080
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: argocd
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: argocd-applicationset-controller
+      ports:
+        - protocol: TCP
+          port: 7000
     # vault agent init container
     - to:
         - namespaceSelector:
