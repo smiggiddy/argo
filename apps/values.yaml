@@ -1,9 +1,0 @@
-spec:
-  destination:
-    server: https://kubernetes.default.svc
-
-mattermost:
-  webhookId: q51n59rsyjnyxexx5faeuuh8ua
-
-repoURL: https://github.com/smiggiddy/argo
-
