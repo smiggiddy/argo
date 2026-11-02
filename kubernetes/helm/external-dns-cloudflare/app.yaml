@@ -1,0 +1,9 @@
+namespace: external-dns-cloudflare
+group: network
+# CRDs are owned by the external-dns app
+skipCrds: true
+chart:
+  repo: https://kubernetes-sigs.github.io/external-dns
+  name: external-dns
+  # renovate: datasource=helm depName=external-dns registryUrl=https://kubernetes-sigs.github.io/external-dns
+  version: 1.23.0

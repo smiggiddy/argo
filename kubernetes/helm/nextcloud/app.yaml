@@ -1,0 +1,8 @@
+namespace: nextcloud
+group: homelab
+sync: manual
+chart:
+  repo: https://nextcloud.github.io/helm/
+  name: nextcloud
+  # renovate: datasource=helm depName=nextcloud registryUrl=https://nextcloud.github.io/helm/
+  version: 9.4.1

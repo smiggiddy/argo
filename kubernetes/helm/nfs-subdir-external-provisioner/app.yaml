@@ -1,0 +1,7 @@
+namespace: nfs-stuff
+group: utilities
+sync: manual
+chart:
+  repo: https://github.com/smiggiddy/argo
+  path: charts/nfs-subdir-external-provisioner
+  version: HEAD

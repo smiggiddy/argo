@@ -51,7 +51,7 @@
     "managerFilePatterns": ["/apps/.+\\.ya?ml$/", "/awx/.+\\.yaml$/"]
   },
   "helm-values": {
-    "managerFilePatterns": ["/apps/.+\\.ya?ml$/", "/apps-values/.+\\.ya?ml$/"]
+    "managerFilePatterns": ["/^kubernetes/helm/.+/values\\.ya?ml$/"]
   },
   "kustomize": {
     "managerFilePatterns": ["/(^|/)kustomization\\.ya?ml$/"],
@@ -60,8 +60,16 @@
   "customManagers": [
     {
       "customType": "regex",
+      "description": "Chart versions in helm ApplicationSet app.yaml files",
+      "managerFilePatterns": ["/^kubernetes/helm/.+/app\\.ya?ml$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: registryUrl=(?<registryUrl>\\S+))?\\n\\s*version: (?<currentValue>\\S+)"
+      ]
+    },
+    {
+      "customType": "regex",
       "description": "Image tags pinned inside app values files",
-      "managerFilePatterns": ["/apps/.+\\.ya?ml$/", "/apps-values/.+\\.ya?ml$/"],
+      "managerFilePatterns": ["/^kubernetes/helm/.+/values\\.ya?ml$/"],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*tag: (?<currentValue>\\S+)"
       ],

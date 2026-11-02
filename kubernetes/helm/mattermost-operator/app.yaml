@@ -1,0 +1,9 @@
+namespace: mattermost-operator
+group: utilities
+avpIgnore: true
+sync: manual
+chart:
+  repo: https://helm.mattermost.com
+  name: mattermost-operator
+  # renovate: datasource=helm depName=mattermost-operator registryUrl=https://helm.mattermost.com
+  version: 1.0.5

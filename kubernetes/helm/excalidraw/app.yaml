@@ -1,0 +1,7 @@
+namespace: apps
+group: development
+chart:
+  repo: git.thecodedom.com/smig
+  name: excalidraw
+  # renovate: datasource=docker depName=git.thecodedom.com/smig/excalidraw
+  version: 0.1.0

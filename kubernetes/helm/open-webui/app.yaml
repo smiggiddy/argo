@@ -1,0 +1,7 @@
+namespace: apps
+group: llm
+chart:
+  repo: https://helm.openwebui.com/
+  name: open-webui
+  # renovate: datasource=helm depName=open-webui registryUrl=https://helm.openwebui.com/
+  version: 17.0.0
