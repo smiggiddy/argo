@@ -1,8 +1,8 @@
 # system-upgrade-controller plus the k3s upgrade Plans. Merging a k3s bump
 # here upgrades the nodes, so renovate never automerges k3s.
 resources:
-  - https://github.com/rancher/system-upgrade-controller/releases/download/v0.20.2/crd.yaml
-  - https://github.com/rancher/system-upgrade-controller/releases/download/v0.20.2/system-upgrade-controller.yaml
+  - https://github.com/rancher/system-upgrade-controller/releases/download/v0.21.0/crd.yaml
+  - https://github.com/rancher/system-upgrade-controller/releases/download/v0.21.0/system-upgrade-controller.yaml
   - ./control-plane.yaml
   - ./agent.yaml
 
