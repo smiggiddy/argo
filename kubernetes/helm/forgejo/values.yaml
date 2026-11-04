@@ -29,6 +29,12 @@ resources:
   limits:
     memory: 1Gi
 
+deployment:
+  env:
+    # ~90% of the memory limit, so the GC tightens before the OOM killer acts
+    - name: GOMEMLIMIT
+      value: 900MiB
+
 gitea:
   admin:
     username: ""
