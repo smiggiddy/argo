@@ -6,7 +6,7 @@ controllers:
     containers:
       main:
         image:
-          # renovate: datasource=docker depName=ghcr.io/immich-app/immich-server
+          repository: ghcr.io/immich-app/immich-server
           tag: v3.3.5
     strategy: Recreate
 immich:
@@ -21,8 +21,8 @@ machine-learning:
         main:
           env:
             MACHINE_LEARNING_RKNN_THREADS: 2
-          image: 
-            # renovate: datasource=docker depName=ghcr.io/immich-app/immich-machine-learning
+          image:
+            repository: ghcr.io/immich-app/immich-machine-learning
             tag: v3.3.5-armnn
           resources:
             limits:
