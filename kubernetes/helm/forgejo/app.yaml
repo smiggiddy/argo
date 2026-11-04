@@ -1,0 +1,8 @@
+namespace: forgejo
+group: development
+sync: manual
+chart:
+  repo: code.forgejo.org/forgejo-helm
+  name: forgejo
+  # renovate: datasource=docker depName=code.forgejo.org/forgejo-helm/forgejo
+  version: 17.3.2
