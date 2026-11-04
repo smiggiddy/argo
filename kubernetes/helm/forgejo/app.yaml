@@ -1,6 +1,5 @@
 namespace: forgejo
 group: development
-sync: manual
 chart:
   repo: code.forgejo.org/forgejo-helm
   name: forgejo
