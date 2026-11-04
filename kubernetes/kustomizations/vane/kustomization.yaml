@@ -8,5 +8,4 @@ resources:
 
 images:
   - name: itzcrazykns1337/vane
-    newTag: slim-latest
-    digest: sha256:aaf9da6bf76f01480c3e755388421029982e819773cbcecdcf0e9621a10e0690
+    newTag: slim-latest@sha256:aaf9da6bf76f01480c3e755388421029982e819773cbcecdcf0e9621a10e0690
