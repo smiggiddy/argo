@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:best-practices", ":dependencyDashboard"],
   "prConcurrentLimit": 10,
-  "concurrentRequestLimit": 5,
+  "hostRules": [{ "concurrentRequestLimit": 5 }],
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch"],
@@ -45,10 +45,21 @@
       "groupName": "immich",
       "groupSlug": "immich",
       "automerge": false
+    },
+    {
+      "description": "Bare image names whose tag is set elsewhere (kustomize images:, or the Mattermost CR version). Don't pin digests onto the base reference.",
+      "matchManagers": ["kubernetes"],
+      "matchPackageNames": [
+        "nousresearch/hermes-agent",
+        "ghcr.io/plastic-labs/honcho",
+        "ghcr.io/umami-software/umami",
+        "cr.smigz.com/mattermost-te"
+      ],
+      "enabled": false
     }
   ],
   "argocd": {
-    "managerFilePatterns": ["/awx/.+\\.yaml$/", "/^kubernetes/argocd\\.yaml$/"]
+    "managerFilePatterns": ["/^awx/.+\\.yaml$/", "/^kubernetes/argocd\\.yaml$/"]
   },
   "helm-values": {
     "managerFilePatterns": ["/^kubernetes/helm/.+/values\\.ya?ml$/", "/^kubernetes/argocd/values\\.ya?ml$/"]
@@ -56,6 +67,9 @@
   "kustomize": {
     "managerFilePatterns": ["/(^|/)kustomization\\.ya?ml$/"],
     "pinDigests": false
+  },
+  "kubernetes": {
+    "managerFilePatterns": ["/^kubernetes/kustomizations/.+\\.ya?ml$/", "/^argo-workflows/.+\\.ya?ml$/"]
   },
   "customManagers": [
     {
@@ -68,15 +82,6 @@
     },
     {
       "customType": "regex",
-      "description": "Image tags pinned inside app values files",
-      "managerFilePatterns": ["/^kubernetes/helm/.+/values\\.ya?ml$/"],
-      "matchStrings": [
-        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*tag: (?<currentValue>\\S+)"
-      ],
-      "versioningTemplate": "docker"
-    },
-    {
-      "customType": "regex",
       "description": "Tool versions the argocd repo-server downloads for the vault plugin sidecars",
       "managerFilePatterns": ["/^kubernetes/argocd/values\\.ya?ml$/"],
       "matchStrings": [
@@ -85,7 +90,8 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/auto_upgrades/.+\\.yaml$/"],
+      "description": "k3s version in system-upgrade-controller Plans",
+      "managerFilePatterns": ["/^auto_upgrades/.+\\.yaml$/"],
       "matchStrings": ["version: (?<currentValue>\\S+)"],
       "depNameTemplate": "k3s",
       "versioningTemplate": "semver-coerced",
@@ -93,30 +99,9 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/kustomization\\.ya?ml$/"],
-      "matchStrings": [
-        "cluster-operator/releases/download/v(?<currentValue>\\S+)/cluster-operator.yml"
-      ],
-      "depNameTemplate": "rabbitmq-cluster-operator",
-      "datasourceTemplate": "github-releases",
-      "packageNameTemplate": "rabbitmq/cluster-operator"
-    },
-    {
-      "customType": "regex",
-      "description": "GitHub raw URLs with version tags in kustomizations",
-      "managerFilePatterns": [
-        "/kustomizations/.+\\.ya?ml$/"
-      ],
-      "matchStrings": [
-        "https://raw\\.githubusercontent\\.com/(?<depName>[^/]+/[^/]+)/(?<currentValue>v?[^/]+)/"
-      ],
-      "datasourceTemplate": "github-tags"
-    },
-    {
-      "customType": "regex",
       "description": "GitHub release URLs in kustomizations",
       "managerFilePatterns": [
-        "/kustomizations/.+\\.ya?ml$/"
+        "/^kubernetes/kustomizations/.+\\.ya?ml$/"
       ],
       "matchStrings": [
         "https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/(?<currentValue>v?[^/]+)/"
@@ -125,33 +110,9 @@
     },
     {
       "customType": "regex",
-      "description": "Container images with imageName field (CloudNativePG, etc)",
-      "managerFilePatterns": [
-        "/kustomizations/.+\\.ya?ml$/"
-      ],
-      "matchStrings": [
-        "imageName:\\s*(?<depName>[^:@\\s]+)(?::(?<currentValue>[^@\\s]+))?(?:@(?<currentDigest>sha256:[a-f0-9]+))?"
-      ],
-      "datasourceTemplate": "docker",
-      "autoReplaceStringTemplate": "imageName: {{{depName}}}{{#if newValue}}:{{{newValue}}}{{/if}}{{#if newDigest}}@{{{newDigest}}}{{/if}}"
-    },
-    {
-      "customType": "regex",
-      "description": "Container images with image field",
-      "managerFilePatterns": [
-        "/kustomizations/.+\\.ya?ml$/"
-      ],
-      "matchStrings": [
-        "image:\\s*(?<depName>[^:@\\s]+)(?::(?<currentValue>[^@\\s]+))?(?:@(?<currentDigest>sha256:[a-f0-9]+))?"
-      ],
-      "datasourceTemplate": "docker",
-      "autoReplaceStringTemplate": "image: {{{depName}}}{{#if newValue}}:{{{newValue}}}{{/if}}{{#if newDigest}}@{{{newDigest}}}{{/if}}"
-    },
-    {
-      "customType": "regex",
       "description": "Mattermost Team Edition version in Argo Workflows",
       "managerFilePatterns": [
-        "/argo-workflows/.+\\.ya?ml$/"
+        "/^argo-workflows/.+\\.ya?ml$/"
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*- name: mm-version\\n\\s*value: \"(?<currentValue>[^\"]+)\""
@@ -160,21 +121,9 @@
     },
     {
       "customType": "regex",
-      "description": "Container images in Argo Workflows",
-      "managerFilePatterns": [
-        "/argo-workflows/.+\\.ya?ml$/"
-      ],
-      "matchStrings": [
-        "image:\\s*(?<depName>[^:@\\s]+)(?::(?<currentValue>[^@\\s]+))?(?:@(?<currentDigest>sha256:[a-f0-9]+))?"
-      ],
-      "datasourceTemplate": "docker",
-      "autoReplaceStringTemplate": "image: {{{depName}}}{{#if newValue}}:{{{newValue}}}{{/if}}{{#if newDigest}}@{{{newDigest}}}{{/if}}"
-    },
-    {
-      "customType": "regex",
       "description": "Mattermost base image tag and ARM64 digest",
       "managerFilePatterns": [
-        "/argo-workflows/.+\\.ya?ml$/"
+        "/^argo-workflows/.+\\.ya?ml$/"
       ],
       "matchStrings": [
         "# renovate: datasource=docker depName=(?<depName>\\S+)\\n\\s*- name: base-image-tag\\n\\s*value: \"(?<currentValue>[^\"]+)\"\\n\\s*- name: base-image-arm64-digest\\n\\s*value: \"(?<currentDigest>sha256:[a-f0-9]+)\""
@@ -207,7 +156,7 @@
       "customType": "regex",
       "description": "Mattermost Team Edition version deployed by the Mattermost operator. Releases are tagged vX.Y.Z, the CR wants X.Y.Z.",
       "managerFilePatterns": [
-        "/kustomizations/mattermost/.+\\.ya?ml$/"
+        "/^kubernetes/kustomizations/mattermost/.+\\.ya?ml$/"
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*version: (?<currentValue>\\S+)"
