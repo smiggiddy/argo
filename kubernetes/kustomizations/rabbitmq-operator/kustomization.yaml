@@ -8,3 +8,29 @@ patches:
       kind: Namespace
       metadata:
         name: rabbitmq-system
+  - target:
+      kind: Deployment
+      name: rabbitmq-cluster-operator
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: rabbitmq-cluster-operator
+      spec:
+        template:
+          spec:
+            affinity:
+              nodeAffinity:
+                preferredDuringSchedulingIgnoredDuringExecution:
+                  - weight: 100
+                    preference:
+                      matchExpressions:
+                        - key: node-role.kubernetes.io/control-plane
+                          operator: In
+                          values:
+                            - "true"
+            tolerations:
+              - key: node-role.kubernetes.io/master
+                operator: Equal
+                value: "true"
+                effect: NoSchedule

@@ -2,3 +2,28 @@ crds:
   enabled: true
 config:
   enableGatewayAPI: true
+
+affinity: &controlPlaneAffinity
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: In
+              values:
+                - "true"
+tolerations: &controlPlaneTolerations
+  - key: node-role.kubernetes.io/master
+    operator: Equal
+    value: "true"
+    effect: NoSchedule
+webhook:
+  affinity: *controlPlaneAffinity
+  tolerations: *controlPlaneTolerations
+cainjector:
+  affinity: *controlPlaneAffinity
+  tolerations: *controlPlaneTolerations
+startupapicheck:
+  affinity: *controlPlaneAffinity
+  tolerations: *controlPlaneTolerations
