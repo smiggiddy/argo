@@ -3,9 +3,9 @@ policy: upsert-only
 sources:
   - service
   - ingress
+  # tcproute/udproute sources watch v1alpha2, which Gateway API v1.6 no longer
+  # serves; the informer never syncs and external-dns exits
   - gateway-httproute
-  - gateway-tcproute
-  - gateway-udproute
 provider:
   name: pihole
 extraArgs:
