@@ -163,3 +163,82 @@ extraDeploy:
       retain: 14
       concurrency: 1
       groups: [forgejo]
+  # Default-deny for the namespace; only the flows below are allowed.
+  - apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: forgejo
+      namespace: forgejo
+    spec:
+      podSelector: {}
+      policyTypes:
+        - Ingress
+        - Egress
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: kube-system
+              podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: traefik
+          ports:
+            - protocol: TCP
+              port: 3000
+        # ServiceLB SNATs, so the original client isn't visible here
+        - ports:
+            - protocol: TCP
+              port: 2222
+      egress:
+        - to:
+            - namespaceSelector: {}
+              podSelector:
+                matchLabels:
+                  k8s-app: kube-dns
+          ports:
+            - protocol: UDP
+              port: 53
+            - protocol: TCP
+              port: 53
+        - to:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: garage
+          ports:
+            - protocol: TCP
+              port: 3900
+        # OIDC via the in-cluster Service
+        - to:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: authentik
+          ports:
+            - protocol: TCP
+              port: 9000
+            - protocol: TCP
+              port: 9443
+        - to:
+            - ipBlock:
+                cidr: 192.168.150.6/32
+          ports:
+            - protocol: TCP
+              port: 25
+        - to:
+            - ipBlock:
+                cidr: 192.168.100.0/24
+        # Internet only: migrations, mirrors, webhooks
+        - to:
+            - ipBlock:
+                cidr: 0.0.0.0/0
+                except:
+                  - 10.0.0.0/8
+                  - 172.16.0.0/12
+                  - 192.168.0.0/16
+                  - 100.64.0.0/10
+          ports:
+            - protocol: TCP
+              port: 80
+            - protocol: TCP
+              port: 443
+            - protocol: TCP
+              port: 22
