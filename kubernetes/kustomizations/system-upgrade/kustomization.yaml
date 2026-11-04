@@ -1,0 +1,25 @@
+# system-upgrade-controller plus the k3s upgrade Plans. Merging a k3s bump
+# here upgrades the nodes, so renovate never automerges k3s.
+resources:
+  - https://github.com/rancher/system-upgrade-controller/releases/download/v0.20.2/crd.yaml
+  - https://github.com/rancher/system-upgrade-controller/releases/download/v0.20.2/system-upgrade-controller.yaml
+  - ./control-plane.yaml
+  - ./agent.yaml
+
+patches:
+  # never let Argo delete the CRD: every Plan goes with it
+  - target:
+      kind: CustomResourceDefinition
+      name: plans.upgrade.cattle.io
+    patch: |
+      - op: add
+        path: /metadata/annotations/argocd.argoproj.io~1sync-options
+        value: Prune=false,Delete=false
+  # Plans are applied in the same sync that creates their CRD
+  - target:
+      kind: Plan
+    patch: |
+      - op: add
+        path: /metadata/annotations
+        value:
+          argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

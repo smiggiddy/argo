@@ -37,6 +37,11 @@
       "automerge": false
     },
     {
+      "description": "Argo syncs the system-upgrade Plans, so merging a k3s bump upgrades the nodes. Never automerge it.",
+      "matchPackageNames": ["k3s"],
+      "automerge": false
+    },
+    {
       "description": "Immich runs DB schema migrations on upgrade: keep server and ML in one PR, never automerge",
       "matchPackageNames": [
         "ghcr.io/immich-app/immich-server",
@@ -47,13 +52,14 @@
       "automerge": false
     },
     {
-      "description": "Bare image names whose tag is set elsewhere (kustomize images:, or the Mattermost CR version). Don't pin digests onto the base reference.",
+      "description": "Bare image names whose tag is set elsewhere (kustomize images:, the Mattermost CR version, or a k3s Plan's version). Don't pin digests onto the base reference.",
       "matchManagers": ["kubernetes"],
       "matchPackageNames": [
         "nousresearch/hermes-agent",
         "ghcr.io/plastic-labs/honcho",
         "ghcr.io/umami-software/umami",
-        "cr.smigz.com/mattermost-te"
+        "cr.smigz.com/mattermost-te",
+        "rancher/k3s-upgrade"
       ],
       "enabled": false
     }
@@ -91,7 +97,7 @@
     {
       "customType": "regex",
       "description": "k3s version in system-upgrade-controller Plans",
-      "managerFilePatterns": ["/^auto_upgrades/.+\\.yaml$/"],
+      "managerFilePatterns": ["/^kubernetes/kustomizations/system-upgrade/(agent|control-plane)\\.yaml$/"],
       "matchStrings": ["version: (?<currentValue>\\S+)"],
       "depNameTemplate": "k3s",
       "versioningTemplate": "semver-coerced",
