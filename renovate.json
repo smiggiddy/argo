@@ -28,7 +28,27 @@
       "groupSlug": "opengym"
     },
     {
-      "matchPackageNames": ["/argo/"],
+      "description": "webhook_relay is a small worker: one PR for its non-major npm updates",
+      "matchFileNames": ["webhook_relay/**"],
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "webhook-relay",
+      "groupSlug": "webhook-relay"
+    },
+    {
+      "description": "VictoriaMetrics and VictoriaLogs charts come from the same repo and usually release together",
+      "matchPackageNames": ["victoria-metrics-k8s-stack", "victoria-logs-single"],
+      "groupName": "victoriametrics",
+      "groupSlug": "victoriametrics"
+    },
+    {
+      "description": "Argo CD chart plus the tools its repo-server sidecars download: one repo-server rollout",
+      "matchPackageNames": [
+        "argo-cd",
+        "argoproj-labs/argocd-vault-plugin",
+        "helm/helm",
+        "kubernetes-sigs/kustomize"
+      ],
       "groupName": "argocd"
     },
     {
