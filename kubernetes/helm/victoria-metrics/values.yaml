@@ -33,6 +33,21 @@ x-control-plane-nodes: &controlPlaneNodes
 victoria-metrics-operator:
   operator:
     disable_prometheus_converter: false
+  affinity: &controlPlaneAffinity
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+          - key: node-role.kubernetes.io/control-plane
+            operator: In
+            values:
+            - "true"
+  tolerations: &controlPlaneTolerations
+  - key: node-role.kubernetes.io/master
+    operator: Equal
+    value: "true"
+    effect: NoSchedule
 
 defaultDatasources:
   victoriametrics:
@@ -102,16 +117,8 @@ alertmanager:
   spec:
     replicaCount: 2
     configSecret: alertmanager-config
-    affinity:
-      nodeAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 1
-          preference:
-            matchExpressions:
-            - key: node-role.kubernetes.io/control-plane
-              operator: In
-              values:
-              - "true"
+    affinity: *controlPlaneAffinity
+    tolerations: *controlPlaneTolerations
 
 kubelet:
   vmScrape:

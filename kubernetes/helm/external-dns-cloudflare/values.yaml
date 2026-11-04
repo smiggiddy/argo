@@ -31,3 +31,19 @@ podAnnotations:
   vault.hashicorp.com/agent-run-as-user: "65532"
   vault.hashicorp.com/agent-run-as-group: "65532"
   vault.hashicorp.com/agent-inject-perms-cf-api-token: "0400"
+
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: In
+              values:
+                - "true"
+tolerations:
+  - key: node-role.kubernetes.io/master
+    operator: Equal
+    value: "true"
+    effect: NoSchedule

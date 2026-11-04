@@ -1,4 +1,15 @@
 notifications:
+  # shared by every component below; tolerations are in global
+  affinity: &controlPlaneAffinity
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          preference:
+            matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: In
+                values:
+                  - "true"
   resources:
     requests:
       cpu: 50m
@@ -189,16 +200,7 @@ applicationSet:
       enabled: true
       additionalLabels:
         release: kube-prometheus-stack
-  affinity:
-    nodeAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 1
-          preference:
-            matchExpressions:
-              - key: node-role.kubernetes.io/control-plane
-                operator: In
-                values:
-                  - "true"
+  affinity: *controlPlaneAffinity
 
 controller:
   resources:
@@ -214,16 +216,7 @@ controller:
       additionalLabels:
         release: kube-prometheus-stack
     replicas: 2
-  affinity:
-    nodeAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 1
-          preference:
-            matchExpressions:
-              - key: node-role.kubernetes.io/control-plane
-                operator: In
-                values:
-                  - "true"
+  affinity: *controlPlaneAffinity
 
 repoServer:
   resources:
@@ -320,16 +313,7 @@ repoServer:
         - mountPath: /usr/local/bin/kustomize
           subPath: kustomize
           name: custom-tools
-  affinity:
-    nodeAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 1
-          preference:
-            matchExpressions:
-              - key: node-role.kubernetes.io/control-plane
-                operator: In
-                values:
-                  - "true"
+  affinity: *controlPlaneAffinity
 
   initContainers:
     - name: download-tools
@@ -365,6 +349,11 @@ repoServer:
           name: custom-tools
 global:
   domain: argocd.lab.smig.tech
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
 configs:
   rbac:
     create: true
@@ -459,18 +448,10 @@ server:
     ingressClassName: traefik
     tls: true
 
-  affinity:
-    nodeAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 1
-          preference:
-            matchExpressions:
-              - key: node-role.kubernetes.io/control-plane
-                operator: In
-                values:
-                  - "true"
+  affinity: *controlPlaneAffinity
 
 redis:
+  affinity: *controlPlaneAffinity
   resources:
     limits:
       cpu: 200m
