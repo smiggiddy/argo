@@ -4,3 +4,4 @@ resources:
   - ./grafana-secrets.yaml
   - ./alertmanager-config.yaml
   - ./argocd-notifications-secret.yaml
+  - ./forgejo-secrets.yaml
