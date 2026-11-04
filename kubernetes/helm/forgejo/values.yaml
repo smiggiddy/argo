@@ -46,6 +46,12 @@ gitea:
     - name: FORGEJO__ATTACHMENT__MINIO_SECRET_ACCESS_KEY
       valueFrom:
         secretKeyRef: {name: forgejo-s3, key: secret_access_key}
+    - name: FORGEJO__PACKAGES__MINIO_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef: {name: forgejo-s3, key: access_key_id}
+    - name: FORGEJO__PACKAGES__MINIO_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef: {name: forgejo-s3, key: secret_access_key}
     - name: FORGEJO__MAILER__SMTP_ADDR
       valueFrom:
         secretKeyRef: {name: forgejo-mailer, key: smtp_addr}
@@ -95,6 +101,13 @@ gitea:
       MINIO_LOCATION: us-east-2
       MINIO_BUCKET: forgejo
       MINIO_BASE_PATH: attachments/
+    packages:
+      STORAGE_TYPE: minio
+      MINIO_ENDPOINT: garage.garage:3900
+      MINIO_USE_SSL: false
+      MINIO_LOCATION: us-east-2
+      MINIO_BUCKET: forgejo
+      MINIO_BASE_PATH: packages/
 
 test:
   enabled: false
