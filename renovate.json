@@ -22,6 +22,12 @@
       "groupSlug": "hermes-agent"
     },
     {
+      "description": "opengym api and web are released together: one PR for both",
+      "matchPackageNames": ["ghcr.io/duartesantos8/opengym-api", "ghcr.io/duartesantos8/opengym-web"],
+      "groupName": "opengym",
+      "groupSlug": "opengym"
+    },
+    {
       "matchPackageNames": ["/argo/"],
       "groupName": "argocd"
     },
