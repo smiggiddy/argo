@@ -11,6 +11,11 @@ provider:
 extraArgs:
   pihole-server: http://rpi3-ubuntu.lab.smig.tech:8080
 
+resources:
+  requests:
+    memory: 64Mi
+  limits:
+    memory: 256Mi
 affinity:
   nodeAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:

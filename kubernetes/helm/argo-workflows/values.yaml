@@ -1,6 +1,11 @@
 crds:
   full: true
 controller:
+  resources:
+    requests:
+      memory: 64Mi
+    limits:
+      memory: 256Mi
   affinity:
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:

@@ -32,6 +32,11 @@ podAnnotations:
   vault.hashicorp.com/agent-run-as-group: "65532"
   vault.hashicorp.com/agent-inject-perms-cf-api-token: "0400"
 
+resources:
+  requests:
+    memory: 32Mi
+  limits:
+    memory: 128Mi
 affinity:
   nodeAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
