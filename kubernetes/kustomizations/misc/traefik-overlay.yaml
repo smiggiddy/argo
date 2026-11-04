@@ -29,6 +29,10 @@ spec:
       websecure:
         observability:
           accessLogs: false
+        transport:
+          respondingTimeouts:
+            # v3 defaults to 60s, which cuts off large registry layer pushes
+            readTimeout: 30m
       traefik:
         observability:
           accessLogs: false
