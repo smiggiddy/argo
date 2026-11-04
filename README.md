@@ -63,8 +63,8 @@ This homelab setup provides a complete self-hosted infrastructure including:
 │       ├── app-secrets/           # Vault-backed Secrets consumed by the Helm apps
 │       ├── home-assistant/
 │       ├── rabbitmq-operator/
+│       ├── system-upgrade/        # system-upgrade-controller + k3s upgrade Plans
 │       └── ...
-├── auto_upgrades/                # K3s system upgrade configurations
 └── renovate.json                 # Automated dependency updates
 ```
 
