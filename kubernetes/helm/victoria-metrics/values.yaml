@@ -33,6 +33,11 @@ x-control-plane-nodes: &controlPlaneNodes
 victoria-metrics-operator:
   operator:
     disable_prometheus_converter: false
+  resources:
+    requests:
+      memory: 96Mi
+    limits:
+      memory: 256Mi
   affinity: &controlPlaneAffinity
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:

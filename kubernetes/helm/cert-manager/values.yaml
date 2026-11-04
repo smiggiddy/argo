@@ -18,12 +18,27 @@ tolerations: &controlPlaneTolerations
     operator: Equal
     value: "true"
     effect: NoSchedule
+resources:
+  requests:
+    memory: 64Mi
+  limits:
+    memory: 256Mi
 webhook:
   affinity: *controlPlaneAffinity
   tolerations: *controlPlaneTolerations
+  resources:
+    requests:
+      memory: 32Mi
+    limits:
+      memory: 128Mi
 cainjector:
   affinity: *controlPlaneAffinity
   tolerations: *controlPlaneTolerations
+  resources:
+    requests:
+      memory: 192Mi
+    limits:
+      memory: 512Mi
 startupapicheck:
   affinity: *controlPlaneAffinity
   tolerations: *controlPlaneTolerations

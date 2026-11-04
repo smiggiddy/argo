@@ -29,6 +29,14 @@ patches:
                           operator: In
                           values:
                             - "true"
+            # upstream reserves 500Mi; it peaks around 25Mi
+            containers:
+              - name: operator
+                resources:
+                  requests:
+                    memory: 64Mi
+                  limits:
+                    memory: 256Mi
             tolerations:
               - key: node-role.kubernetes.io/master
                 operator: Equal
