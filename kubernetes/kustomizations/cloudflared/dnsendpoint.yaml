@@ -27,3 +27,10 @@ spec:
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "true"
+    - dnsName: miniflux.smigz.com
+      recordType: CNAME
+      targets:
+        - 7ab819f4-284f-4b82-b3d8-845207359168.cfargotunnel.com
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"

@@ -94,3 +94,33 @@ spec:
       services:
         - name: authentik-server
           port: 80
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: public-ratelimit
+  namespace: miniflux
+spec:
+  rateLimit:
+    average: 50
+    period: 1s
+    burst: 200
+    sourceCriterion:
+      requestHeaderName: Cf-Connecting-Ip
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: miniflux-public
+  namespace: miniflux
+spec:
+  entryPoints:
+    - cloudflare
+  routes:
+    - match: Host(`miniflux.smigz.com`)
+      kind: Rule
+      middlewares:
+        - name: public-ratelimit
+      services:
+        - name: miniflux-svc
+          port: 8080
