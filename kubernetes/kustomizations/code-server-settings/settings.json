@@ -1,0 +1,113 @@
+{
+    "workbench.colorTheme": "Catppuccin Frappé",
+    "claudeCode.preferredLocation": "panel",
+    "redhat.telemetry.enabled": false,
+
+    // ---- image-volume tools on PATH (mounted at /opt/tools) ----
+    // env.linux prepends the path; non-login bash profile skips /etc/profile,
+    // whose line 7 does an absolute PATH reset that would otherwise wipe it.
+    "terminal.integrated.env.linux": {
+        "PATH": "/opt/tools/bin:${env:PATH}:${env:HOME}/go/bin"
+    },
+    "terminal.integrated.profiles.linux": {
+        "bash": { "path": "bash", "args": [] }
+    },
+    "terminal.integrated.defaultProfile.linux": "bash",
+        // "terminal.integrated.shellIntegration.enabled": true,
+    "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font",
+    "terminal.integrated.fontSize": 13,
+    "terminal.integrated.lineHeight": 1.3,
+    "terminal.integrated.letterSpacing": 0.5,
+    "terminal.integrated.cursorStyle": "block",
+    "terminal.integrated.cursorBlinking": true,
+
+
+    // ---- Editor options mirrored from ~/repos/nvim/lua/options.lua ----
+    "editor.lineNumbers": "relative",
+
+    // ---- Vim extension: mirror of neovim config ----
+    "vim.leader": "<space>",
+    "vim.hlsearch": false,
+    "vim.ignorecase": true,
+    "vim.smartcase": true,
+    "vim.useSystemClipboard": true,
+    "vim.timeout": 300,
+    "vim.normalModeKeyBindingsNonRecursive": [
+        // <C-d>/<C-u> keep cursor centered (zz)
+        { "before": ["<C-d>"], "after": ["<C-d>", "z", "z"] },
+        { "before": ["<C-u>"], "after": ["<C-u>", "z", "z"] },
+        // buffer navigation -> VSCode editor tabs
+        { "before": ["<leader>", "b", "n"], "commands": ["workbench.action.nextEditor"] },
+        { "before": ["<leader>", "b", "p"], "commands": ["workbench.action.previousEditor"] },
+        { "before": ["<leader>", "b", "d"], "commands": ["workbench.action.closeActiveEditor"] },
+        // <C-n> OilToggle -> focus file explorer
+        { "before": ["<C-n>"], "commands": ["workbench.view.explorer"] },
+        // <leader>q diagnostics list -> Problems panel
+        { "before": ["<leader>", "q"], "commands": ["workbench.actions.view.problems"] },
+        {"before": ["K"],"commands": ["editor.action.showHover"]}
+    ],
+    "aws.cloudformation.telemetry.enabled": false,
+    "breadcrumbs.enabled": false,
+    "editor.minimap.enabled": false,
+    "editor.codeLens": false,
+    "remote.autoForwardPortsSource": "hybrid",
+
+    // ---- Resource usage: keep idle memory and file watching low ----
+    "telemetry.telemetryLevel": "off",
+    "telemetry.enableTelemetry": false,
+    "extensions.autoUpdate": false,
+    "extensions.autoCheckUpdates": false,
+    "update.mode": "none",
+    "workbench.enableExperiments": false,
+    "search.followSymlinks": false,
+    "typescript.tsserver.maxTsServerMemory": 1024,
+    "typescript.disableAutomaticTypeAcquisition": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/env": true,
+        "**/venv": true,
+        "**/dist": true,
+        "**/build": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/env": true,
+        "**/venv": true,
+        "**/dist": true
+    },
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/**": true,
+        "**/env/**": true,
+        "**/venv/**": true,
+        "**/.venv/**": true,
+        "**/dist/**": true,
+        "**/build/**": true,
+        "**/target/**": true,
+        "**/__pycache__/**": true,
+        "**/.cache/**": true
+    },
+
+    // ---- Disable GitHub Copilot (CLI agent process runs at idle otherwise) ----
+    "chat.agent.enabled": false,
+    "github.copilot.enable": {
+        "*": false
+    },
+
+    // ---- GitLab Workflow: test-disable all Duo features ----
+    // Chasing a stray 0-byte binary-named file written to the workspace root
+    // on GitLab language-server startup. Agent Platform alone didn't stop it;
+    // flipping every Duo switch off to see if the LS stops writing it.
+    "gitlab.duoAgentPlatform.enabled": false,
+    "gitlab.duoChat.enabled": false,
+    "gitlab.duoCodeSuggestions.enabled": false,
+    "workbench.settings.applyToAllProfiles": [
+
+    ],
+    "aws.telemetry": false
+}

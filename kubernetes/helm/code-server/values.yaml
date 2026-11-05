@@ -1,7 +1,11 @@
 extraArgs:
   - --proxy-domain
   - code-server.lab.smig.tech
+  - --disable-telemetry
+  - --disable-update-check
 extraVars:
+  - name: NODE_OPTIONS
+    value: "--max-old-space-size=1024"
   - name: CODER_OIDC_ISSUER_URL
     value: "https://auth.thecodedom.com/application/o/code-server/"
   - name: CODER_OIDC_EMAIL_DOMAIN
@@ -30,6 +34,30 @@ image:
   tag: "latest"
 persistence:
   storageClass: longhorn
+extraConfigmapMounts:
+  - name: code-server-settings
+    mountPath: /opt/settings
+    configMap: code-server-settings
+    defaultMode: 420
+    readOnly: true
+extraInitContainers: |
+  - name: sync-settings
+    image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+    imagePullPolicy: IfNotPresent
+    securityContext:
+      runAsUser: 1000
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /home/coder/.local/share/code-server/User
+        cp /opt/settings/settings.json /home/coder/.local/share/code-server/User/settings.json
+    volumeMounts:
+      - name: data
+        mountPath: /home/coder
+      - name: code-server-settings
+        mountPath: /opt/settings
+        readOnly: true
 ingress:
   enabled: true
   ingressClassName: "traefik"

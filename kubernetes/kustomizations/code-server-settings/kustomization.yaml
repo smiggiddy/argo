@@ -1,0 +1,6 @@
+configMapGenerator:
+  - name: code-server-settings
+    files:
+      - settings.json
+    options:
+      disableNameSuffixHash: true
