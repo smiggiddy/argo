@@ -1,0 +1,44 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: miniflux-pg
+  namespace: miniflux
+spec:
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: postgresql
+    major: 15
+  instances: 1
+  enablePDB: false
+  storage:
+    size: 5Gi
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "1"
+  bootstrap:
+    initdb:
+      database: miniflux
+      owner: miniflux
+      import:
+        type: microservice
+        databases:
+          - miniflux
+        source:
+          externalCluster: miniflux-quadlet
+
+  externalClusters:
+    - name: miniflux-quadlet
+      connectionParameters:
+        host: pve-apps2.lab.smig.tech
+        port: "5432"
+        user: miniflux
+        dbname: postgres
+        sslmode: disable
+      password:
+        name: miniflux-quadlet-pg
+        key: password

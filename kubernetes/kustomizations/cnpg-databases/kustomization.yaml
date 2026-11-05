@@ -25,3 +25,4 @@ resources:
   - ./umami-pg.yaml
   - ./umami-cnpg-backup.yaml
   - ./umami-backup-secret.yaml
+  - ./miniflux-pg.yaml

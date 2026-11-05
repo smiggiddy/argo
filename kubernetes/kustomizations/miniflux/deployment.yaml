@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: miniflux
+  name: miniflux
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: miniflux
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: miniflux
+    spec:
+      containers:
+        - image: docker.io/miniflux/miniflux
+          name: miniflux
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: 128Mi
+              cpu: 100m
+            limits:
+              memory: 512Mi
+              cpu: 1
+          securityContext:
+            allowPrivilegeEscalation: false
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: miniflux-pg-app
+                  key: uri
+            - name: BASE_URL
+              value: https://miniflux.smigz.com
+            - name: TRUSTED_REVERSE_PROXY_NETWORKS
+              value: 10.42.0.0/16
+            - name: RUN_MIGRATIONS
+              value: "1"
+            - name: CREATE_ADMIN
+              value: "1"
+            - name: ADMIN_USERNAME
+              value: smig
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: miniflux-secrets
+                  key: admin-password
+            - name: CLEANUP_ARCHIVE_UNREAD_DAYS
+              value: "14"
+            - name: CLEANUP_FREQUENCY_HOURS
+              value: "24"
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
