@@ -18,7 +18,6 @@ service:
     type: ClusterIP
     port: 3000
   ssh:
-    # ServiceLB hostPort 2222 on every node; never 22 (would take the nodes' sshd)
     type: LoadBalancer
     port: 2222
 
@@ -31,7 +30,6 @@ resources:
 
 deployment:
   env:
-    # ~90% of the memory limit, so the GC tightens before the OOM killer acts
     - name: GOMEMLIMIT
       value: 900MiB
 
@@ -42,31 +40,29 @@ gitea:
   additionalConfigFromEnvs:
     - name: FORGEJO__LFS__MINIO_ACCESS_KEY_ID
       valueFrom:
-        secretKeyRef: {name: forgejo-s3, key: access_key_id}
+        secretKeyRef: { name: forgejo-s3, key: access_key_id }
     - name: FORGEJO__LFS__MINIO_SECRET_ACCESS_KEY
       valueFrom:
-        secretKeyRef: {name: forgejo-s3, key: secret_access_key}
+        secretKeyRef: { name: forgejo-s3, key: secret_access_key }
     - name: FORGEJO__ATTACHMENT__MINIO_ACCESS_KEY_ID
       valueFrom:
-        secretKeyRef: {name: forgejo-s3, key: access_key_id}
+        secretKeyRef: { name: forgejo-s3, key: access_key_id }
     - name: FORGEJO__ATTACHMENT__MINIO_SECRET_ACCESS_KEY
       valueFrom:
-        secretKeyRef: {name: forgejo-s3, key: secret_access_key}
+        secretKeyRef: { name: forgejo-s3, key: secret_access_key }
     - name: FORGEJO__PACKAGES__MINIO_ACCESS_KEY_ID
       valueFrom:
-        secretKeyRef: {name: forgejo-s3, key: access_key_id}
+        secretKeyRef: { name: forgejo-s3, key: access_key_id }
     - name: FORGEJO__PACKAGES__MINIO_SECRET_ACCESS_KEY
       valueFrom:
-        secretKeyRef: {name: forgejo-s3, key: secret_access_key}
+        secretKeyRef: { name: forgejo-s3, key: secret_access_key }
     - name: FORGEJO__MAILER__SMTP_ADDR
       valueFrom:
-        secretKeyRef: {name: forgejo-mailer, key: smtp_addr}
+        secretKeyRef: { name: forgejo-mailer, key: smtp_addr }
     - name: FORGEJO__MAILER__FROM
       valueFrom:
-        secretKeyRef: {name: forgejo-mailer, key: from}
+        secretKeyRef: { name: forgejo-mailer, key: from }
 
-  # Paths follow the existing data layout under /data (the chart's work dir);
-  # host keys stay in /data/ssh (built-in server default).
   config:
     APP_NAME: The CodeDom Git
     server:
@@ -74,8 +70,8 @@ gitea:
       ROOT_URL: https://git.thecodedom.com/
       LOCAL_ROOT_URL: http://localhost:3000/
       SSH_DOMAIN: git.thecodedom.com
-      SSH_PORT: 22 # advertised in clone URLs
-      SSH_LISTEN_PORT: 2222 # in-pod, rootless built-in server
+      SSH_PORT: 22
+      SSH_LISTEN_PORT: 2222
       LFS_START_SERVER: true
     repository:
       ROOT: /data/git/repositories
@@ -146,7 +142,6 @@ extraDeploy:
       issuerRef:
         kind: ClusterIssuer
         name: letsencrypt
-  # Longhorn: local snapshots plus backups to the configured backup target
   - apiVersion: longhorn.io/v1beta2
     kind: RecurringJob
     metadata:
@@ -169,7 +164,6 @@ extraDeploy:
       retain: 14
       concurrency: 1
       groups: [forgejo]
-  # Default-deny for the namespace; only the flows below are allowed.
   - apiVersion: networking.k8s.io/v1
     kind: NetworkPolicy
     metadata:
