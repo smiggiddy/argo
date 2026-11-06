@@ -1,5 +1,22 @@
 valkey:
   enabled: true
+  controllers:
+    main:
+      pod:
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          fsGroup: 1000
+          seccompProfile:
+            type: RuntimeDefault
+      containers:
+        main:
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
 
 controllers:
   main:
@@ -17,6 +34,14 @@ immich:
 machine-learning:
   controllers:
     main:
+      pod:
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          fsGroup: 1000
+          seccompProfile:
+            type: RuntimeDefault
       containers:
         main:
           env:
@@ -24,6 +49,11 @@ machine-learning:
           image:
             repository: ghcr.io/immich-app/immich-machine-learning
             tag: v3.3.6-armnn@sha256:819b6eb46db3fd1c7f35cad562bf6a4c0327c06c51c90dc6ed1195cadc6d49c2
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           resources:
             limits:
               devic.es/mali: 1
@@ -47,6 +77,14 @@ machine-learning:
 server:
   controllers:
     main:
+      pod:
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          fsGroup: 1000
+          seccompProfile:
+            type: RuntimeDefault
       containers:
         main:
           env:
@@ -58,6 +96,11 @@ server:
                 secretKeyRef:
                   name: immich-postgres-user
                   key: password
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           resources:
             limits:
               devic.es/video: 1
