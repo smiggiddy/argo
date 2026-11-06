@@ -3,7 +3,7 @@
 # keep, so this app takes over cleanly when that happens. Keep the version
 # in step with the bundled one until then, or selfHeal fights the chart.
 resources:
-  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.1/standard-install.yaml
+  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.7.0/standard-install.yaml
 
 # never let Argo delete these: every Gateway/HTTPRoute in the cluster goes with them
 commonAnnotations:
