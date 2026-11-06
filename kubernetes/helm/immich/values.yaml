@@ -95,10 +95,7 @@ server:
                   name: immich-postgres-user
                   key: password
           securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
+            privileged: true
           resources:
             limits:
               devic.es/video: 1
