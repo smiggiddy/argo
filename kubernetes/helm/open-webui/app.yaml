@@ -4,4 +4,4 @@ chart:
   repo: https://helm.openwebui.com/
   name: open-webui
   # renovate: datasource=helm depName=open-webui registryUrl=https://helm.openwebui.com/
-  version: 17.5.0
+  version: 18.0.0
