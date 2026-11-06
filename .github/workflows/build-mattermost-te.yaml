@@ -39,7 +39,7 @@ jobs:
   build:
     # Fork PRs get no secrets; skip them rather than fail on login.
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-26.04-arm
     steps:
       - name: Log in to cr.smigz.com
         env:
