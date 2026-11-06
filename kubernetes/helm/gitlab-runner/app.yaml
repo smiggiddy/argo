@@ -4,4 +4,4 @@ chart:
   repo: https://charts.gitlab.io
   name: gitlab-runner
   # renovate: datasource=helm depName=gitlab-runner registryUrl=https://charts.gitlab.io
-  version: 0.94.2
+  version: 0.94.3
