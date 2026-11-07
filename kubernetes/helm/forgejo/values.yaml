@@ -81,6 +81,8 @@ gitea:
       SQLITE_JOURNAL_MODE: WAL
     session:
       PROVIDER: db
+    webhook:
+      ALLOWED_HOST_LIST: external,argocd-server.argocd.svc.cluster.local
     picture:
       AVATAR_UPLOAD_PATH: /data/data/avatars
       REPOSITORY_AVATAR_UPLOAD_PATH: /data/data/repo-avatars
