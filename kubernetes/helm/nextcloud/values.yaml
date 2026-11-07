@@ -120,7 +120,6 @@ nextcloud:
       <?php
       $CONFIG = array (
         'log_type' => 'file',
-        'logfile' => 'nextcloud.log',
         'loglevel' => 2,
         'logdateformat' => 'F d, Y H:i:s',
         'log_rotate_size' => 10 * 1024 * 1024
