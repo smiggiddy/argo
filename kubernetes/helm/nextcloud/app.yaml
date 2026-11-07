@@ -1,6 +1,5 @@
 namespace: nextcloud
 group: homelab
-sync: manual
 chart:
   repo: https://nextcloud.github.io/helm/
   name: nextcloud

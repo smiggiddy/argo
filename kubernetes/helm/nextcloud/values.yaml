@@ -1,10 +1,10 @@
-resources: 
+resources:
   limits:
-   cpu: 1000m
-   memory: 768Mi
+    cpu: 1000m
+    memory: 768Mi
   requests:
-   cpu: 500m
-   memory: 256Mi
+    cpu: 500m
+    memory: 256Mi
 metrics:
   enabled: true
 
@@ -35,7 +35,7 @@ nginx:
     headers:
       "Strict-Transport-Security": "max-age=15552000; includeSubDomains; preload;"
 phpClientHttpsFix:
-  enabled: false 
+  enabled: false
   protocol: https
 redis:
   enabled: false
@@ -125,15 +125,20 @@ nextcloud:
         'log_rotate_size' => 10 * 1024 * 1024
         );
     trusted_domains.config.php: |-
-        <?php
-        $CONFIG = [
-        'trusted_domains' =>
-          array (
-            0 => 'localhost',
-            1 => 'cloud.lab.smig.tech',
-            2 => 'cloud.vpn.thecodedom.com'
-            )
-          ];
+      <?php
+      $CONFIG = [
+      'trusted_domains' =>
+        array (
+          0 => 'localhost',
+          1 => 'cloud.lab.smig.tech',
+          2 => 'cloud.vpn.thecodedom.com'
+          )
+        ];
+    allow-local-remote-servers.config.php: |-
+      <?php
+      $CONFIG = [
+      'allow_local_remote_servers' => true,
+      ];
   host: cloud.lab.smig.tech
   existingSecret:
     enabled: true
@@ -153,28 +158,28 @@ nextcloud:
           cpu: 10m
           memory: 32Mi
       env:
-      - name: TS_HOSTNAME
-        value: cloud
-      - name: TS_KUBE_SECRET
-        value: tailscale-auth-nextcloud
-      - name: TS_USERSPACE
-        value: "false"
-      - name: TS_EXTRA_ARGS
-        valueFrom:
-          secretKeyRef:
-            name: tailscale-auth-nextcloud
-            key: extra_args
-            optional: true
-      - name: TS_AUTHKEY
-        valueFrom:
-          secretKeyRef:
-            name: tailscale-auth-nextcloud
-            key: TS_AUTHKEY
-            optional: true
+        - name: TS_HOSTNAME
+          value: cloud
+        - name: TS_KUBE_SECRET
+          value: tailscale-auth-nextcloud
+        - name: TS_USERSPACE
+          value: "false"
+        - name: TS_EXTRA_ARGS
+          valueFrom:
+            secretKeyRef:
+              name: tailscale-auth-nextcloud
+              key: extra_args
+              optional: true
+        - name: TS_AUTHKEY
+          valueFrom:
+            secretKeyRef:
+              name: tailscale-auth-nextcloud
+              key: TS_AUTHKEY
+              optional: true
       securityContext:
         capabilities:
           add:
-          - NET_ADMIN
+            - NET_ADMIN
 ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
@@ -185,6 +190,6 @@ ingress:
   enabled: true
   className: traefik
   tls:
-   - secretName: cloud-tls
-     hosts:
-     - cloud.lab.smig.tech
+    - secretName: cloud-tls
+      hosts:
+        - cloud.lab.smig.tech
