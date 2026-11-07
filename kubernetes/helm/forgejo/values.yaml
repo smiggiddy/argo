@@ -190,6 +190,17 @@ extraDeploy:
             - protocol: TCP
               port: 2222
       egress:
+        # for webhook
+        - to:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: argocd
+              podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: argocd-server
+          ports:
+            - protocol: TCP
+              port: 8080
         - to:
             - namespaceSelector: {}
               podSelector:
