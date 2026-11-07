@@ -13,7 +13,7 @@
     "@types/node": "26.6.6",
     "smee-client": "5.0.0",
     "typescript": "7.0.2",
-    "wrangler": "4.156.0"
+    "wrangler": "4.157.0"
   },
   "dependencies": {
     "@hono/cloudflare-workers": "^1.0.1",
