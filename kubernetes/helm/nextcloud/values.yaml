@@ -44,6 +44,9 @@ redis:
 # Readiness still pulls the pod from the service when status.php fails.
 livenessProbe:
   enabled: false
+readinessProbe:
+  timeoutSeconds: 15
+  failureThreshold: 6
 # crond needs root, so run cron.php from a CronJob as www-data instead of the
 # sidecar
 cronjob:
@@ -115,9 +118,6 @@ nextcloud:
     .htaccess: false
     apache-pretty-urls.config.php: false
     swift.config.php: false
-  # with nginx enabled these land in /usr/local/etc/php-fpm.d, so a zz-*.conf
-  # overrides the image's www.conf pool (pm.max_children 5). Size from the
-  # 768Mi limit at ~50-100MB per worker.
   phpConfigs:
     zz-tuning.conf: |-
       [www]
