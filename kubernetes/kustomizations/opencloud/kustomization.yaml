@@ -1,0 +1,16 @@
+resources:
+  - ./deployment.yaml
+  - ./ingress.yaml
+  - ./middleware.yaml
+  - ./pvc.yaml
+  - ./recurring-jobs.yaml
+  - ./service.yaml
+
+configMapGenerator:
+  - name: opencloud-env
+    envs:
+      - env
+  - name: opencloud-files
+    files:
+      - csp.yaml
+      - app-registry.yaml

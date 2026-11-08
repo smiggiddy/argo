@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opencloud
+  labels:
+    app.kubernetes.io/name: opencloud
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: opencloud
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: opencloud
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        - name: opencloud
+          image: opencloudeu/opencloud-rolling:9.0.0@sha256:bd57f039d0dd3df510fb25f178beefdf0b1f049097285feead607824460e6506
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - opencloud init || true; opencloud server
+          ports:
+            - name: http
+              containerPort: 9200
+          envFrom:
+            - configMapRef:
+                name: opencloud-env
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              memory: 2Gi
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            failureThreshold: 30
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 15
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 30
+            failureThreshold: 3
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/opencloud
+            - name: config
+              mountPath: /etc/opencloud
+            - name: files
+              mountPath: /etc/opencloud/csp.yaml
+              subPath: csp.yaml
+              readOnly: true
+            - name: files
+              mountPath: /etc/opencloud/app-registry.yaml
+              subPath: app-registry.yaml
+              readOnly: true
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: opencloud-data
+        - name: config
+          persistentVolumeClaim:
+            claimName: opencloud-config
+        - name: files
+          configMap:
+            name: opencloud-files

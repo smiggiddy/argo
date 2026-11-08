@@ -58,6 +58,11 @@
       "enabled": false
     },
     {
+      "description": "OpenCloud rolling releases can carry breaking changes: review every bump",
+      "matchPackageNames": ["opencloudeu/opencloud-rolling"],
+      "automerge": false
+    },
+    {
       "description": "cloudnative-vectorchord tags encode the postgres major.minor as well as the extension version, and immich only accepts vchord >=0.3 <2. Never automerge it.",
       "matchPackageNames": ["ghcr.io/tensorchord/cloudnative-vectorchord"],
       "automerge": false
