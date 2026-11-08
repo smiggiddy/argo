@@ -157,41 +157,6 @@ nextcloud:
     secretName: nextcloud-db
     usernameKey: nextcloud-username
     passwordKey: nextcloud-password
-  extraSidecarContainers:
-    - name: ts-sidecar
-      imagePullPolicy: Always
-      image: "ghcr.io/tailscale/tailscale:latest@sha256:87c55d6be56ad85b3d8bceca5f87f73de288c609131460dd1be1874c250cc41d"
-      resources:
-        limits:
-          devic.es/tun: "1"
-          memory: 128Mi
-        requests:
-          devic.es/tun: "1"
-          cpu: 10m
-          memory: 32Mi
-      env:
-        - name: TS_HOSTNAME
-          value: cloud
-        - name: TS_KUBE_SECRET
-          value: tailscale-auth-nextcloud
-        - name: TS_USERSPACE
-          value: "false"
-        - name: TS_EXTRA_ARGS
-          valueFrom:
-            secretKeyRef:
-              name: tailscale-auth-nextcloud
-              key: extra_args
-              optional: true
-        - name: TS_AUTHKEY
-          valueFrom:
-            secretKeyRef:
-              name: tailscale-auth-nextcloud
-              key: TS_AUTHKEY
-              optional: true
-      securityContext:
-        capabilities:
-          add:
-            - NET_ADMIN
 ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
