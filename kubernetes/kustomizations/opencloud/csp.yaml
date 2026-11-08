@@ -1,0 +1,49 @@
+directives:
+  child-src:
+    - '''self'''
+  connect-src:
+    - '''self'''
+    - 'blob:'
+    - 'https://raw.githubusercontent.com/opencloud-eu/awesome-apps/'
+    - 'https://auth.thecodedom.com/'
+    - 'https://update.opencloud.eu/'
+    - 'https://tile.openstreetmap.org/'
+  default-src:
+    - '''none'''
+  font-src:
+    - '''self'''
+  frame-ancestors:
+    - '''self'''
+  frame-src:
+    - '''self'''
+    - 'blob:'
+    - 'https://embed.diagrams.net/'
+    - 'https://office.lab.smig.tech/'
+    - 'https://docs.opencloud.eu'
+    - 'https://auth.thecodedom.com/'
+  img-src:
+    - '''self'''
+    - 'data:'
+    - 'blob:'
+    - 'https://raw.githubusercontent.com/opencloud-eu/awesome-apps/'
+    - 'https://tile.openstreetmap.org/'
+    - 'https://office.lab.smig.tech/'
+  manifest-src:
+    - '''self'''
+  media-src:
+    - '''self'''
+    - 'blob:'
+  object-src:
+    - '''self'''
+    - 'blob:'
+  script-src:
+    - '''self'''
+    - '''unsafe-inline'''
+    - 'https://auth.thecodedom.com/'
+  style-src:
+    - '''self'''
+    - '''unsafe-inline'''
+    - 'blob:'
+  worker-src:
+    - "'self'"
+    - 'blob:'

@@ -1,0 +1,10 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: opencloud-sts
+spec:
+  headers:
+    stsSeconds: 15553000
+    stsPreload: true
+    stsIncludeSubdomains: true
+    forceSTSHeader: true

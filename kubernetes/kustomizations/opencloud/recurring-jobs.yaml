@@ -1,0 +1,23 @@
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: opencloud-snapshot
+  namespace: longhorn-system
+spec:
+  task: snapshot
+  cron: "15 */6 * * *"
+  retain: 8
+  concurrency: 1
+  groups: [opencloud]
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: opencloud-backup
+  namespace: longhorn-system
+spec:
+  task: backup
+  cron: "0 4 * * *"
+  retain: 14
+  concurrency: 1
+  groups: [opencloud]
