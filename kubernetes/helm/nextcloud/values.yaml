@@ -115,6 +115,18 @@ nextcloud:
     .htaccess: false
     apache-pretty-urls.config.php: false
     swift.config.php: false
+  # with nginx enabled these land in /usr/local/etc/php-fpm.d, so a zz-*.conf
+  # overrides the image's www.conf pool (pm.max_children 5). Size from the
+  # 768Mi limit at ~50-100MB per worker.
+  phpConfigs:
+    zz-tuning.conf: |-
+      [www]
+      pm = dynamic
+      pm.max_children = 10
+      pm.start_servers = 3
+      pm.min_spare_servers = 2
+      pm.max_spare_servers = 5
+      pm.max_requests = 500
   configs:
     logging.config.php: |-
       <?php
