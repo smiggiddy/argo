@@ -4,8 +4,6 @@ resources:
   - ./code-server-middleware.yaml
   - ./gitlab-runner-secret.yaml
   - ./grafana-secret.yaml
-  - ./nextcloud-middleware.yaml
-  - ./nextcloud-tailscale.yaml
   - ./r2-backup-secret.yaml
   - ./registry-secret.yaml
   - ./storage-class.yaml
