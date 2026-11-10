@@ -14,6 +14,8 @@
 #   skipCrds: true     don't install the chart's CRDs
 #   syncOptions        extra spec.syncPolicy.syncOptions
 #   ignoreDifferences  passed through to spec.ignoreDifferences
+#   values.repo        extra git repo with a values file, applied after values.yaml
+#   values.path        values file in values.repo, defaults to <name>/values.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -75,9 +77,17 @@ spec:
             ignoreMissingValueFiles: true
             valueFiles:
               - '$values/{{ .path.path }}/values.yaml'
+              {{- if .values }}
+              - '$extra/{{ default (printf "%s/values.yaml" (default .path.basename .name)) .values.path }}'
+              {{- end }}
         - repoURL: https://github.com/smiggiddy/argo
           targetRevision: HEAD
           ref: values
+        {{- if .values }}
+        - repoURL: '{{ .values.repo }}'
+          targetRevision: HEAD
+          ref: extra
+        {{- end }}
       syncPolicy:
         syncOptions:
           - CreateNamespace=true

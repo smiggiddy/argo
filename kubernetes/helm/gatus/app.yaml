@@ -1,0 +1,10 @@
+namespace: apps
+group: utilities
+avpIgnore: true
+chart:
+  repo: https://twin.github.io/helm-charts
+  name: gatus
+  # renovate: datasource=helm depName=gatus registryUrl=https://twin.github.io/helm-charts
+  version: 1.5.0
+values:
+  repo: ssh://git@git.thecodedom.com/thecodedom/argocd-values.git

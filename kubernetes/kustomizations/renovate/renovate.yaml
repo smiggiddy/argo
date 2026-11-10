@@ -21,7 +21,7 @@ metadata:
 data:
   config.json: |-
     {
-      "repositories": ["smiggiddy/argocd", "smiggiddy/oci_docker"],
+      "repositories": ["smiggiddy/argocd", "smiggiddy/oci_docker", "thecodedom/argocd-values"],
       "endpoint": "https://git.thecodedom.com",
       "argocd": {
       "fileMatch": ["apps/.+\\.yaml$"]
