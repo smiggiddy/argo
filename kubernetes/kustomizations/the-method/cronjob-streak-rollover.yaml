@@ -33,7 +33,7 @@ spec:
             kubernetes.io/arch: arm64
           containers:
             - name: streak-rollover
-              image: cr.smigz.com/the-method:latest
+              image: cr.smigz.com/the-method
               imagePullPolicy: Always
               command: ["/streak-rollover"]
               env:

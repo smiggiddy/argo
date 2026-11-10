@@ -17,7 +17,7 @@ spec:
         kubernetes.io/arch: arm64
       containers:
         - name: migrate
-          image: cr.smigz.com/the-method:latest
+          image: cr.smigz.com/the-method
           imagePullPolicy: Always
           command: ["/migrate", "-dir", "/db/migrations", "up"]
           env:

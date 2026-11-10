@@ -41,7 +41,7 @@ spec:
               mountPath: /data
       containers:
         - name: api
-          image: ghcr.io/duartesantos8/opengym-api:1.4.4@sha256:7508ecca4ae16a917e6e58e3fd40961fbdf7d5fbfc54b7e6f434f741ddf41402
+          image: ghcr.io/duartesantos8/opengym-api
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

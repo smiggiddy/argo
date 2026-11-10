@@ -29,7 +29,7 @@ spec:
             kubernetes.io/arch: arm64
           containers:
             - name: weekly-rotation
-              image: cr.smigz.com/the-method:latest
+              image: cr.smigz.com/the-method
               imagePullPolicy: Always
               command: ["/weekly-rotation"]
               # Default --config path (/etc/the-method/weekly_challenges.json)
