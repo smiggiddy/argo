@@ -5,3 +5,4 @@ resources:
   - ./alertmanager-config.yaml
   - ./argocd-notifications-secret.yaml
   - ./forgejo-secrets.yaml
+  - ./gatus-secrets.yaml
