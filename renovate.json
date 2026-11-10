@@ -5,7 +5,7 @@
   "hostRules": [{ "concurrentRequestLimit": 5 }],
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": ["patch"],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
     },
@@ -89,6 +89,14 @@
         "nousresearch/hermes-agent",
         "ghcr.io/plastic-labs/honcho",
         "ghcr.io/umami-software/umami",
+        "docker.io/miniflux/miniflux",
+        "ghcr.io/home-assistant/home-assistant",
+        "ghcr.io/duartesantos8/opengym-api",
+        "ghcr.io/duartesantos8/opengym-web",
+        "valkey/valkey",
+        "searxng/searxng",
+        "itzcrazykns1337/vane",
+        "cr.smigz.com/the-method",
         "cr.smigz.com/mattermost-te",
         "rancher/k3s-upgrade"
       ],

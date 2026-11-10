@@ -27,7 +27,7 @@ spec:
             - --save
             - "60"
             - "1"
-          image: valkey/valkey:9.1.2-trixie@sha256:418652cfb58ef879d4978c33553735d7147016032d5aefaa14c828e611eb9dfd
+          image: valkey/valkey
           name: valkey
           ports:
             - containerPort: 6379

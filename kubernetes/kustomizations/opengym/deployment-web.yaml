@@ -57,7 +57,7 @@ spec:
               mountPath: /out
       containers:
         - name: web
-          image: ghcr.io/duartesantos8/opengym-web:1.4.4@sha256:33575782762f6cc9181f5e33616d55bf718bcd56338b714f22cb5d01e1adc278
+          image: ghcr.io/duartesantos8/opengym-web
           imagePullPolicy: IfNotPresent
           ports:
             - name: web

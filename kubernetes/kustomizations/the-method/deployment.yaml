@@ -26,7 +26,7 @@ spec:
         kubernetes.io/arch: arm64
       containers:
         - name: api
-          image: cr.smigz.com/the-method:latest
+          image: cr.smigz.com/the-method
           imagePullPolicy: Always
           # Bootstrap habit config is baked into the image at the binary's
           # default path (/etc/habits/habits.json). It's personal data and
