@@ -4,4 +4,4 @@ chart:
   repo: https://victoriametrics.github.io/helm-charts/
   name: victoria-metrics-k8s-stack
   # renovate: datasource=helm depName=victoria-metrics-k8s-stack registryUrl=https://victoriametrics.github.io/helm-charts/
-  version: 0.97.1
+  version: 0.98.1
