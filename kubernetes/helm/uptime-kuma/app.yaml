@@ -1,8 +1,0 @@
-namespace: apps
-group: utilities
-sync: manual
-chart:
-  repo: https://smiggiddy.github.io
-  name: uptime-kuma
-  # renovate: datasource=helm depName=uptime-kuma registryUrl=https://smiggiddy.github.io
-  version: 0.0.21
