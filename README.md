@@ -11,7 +11,7 @@ This homelab setup provides a complete self-hosted infrastructure including:
 - **Productivity**: OpenCloud, Mattermost, GitLab
 - **Home Automation**: Home Assistant
 - **Development**: Code Server, LocalStack
-- **Utilities**: Homer dashboard, Linkding bookmarks, Uptime Kuma, Hashicorp Vault
+- **Utilities**: Homer dashboard, Linkding bookmarks, Gatus, Hashicorp Vault
 
 ## 🏗️ Architecture
 
