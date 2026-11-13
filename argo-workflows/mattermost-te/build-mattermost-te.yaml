@@ -18,7 +18,7 @@ spec:
       - name: base-image-tag
         value: "26.04"
       - name: base-image-arm64-digest
-        value: "sha256:f144425ff09be612d6d9ad965196e9cdc23dae1f42110a8a11a3e9a8198759f7"
+        value: "sha256:065aa8626841f16057b78b027b464cd59c4fac36c204c72dcbf48d66f5fa8a96"
 
   templates:
     - name: main
