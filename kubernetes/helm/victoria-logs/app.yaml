@@ -4,4 +4,4 @@ chart:
   repo: https://victoriametrics.github.io/helm-charts/
   name: victoria-logs-single
   # renovate: datasource=helm depName=victoria-logs-single registryUrl=https://victoriametrics.github.io/helm-charts/
-  version: 0.13.12
+  version: 0.13.13
