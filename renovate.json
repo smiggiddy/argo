@@ -2,7 +2,15 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:best-practices", ":dependencyDashboard"],
   "prConcurrentLimit": 10,
-  "hostRules": [{ "concurrentRequestLimit": 5 }],
+  "hostRules": [
+    { "concurrentRequestLimit": 5 },
+    {
+      "matchHost": "docker.io",
+      "hostType": "docker",
+      "username": "{{ secrets.DOCKER_HUB_USERNAME }}",
+      "password": "{{ secrets.DOCKER_HUB_TOKEN }}"
+    }
+  ],
   "packageRules": [
     {
       "matchUpdateTypes": ["patch"],
