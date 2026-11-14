@@ -7,7 +7,7 @@ resources:
   - ./ingress.yaml
 images:
   - name: ghcr.io/plastic-labs/honcho
-    newTag: v3.5.0@sha256:23ff96bf62ab2ca14928e6766db1a30a7729f5b7c9e2285af0cd4a179c0d393d
+    newTag: v3.6.1@sha256:2ced1a958f14c128ddb05e68deb549f9281681e44595a7a3c34adebf5b432b16
 configMapGenerator:
   - name: honcho-config
     envs:
