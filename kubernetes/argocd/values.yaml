@@ -324,7 +324,7 @@ repoServer:
           value: 1.18.1
         # renovate: datasource=github-releases depName=helm/helm extractVersion=^v(?<version>.+)$
         - name: HELM_VERSION
-          value: 4.3.1
+          value: 4.3.2
         # renovate: datasource=github-releases depName=kubernetes-sigs/kustomize extractVersion=^kustomize/v(?<version>.+)$
         - name: KUSTOMIZE_VERSION
           value: 5.8.3
