@@ -43,6 +43,11 @@ spec:
                 secretKeyRef:
                   name: umami-secrets
                   key: hash-salt
+            - name: APP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: umami-secrets
+                  key: app-secret
           livenessProbe:
             httpGet:
               path: /api/heartbeat
