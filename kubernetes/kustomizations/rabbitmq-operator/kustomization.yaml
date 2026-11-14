@@ -1,5 +1,5 @@
 resources:
-  - https://github.com/rabbitmq/cluster-operator/releases/download/v2.23.2/cluster-operator.yml
+  - https://github.com/rabbitmq/cluster-operator/releases/download/v2.23.3/cluster-operator.yml
 patches:
   # CreateNamespace on the Application owns rabbitmq-system
   - patch: |-
