@@ -1,4 +1,4 @@
-# Vault Agent template -> rendered to /vault/secrets/settings.yml at pod start.
+# ESO template (ExternalSecret searxng-settings) -> Secret searxng-settings, mounted at /etc/searxng-settings/settings.yml.
 # Carries only deviations; the rest comes from the image via use_default_settings.
 # No literal double-braces anywhere (including comments) - fatal parse error.
 
@@ -141,7 +141,7 @@ search:
     recaptcha_SearxEngineCaptcha: 3600
 
 server:
-  secret_key: "{{ with secret "k8s/data/argocd/searxng" }}{{ .Data.data.searxng_secret }}{{ end }}"
+  secret_key: "{{ .searxng_secret }}"
   limiter: false
   public_instance: false
   image_proxy: false
@@ -274,7 +274,7 @@ engines:
   - name: braveapi
     inactive: false
     disabled: true
-    api_key: "{{ with secret "k8s/data/argocd/searxng" }}{{ .Data.data.brave_api_key }}{{ end }}"
+    api_key: "{{ .brave_api_key }}"
     results_per_page: 20
   - name: qwant
     disabled: true

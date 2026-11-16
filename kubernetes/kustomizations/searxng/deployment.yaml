@@ -15,16 +15,6 @@ spec:
     metadata:
       labels:
         app: searxng
-      annotations:
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/agent-pre-populate-only: "true"
-        vault.hashicorp.com/role: "searxng"
-        vault.hashicorp.com/agent-copy-volume-mounts: "searxng"
-        vault.hashicorp.com/agent-inject-secret-settings.yml: "k8s/data/argocd/searxng"
-        vault.hashicorp.com/agent-inject-template-file-settings.yml: "/etc/searxng-tpl/settings.yml.tpl"
-        vault.hashicorp.com/agent-run-as-user: "977"
-        vault.hashicorp.com/agent-run-as-group: "977"
-        vault.hashicorp.com/agent-inject-perms-settings.yml: "0640"
     spec:
       serviceAccountName: searxng
       containers:
@@ -34,7 +24,7 @@ spec:
             - containerPort: 8080
           env:
             - name: SEARXNG_SETTINGS_PATH
-              value: /vault/secrets/settings.yml
+              value: /etc/searxng-settings/settings.yml
             # keeps the SQLite engine cache on the PVC, not ephemeral /tmp
             - name: TMPDIR
               value: /var/cache/searxng
@@ -43,6 +33,9 @@ spec:
               mountPath: /var/cache/searxng
             - name: settings-tpl
               mountPath: /etc/searxng-tpl
+              readOnly: true
+            - name: settings
+              mountPath: /etc/searxng-settings
               readOnly: true
             - name: etc-searxng   # entrypoint exits 127 if it can't write here
               mountPath: /etc/searxng
@@ -73,6 +66,8 @@ spec:
       securityContext:
         runAsUser: 977
         runAsGroup: 977
+        fsGroup: 977
+        fsGroupChangePolicy: OnRootMismatch
 
       volumes:
         - name: data
@@ -81,5 +76,9 @@ spec:
         - name: settings-tpl
           configMap:
             name: searxng-settings
+        - name: settings
+          secret:
+            secretName: searxng-settings
+            defaultMode: 0440
         - name: etc-searxng
           emptyDir: {}

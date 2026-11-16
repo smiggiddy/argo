@@ -4,16 +4,20 @@ kind: Kustomization
 resources:
   - ./deployment.yaml
   - ./ingress.yaml
+  - ./secret.yaml
   - ./serviceaccount.yaml
   - ./service.yaml
 
+configurations:
+  - ./kustomize-config.yaml
+
 # Generated with a name-suffix hash so editing the template rolls the pod.
-# No AVP annotation here: secrets are resolved at runtime by the Vault Agent,
-# so nothing in this ConfigMap is sensitive.
+# The ExternalSecret renders it into Secret searxng-settings, so nothing in
+# this ConfigMap is sensitive.
 configMapGenerator:
   - name: searxng-settings
     files:
-      - settings.yml.tpl
+      - settings.yml=settings.yml.tpl
 
 images:
   # original image is image: searxng/searxng:2025.8.1-3d96414@sha256:3f229455cee2e21bd9bd910fd1193687b380ebe2a083e15ad19bd5df72bab47f

@@ -4,5 +4,6 @@ resources:
   - ./grafana-secrets.yaml
   - ./alertmanager-config.yaml
   - ./argocd-notifications-secret.yaml
+  - ./external-dns-cloudflare-secret.yaml
   - ./forgejo-secrets.yaml
   - ./gatus-secrets.yaml

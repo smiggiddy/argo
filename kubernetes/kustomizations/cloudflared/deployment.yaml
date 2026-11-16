@@ -1,4 +1,4 @@
-# Vault secret k8s/data/cloudflare-tunnel-rpi-k3s: key token is the tunnel
+# OpenBao secret k8s/data/cloudflare-tunnel-rpi-k3s: key token is the tunnel
 # run token (cloudflared --token-file). api-token is the account API token
 # for managing tunnels and account-id its account; neither is used here.
 
@@ -16,19 +16,11 @@ spec:
     metadata:
       labels:
         app: cloudflared
-      annotations:
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/agent-pre-populate-only: "true"
-        vault.hashicorp.com/role: "cloudflared"
-        vault.hashicorp.com/agent-inject-secret-token: "k8s/data/cloudflare-tunnel-rpi-k3s"
-        vault.hashicorp.com/agent-inject-template-token: |
-          {{- with secret "k8s/data/cloudflare-tunnel-rpi-k3s" -}}{{ .Data.data.token }}{{- end -}}
-        # cloudflared image runs as distroless nonroot
-        vault.hashicorp.com/agent-run-as-user: "65532"
-        vault.hashicorp.com/agent-run-as-group: "65532"
-        vault.hashicorp.com/agent-inject-perms-token: "0400"
     spec:
       serviceAccountName: cloudflared
+      # cloudflared image runs as distroless nonroot
+      securityContext:
+        fsGroup: 65532
       containers:
         - name: cloudflared
           image: cloudflare/cloudflared:latest
@@ -40,12 +32,19 @@ spec:
               "/etc/cloudflared/config.yaml",
               "run",
               "--token-file",
-              "/vault/secrets/token",
+              "/etc/cloudflared-token/token",
             ]
           volumeMounts:
             - name: config
               mountPath: /etc/cloudflared
+            - name: token
+              mountPath: /etc/cloudflared-token
+              readOnly: true
       volumes:
         - name: config
           configMap:
             name: cloudflared-config
+        - name: token
+          secret:
+            secretName: cloudflared-token
+            defaultMode: 0440
