@@ -1,0 +1,19 @@
+apiVersion: external-secrets.io/v1
+kind: ClusterSecretStore
+metadata:
+  name: openbao
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  provider:
+    vault:
+      server: http://openbao.openbao.svc:8200
+      path: k8s
+      version: v2
+      auth:
+        kubernetes:
+          mountPath: kubernetes
+          role: external-secrets
+          serviceAccountRef:
+            name: external-secrets
+            namespace: external-secrets

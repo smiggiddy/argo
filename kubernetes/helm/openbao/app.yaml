@@ -1,0 +1,9 @@
+namespace: openbao
+group: utilities
+sync: manual
+avpIgnore: true
+chart:
+  repo: https://openbao.github.io/openbao-helm
+  name: openbao
+  # renovate: datasource=helm depName=openbao registryUrl=https://openbao.github.io/openbao-helm
+  version: 0.30.7

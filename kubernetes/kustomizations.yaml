@@ -7,6 +7,7 @@
 #   sync: manual       drop the automated sync policy
 #   avpIgnore: true    skip argocd-vault-plugin substitution
 #   ignoreDifferences  passed through to spec.ignoreDifferences
+#   retry              passed through to spec.syncPolicy.retry
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -65,6 +66,10 @@ spec:
         automated:
           prune: true
           selfHeal: true
+        {{- end }}
+        {{- with .retry }}
+        retry:
+          {{- toYaml . | nindent 6 }}
         {{- end }}
       {{- with .ignoreDifferences }}
       ignoreDifferences:
