@@ -1,6 +1,5 @@
 namespace: mattermost-operator
 group: utilities
-avpIgnore: true
 sync: manual
 chart:
   repo: https://helm.mattermost.com

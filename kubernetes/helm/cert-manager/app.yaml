@@ -1,6 +1,5 @@
 namespace: utilities
 group: utilities
-avpIgnore: true
 chart:
   repo: https://charts.jetstack.io
   name: cert-manager
