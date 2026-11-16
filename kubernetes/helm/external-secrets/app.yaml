@@ -1,6 +1,5 @@
 namespace: external-secrets
 group: security
-avpIgnore: true
 chart:
   repo: https://charts.external-secrets.io
   name: external-secrets

@@ -5,7 +5,6 @@
 #   group              value of the `apps` label (required)
 #   name               Application name, defaults to the directory name
 #   sync: manual       drop the automated sync policy
-#   avpIgnore: true    skip argocd-vault-plugin substitution
 #   ignoreDifferences  passed through to spec.ignoreDifferences
 #   retry              passed through to spec.syncPolicy.retry
 apiVersion: argoproj.io/v1alpha1
@@ -51,11 +50,6 @@ spec:
         server: https://kubernetes.default.svc
         namespace: '{{ .namespace }}'
   templatePatch: |
-    {{- if .avpIgnore }}
-    metadata:
-      annotations:
-        avp.kubernetes.io/ignore: "true"
-    {{- end }}
     spec:
       syncPolicy:
         syncOptions:

@@ -1,3 +1,2 @@
 namespace: rabbitmq-system
 group: utilities
-avpIgnore: true

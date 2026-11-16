@@ -1,6 +1,5 @@
 namespace: argo
 group: utilities
-avpIgnore: true
 chart:
   repo: https://argoproj.github.io/argo-helm
   name: argo-workflows

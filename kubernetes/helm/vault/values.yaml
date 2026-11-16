@@ -1,4 +1,7 @@
+injector:
+  enabled: false
 server:
+  enabled: false
   dataStorage:
     storageClass: longhorn
   standalone:

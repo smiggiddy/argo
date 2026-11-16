@@ -10,7 +10,6 @@
 #   chart.path         chart directory in a git repo, instead of chart.name
 #   chart.version      chart version or git revision (required)
 #   sync: manual       drop the automated sync policy
-#   avpIgnore: true    skip argocd-vault-plugin substitution
 #   skipCrds: true     don't install the chart's CRDs
 #   syncOptions        extra spec.syncPolicy.syncOptions
 #   ignoreDifferences  passed through to spec.ignoreDifferences
@@ -55,9 +54,6 @@ spec:
   templatePatch: |
     metadata:
       annotations:
-        {{- if .avpIgnore }}
-        avp.kubernetes.io/ignore: "true"
-        {{- end }}
         # webhook pushes only refresh apps whose values (or local chart) changed;
         # paths are repo-root absolute since the values source has no path
         argocd.argoproj.io/manifest-generate-paths: '/{{ .path.path }}{{ if .chart.path }};/{{ .chart.path }}{{ end }}'

@@ -1,7 +1,6 @@
 namespace: openbao
 group: utilities
 sync: manual
-avpIgnore: true
 chart:
   repo: https://openbao.github.io/openbao-helm
   name: openbao

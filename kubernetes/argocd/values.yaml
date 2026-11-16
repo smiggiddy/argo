@@ -20,7 +20,7 @@ notifications:
   # and the ApplicationSet templates under kubernetes/
   secret:
     # argocd-notifications-secret (mattermost-token, github-token) comes from
-    # Vault via the app-secrets kustomization
+    # OpenBao via the ExternalSecret in the app-secrets kustomization
     create: false
   notifiers:
     service.mattermost: |
@@ -234,119 +234,7 @@ repoServer:
     replicas: 2
   serviceAccount:
     automountServiceAccountToken: true
-  volumes:
-    - configMap:
-        name: argocd-cmp-cm
-      name: cmp-plugin
-    - name: custom-tools
-      emptyDir: {}
-  extraContainers:
-    - name: argocd-vault-plugin
-      command:
-        - /var/run/argocd/argocd-cmp-server
-      image: registry.access.redhat.com/ubi10-minimal
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 999
-      volumeMounts:
-        - mountPath: /var/run/argocd
-          name: var-files
-        - mountPath: /home/argocd/cmp-server/plugins
-          name: plugins
-        - mountPath: /tmp
-          name: tmp
-        - mountPath: /home/argocd/cmp-server/config/plugin.yaml
-          subPath: argocd-vault-plugin.yaml
-          name: cmp-plugin
-        - name: custom-tools
-          subPath: argocd-vault-plugin
-          mountPath: /usr/local/bin/argocd-vault-plugin
-        - mountPath: /usr/local/bin/helm
-          subPath: helm
-          name: custom-tools
-        - mountPath: /usr/local/bin/kustomize
-          subPath: kustomize
-          name: custom-tools
-    - name: argocd-vault-plugin-helm
-      command:
-        - /var/run/argocd/argocd-cmp-server
-      image: registry.access.redhat.com/ubi10-minimal
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 999
-      volumeMounts:
-        - mountPath: /var/run/argocd
-          name: var-files
-        - mountPath: /home/argocd/cmp-server/plugins
-          name: plugins
-        - mountPath: /tmp
-          name: tmp
-        - mountPath: /home/argocd/cmp-server/config/plugin.yaml
-          subPath: argocd-vault-plugin-helm.yaml
-          name: cmp-plugin
-        - name: custom-tools
-          subPath: argocd-vault-plugin
-          mountPath: /usr/local/bin/argocd-vault-plugin
-        - mountPath: /usr/local/bin/helm
-          subPath: helm
-          name: custom-tools
-    - name: argocd-vault-plugin-kustomize
-      command:
-        - /var/run/argocd/argocd-cmp-server
-      image: registry.access.redhat.com/ubi10-minimal
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 999
-      volumeMounts:
-        - mountPath: /var/run/argocd
-          name: var-files
-        - mountPath: /home/argocd/cmp-server/plugins
-          name: plugins
-        - mountPath: /tmp
-          name: tmp
-        - mountPath: /home/argocd/cmp-server/config/plugin.yaml
-          subPath: argocd-vault-plugin-kustomize.yaml
-          name: cmp-plugin
-        - name: custom-tools
-          subPath: argocd-vault-plugin
-          mountPath: /usr/local/bin/argocd-vault-plugin
-        - mountPath: /usr/local/bin/kustomize
-          subPath: kustomize
-          name: custom-tools
   affinity: *controlPlaneAffinity
-
-  initContainers:
-    - name: download-tools
-      image: alpine/curl
-      env:
-        # renovate: datasource=github-releases depName=argoproj-labs/argocd-vault-plugin extractVersion=^v(?<version>.+)$
-        - name: AVP_VERSION
-          value: 1.18.1
-        # renovate: datasource=github-releases depName=helm/helm extractVersion=^v(?<version>.+)$
-        - name: HELM_VERSION
-          value: 4.3.1
-        # renovate: datasource=github-releases depName=kubernetes-sigs/kustomize extractVersion=^kustomize/v(?<version>.+)$
-        - name: KUSTOMIZE_VERSION
-          value: 5.8.3
-      command:
-        - sh
-        - "-c"
-      args:
-        - >-
-          curl -L
-          https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$(AVP_VERSION)/argocd-vault-plugin_$(AVP_VERSION)_linux_arm64
-          -o argocd-vault-plugin && chmod +x argocd-vault-plugin && mv
-          argocd-vault-plugin /custom-tools/ &&
-
-          curl -sL https://get.helm.sh/helm-v$(HELM_VERSION)-linux-arm64.tar.gz
-          | tar -xz --strip-components=1 -C /custom-tools linux-arm64/helm &&
-
-          curl -sL
-          https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv$(KUSTOMIZE_VERSION)/kustomize_v$(KUSTOMIZE_VERSION)_linux_arm64.tar.gz
-          | tar -xz -C /custom-tools
-      volumeMounts:
-        - mountPath: /custom-tools
-          name: custom-tools
 global:
   domain: argocd.lab.smig.tech
   tolerations:
@@ -373,59 +261,6 @@ configs:
       enablePKCEAuthentication: true
   params:
     server.insecure: true
-  cmp:
-    create: yes
-    plugins:
-      argocd-vault-plugin:
-        allowConcurrency: true
-        discover:
-          find:
-            command:
-              - sh
-              - "-c"
-              - "test ! -f kustomization.yaml && test ! -f Chart.yaml && find .
-                -name '*.yaml' | xargs -I {} grep
-                \"<path\\|avp\\.kubernetes\\.io\" {} | grep ."
-        generate:
-          command:
-            - argocd-vault-plugin
-            - generate
-            - "."
-            - "-s"
-            - vault-configuration
-        lockRepo: false
-      argocd-vault-plugin-helm:
-        allowConcurrency: true
-        discover:
-          find:
-            command:
-              - sh
-              - "-c"
-              - "find . -name 'Chart.yaml' && find . -name 'values.yaml'"
-        generate:
-          command:
-            - sh
-            - "-c"
-            - |
-              helm template $ARGOCD_APP_NAME -n $ARGOCD_APP_NAMESPACE -f <(echo "$ARGOCD_ENV_HELM_VALUES") . |
-              argocd-vault-plugin -s vault-configuration generate -
-        lockRepo: false
-      argocd-vault-plugin-kustomize:
-        allowConcurrency: true
-        discover:
-          find:
-            command:
-              - find
-              - "."
-              - -name
-              - kustomization.y?ml
-        generate:
-          command:
-            - sh
-            - "-c"
-            - "kustomize build . | argocd-vault-plugin -s vault-configuration
-              generate -"
-        lockRepo: false
 
 dex:
   enabled: false

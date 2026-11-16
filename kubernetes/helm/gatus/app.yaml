@@ -1,6 +1,5 @@
 namespace: apps
 group: utilities
-avpIgnore: true
 chart:
   repo: https://twin.github.io/helm-charts
   name: gatus

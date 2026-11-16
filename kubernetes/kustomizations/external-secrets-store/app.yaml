@@ -1,6 +1,5 @@
 namespace: external-secrets
 group: security
-avpIgnore: true
 retry:
   limit: 5
   backoff:
