@@ -1,0 +1,104 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: run-ansible
+spec:
+  serviceAccountName: {{ .Values.serviceAccountName }}
+  entrypoint: run
+  onExit: notify
+  activeDeadlineSeconds: {{ .Values.deadlineSeconds }}
+  arguments:
+    parameters:
+      - name: playbook
+      - name: limit
+        value: ""
+      - name: tags
+        value: ""
+      - name: extra-args
+        value: ""
+  volumes:
+    - name: secrets
+      secret:
+        secretName: ansible-schedules
+        defaultMode: 0400
+        items:
+          - key: ssh-private-key
+            path: ssh-private-key
+          - key: vault-password
+            path: vault-password
+  templates:
+    - name: run
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      inputs:
+        artifacts:
+          - name: repo
+            path: /src
+            git:
+              repo: {{ .Values.git.repo }}
+              revision: {{ .Values.git.revision }}
+              depth: 1
+              usernameSecret:
+                name: ansible-schedules
+                key: git-username
+              passwordSecret:
+                name: ansible-schedules
+                key: git-token
+      container:
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        workingDir: /src/ansible
+        command: [sh, -c]
+        args:
+          - |
+            set -eu
+            set -- "playbooks/$PLAYBOOK"
+            [ -n "$LIMIT" ] && set -- "$@" --limit "$LIMIT"
+            [ -n "$TAGS" ] && set -- "$@" --tags "$TAGS"
+            exec ansible-playbook "$@" $EXTRA_ARGS
+        env:
+          - name: PLAYBOOK
+            value: {{ "'{{workflow.parameters.playbook}}'" }}
+          - name: LIMIT
+            value: {{ "'{{workflow.parameters.limit}}'" }}
+          - name: TAGS
+            value: {{ "'{{workflow.parameters.tags}}'" }}
+          - name: EXTRA_ARGS
+            value: {{ "'{{workflow.parameters.extra-args}}'" }}
+          - name: ANSIBLE_REMOTE_USER
+            value: {{ .Values.remoteUser }}
+          - name: ANSIBLE_PRIVATE_KEY_FILE
+            value: /secrets/ssh-private-key
+          - name: ANSIBLE_VAULT_PASSWORD_FILE
+            value: /secrets/vault-password
+        volumeMounts:
+          - name: secrets
+            mountPath: /secrets
+            readOnly: true
+
+    - name: notify
+      steps:
+        - - name: failed
+            template: mattermost
+            when: {{ "'{{workflow.status}} != Succeeded'" }}
+
+    - name: mattermost
+      container:
+        image: {{ .Values.notifyImage }}
+        command: [sh, -c]
+        args:
+          - |
+            curl -fsS -X POST -H 'Content-Type: application/json' \
+              -d "{\"text\": \"ansible \`$WF_NAME\` $WF_STATUS: {{ .Values.argoUrl }}/workflows/$WF_NAMESPACE/$WF_NAME\"}" \
+              "$WEBHOOK_URL"
+        env:
+          - name: WF_NAME
+            value: {{ "'{{workflow.name}}'" }}
+          - name: WF_NAMESPACE
+            value: {{ "'{{workflow.namespace}}'" }}
+          - name: WF_STATUS
+            value: {{ "'{{workflow.status}}'" }}
+          - name: WEBHOOK_URL
+            valueFrom:
+              secretKeyRef:
+                name: ansible-schedules
+                key: mattermost-webhook-url

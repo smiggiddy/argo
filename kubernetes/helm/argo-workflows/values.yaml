@@ -54,6 +54,7 @@ workflow:
     create: true
   workflowNamespaces:
     - default
+    - ansible-schedules
 server:
   authModes:
     - server

@@ -1,0 +1,7 @@
+namespace: ansible-schedules
+group: utilities
+avpIgnore: true
+chart:
+  repo: https://github.com/smiggiddy/argo.git
+  path: charts/ansible-schedules
+  version: HEAD

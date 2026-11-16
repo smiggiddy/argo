@@ -1,0 +1,24 @@
+image:
+  repository: registry.lab.smig.tech/smig/homelab/smigtech_ee
+  tag: latest
+
+nodeSelector: {}
+
+git:
+  repo: https://gitlab.lab.smig.tech/smig/homelab.git
+  revision: main
+
+secretStore:
+  name: openbao
+  path: ansible-schedules
+
+remoteUser: ansible
+serviceAccountName: argo-workflow
+deadlineSeconds: 10800
+timezone: America/New_York
+
+argoUrl: https://argoworkflows.lab.smig.tech
+
+notifyImage: curlimages/curl:8.11.1
+
+schedules: {}
