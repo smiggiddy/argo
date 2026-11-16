@@ -1,11 +1,22 @@
-apiVersion: v1
-stringData:
-  username: <username>
-  password: <password>
-kind: Secret
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
 metadata:
   name: the-method-gitlab-deploy
   namespace: default
-  annotations:
-    avp.kubernetes.io/path: "k8s/data/argocd/the-method-gitlab-deploy"
-type: Opaque
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: openbao
+  target:
+    name: the-method-gitlab-deploy
+    creationPolicy: Owner
+  data:
+    - secretKey: username
+      remoteRef:
+        key: argocd/the-method-gitlab-deploy
+        property: username
+    - secretKey: password
+      remoteRef:
+        key: argocd/the-method-gitlab-deploy
+        property: password

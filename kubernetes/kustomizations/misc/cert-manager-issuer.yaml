@@ -16,13 +16,21 @@ spec:
             name: cloudflare-api-token-secret
             key: api-token
 ---
-apiVersion: v1
-kind: Secret
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
 metadata:
-  namespace: utilities
   name: cloudflare-api-token-secret
-  annotations:
-    avp.kubernetes.io/path: "k8s/data/argocd/cert-manager"
-type: Opaque
-stringData:
-  api-token: <api-token>
+  namespace: utilities
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: openbao
+  target:
+    name: cloudflare-api-token-secret
+    creationPolicy: Owner
+  data:
+    - secretKey: api-token
+      remoteRef:
+        key: argocd/cert-manager
+        property: api-token

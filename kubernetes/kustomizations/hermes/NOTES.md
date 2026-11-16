@@ -84,9 +84,10 @@ environment variables**, not from `model:` / `model_aliases:` in config.yaml:
   `model_aliases:` entries are only `/model <alias>` shortcuts — they don't
   register an endpoint. `discover_models: true` live-fetches `/v1/models`.
   → `qwen-small` registered in `hermes-config.yaml`.
-- **Ollama Cloud (43 models)** appears because the Vault secret
-  (`k8s/data/argocd/hermes`) sets `OLLAMA_API_KEY=none` — any non-empty string
-  counts as configured. Delete the key from Vault to drop the row.
+- **Ollama Cloud (43 models)** appears because the `hermes-secrets`
+  ExternalSecret sets `OLLAMA_API_KEY=none` as a template literal — any
+  non-empty string counts as configured. Remove it from `secret.yaml` to drop
+  the row.
 
 ## Auxiliary model overrides need `provider: custom`
 

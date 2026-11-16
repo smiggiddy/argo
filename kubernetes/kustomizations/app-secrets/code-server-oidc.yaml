@@ -1,9 +1,22 @@
-apiVersion: v1
-stringData:
-  client_id: <path:k8s/data/argocd/code-server#client_id>
-  client_secret: <path:k8s/data/argocd/code-server#client_secret>
-kind: Secret
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
 metadata:
   name: code-server-oidc
   namespace: apps
-type: Opaque
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: openbao
+  target:
+    name: code-server-oidc
+    creationPolicy: Owner
+  data:
+    - secretKey: client_id
+      remoteRef:
+        key: argocd/code-server
+        property: client_id
+    - secretKey: client_secret
+      remoteRef:
+        key: argocd/code-server
+        property: client_secret
