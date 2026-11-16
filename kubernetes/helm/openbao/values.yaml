@@ -4,6 +4,9 @@ server:
   dataStorage:
     size: 1Gi
     storageClass: longhorn
+    labels:
+      recurring-job.longhorn.io/source: enabled
+      recurring-job-group.longhorn.io/openbao: enabled
   ha:
     enabled: true
     replicas: 1
@@ -37,3 +40,38 @@ server:
       - secretName: openbao-tls
         hosts:
           - openbao.lab.smig.tech
+snapshotAgent:
+  enabled: true
+  schedule: "0 */6 * * *"
+  s3CredentialsSecret: openbao-snapshot-s3
+  config:
+    s3Host: garage.garage:3900
+    s3Bucket: openbao-snapshots
+    s3Uri: s3://openbao-snapshots
+    s3ExpireDays: "30"
+    s3cmdExtraFlag: "--no-ssl --region=us-east-2"
+    baoAuthPath: kubernetes
+    baoRole: snapshot
+extraObjects:
+  - apiVersion: longhorn.io/v1beta2
+    kind: RecurringJob
+    metadata:
+      name: openbao-snapshot
+      namespace: longhorn-system
+    spec:
+      task: snapshot
+      cron: "45 */6 * * *"
+      retain: 8
+      concurrency: 1
+      groups: [openbao]
+  - apiVersion: longhorn.io/v1beta2
+    kind: RecurringJob
+    metadata:
+      name: openbao-backup
+      namespace: longhorn-system
+    spec:
+      task: backup
+      cron: "45 3 * * *"
+      retain: 14
+      concurrency: 1
+      groups: [openbao]
