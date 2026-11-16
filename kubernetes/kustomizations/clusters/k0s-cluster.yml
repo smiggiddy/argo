@@ -1,13 +1,26 @@
-apiVersion: v1
-kind: Secret
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
 metadata:
   name: k0s-public-cluster-secret
-  labels:
-    argocd.argoproj.io/secret-type: cluster
-  annotations:
-    avp.kubernetes.io/path: "k8s/data/argocd/clusters"
-type: Opaque
-stringData:
-  name: k0s-pub-smig-tech
-  server: https://192.168.150.10:6443
-  config: <k0s-cluster>
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: openbao
+  target:
+    name: k0s-public-cluster-secret
+    creationPolicy: Owner
+    template:
+      engineVersion: v2
+      mergePolicy: Merge
+      metadata:
+        labels:
+          argocd.argoproj.io/secret-type: "cluster"
+      data:
+        name: "k0s-pub-smig-tech"
+        server: "https://192.168.150.10:6443"
+  data:
+    - secretKey: config
+      remoteRef:
+        key: argocd/clusters
+        property: k0s-cluster
