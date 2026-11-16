@@ -1,0 +1,29 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: argo-workflows-pg
+  namespace: argo
+spec:
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: postgresql
+    major: 18
+  instances: 1
+  enablePDB: false
+  storage:
+    size: 1Gi
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "1"
+  bootstrap:
+    initdb:
+      database: argo
+      owner: argo
+      encoding: UTF8
+      localeCType: C
+      localeCollate: C

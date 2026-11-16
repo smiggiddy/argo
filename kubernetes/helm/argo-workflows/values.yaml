@@ -21,6 +21,31 @@ controller:
       operator: Equal
       value: "true"
       effect: NoSchedule
+  persistence:
+    archive: true
+    archiveTTL: 30d
+    postgresql:
+      host: argo-workflows-pg-rw.argo.svc.cluster.local
+      port: 5432
+      database: argo
+      tableName: argo_workflows
+      userNameSecret:
+        name: argo-workflows-pg-app
+        key: username
+      passwordSecret:
+        name: argo-workflows-pg-app
+        key: password
+  workflowDefaults:
+    spec:
+      ttlStrategy:
+        secondsAfterCompletion: 86400
+      podGC:
+        strategy: OnPodCompletion
+        deleteDelayDuration: 2m
+  links:
+    - name: Logs (VictoriaLogs)
+      scope: workflow
+      url: https://grafana-k3s.lab.smig.tech/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22victorialogs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22victoriametrics-logs-datasource%22%2C%22uid%22%3A%22victorialogs%22%7D%2C%22expr%22%3A%22_stream%3A%7Bnamespace%3D%5C%22${metadata.namespace}%5C%22%7D%20pod%3A~%5C%22%5E${metadata.name}-%5C%22%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-30d%22%2C%22to%22%3A%22now%22%7D%7D%7D
 workflow:
   serviceAccount:
     create: true
