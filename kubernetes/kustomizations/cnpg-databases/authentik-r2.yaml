@@ -16,7 +16,9 @@ spec:
       remoteRef:
         key: argocd/authentik
         property: access_key_id
+        decodingStrategy: Base64
     - secretKey: ACCESS_SECRET_KEY
       remoteRef:
         key: argocd/authentik
         property: access_secret_key
+        decodingStrategy: Base64
