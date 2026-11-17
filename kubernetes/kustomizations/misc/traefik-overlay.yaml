@@ -8,7 +8,7 @@ spec:
     providers:
       kubernetesGateway:
         enabled: true
-        experimentalChannel: true
+        experimentalChannel: false
     ports:
       # cloudflared-only entrypoint; on the ClusterIP service, never the LB.
       # see cloudflared/traefik-netpol.yaml
