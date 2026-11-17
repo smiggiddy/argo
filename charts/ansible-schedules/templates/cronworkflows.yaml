@@ -1,0 +1,30 @@
+{{- range $name, $s := .Values.schedules }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: CronWorkflow
+metadata:
+  name: {{ $name }}
+spec:
+  schedules:
+    - {{ required (printf "schedules.%s.schedule is required" $name) $s.schedule | quote }}
+  timezone: {{ $.Values.timezone }}
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 600
+  suspend: {{ $s.suspend | default false }}
+  workflowSpec:
+    workflowTemplateRef:
+      name: run-ansible
+    {{- with $s.deadlineSeconds }}
+    activeDeadlineSeconds: {{ . }}
+    {{- end }}
+    arguments:
+      parameters:
+        - name: playbook
+          value: {{ required (printf "schedules.%s.playbook is required" $name) $s.playbook | quote }}
+        - name: limit
+          value: {{ $s.limit | default "" | quote }}
+        - name: tags
+          value: {{ $s.tags | default "" | quote }}
+        - name: extra-args
+          value: {{ $s.extraArgs | default "" | quote }}
+{{- end }}

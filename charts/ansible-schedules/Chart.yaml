@@ -1,0 +1,4 @@
+apiVersion: v2
+name: ansible-schedules
+version: 0.1.0
+description: Scheduled ansible playbook runs on Argo Workflows
