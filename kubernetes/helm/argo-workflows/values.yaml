@@ -1,6 +1,9 @@
 crds:
   full: true
 controller:
+  workflowNamespaces:
+    - default
+    - ansible-schedules
   resources:
     requests:
       memory: 64Mi
@@ -52,9 +55,6 @@ workflow:
     name: "argo-workflow"
   rbac:
     create: true
-  workflowNamespaces:
-    - default
-    - ansible-schedules
 server:
   authModes:
     - server
