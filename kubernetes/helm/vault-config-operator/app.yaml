@@ -1,0 +1,7 @@
+namespace: vault-config-operator
+group: security
+chart:
+  repo: https://redhat-cop.github.io/vault-config-operator
+  name: vault-config-operator
+  # renovate: datasource=helm depName=vault-config-operator registryUrl=https://redhat-cop.github.io/vault-config-operator
+  version: v1.0.7

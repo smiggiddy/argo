@@ -1,0 +1,36 @@
+# OpenBao mounts, auth config, roles and policies as vault-config-operator CRs,
+# kept in the private values repo. Deleting a CR deletes the object in OpenBao,
+# so every CR carries Delete=false,Prune=false and removals are done by hand.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: openbao-config
+  namespace: argocd
+  labels:
+    apps: security
+  annotations:
+    notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    argocd.argoproj.io/compare-options: ServerSideDiff=true
+spec:
+  project: default
+  source:
+    repoURL: https://git.thecodedom.com/thecodedom/argocd-values.git
+    targetRevision: HEAD
+    path: openbao-config
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openbao-config
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
+      - SkipDryRunOnMissingResource=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 5m
