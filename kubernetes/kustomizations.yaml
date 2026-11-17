@@ -7,6 +7,8 @@
 #   sync: manual       drop the automated sync policy
 #   ignoreDifferences  passed through to spec.ignoreDifferences
 #   retry              passed through to spec.syncPolicy.retry
+#   source.repo        git repo with the kustomization, defaults to this repo
+#   source.path        kustomization directory in source.repo, defaults to the app.yaml directory
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -34,22 +36,26 @@ spec:
         notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
         notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
         notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
-        notifications.argoproj.io/subscribe.on-sync-running-github.github: ""
-        notifications.argoproj.io/subscribe.on-deployed-github.github: ""
-        notifications.argoproj.io/subscribe.on-sync-failed-github.github: ""
         argocd.argoproj.io/compare-options: ServerSideDiff=true
         # webhook pushes only refresh apps whose directory changed
         argocd.argoproj.io/manifest-generate-paths: .
     spec:
       project: default
       source:
-        repoURL: https://github.com/smiggiddy/argo
+        repoURL: '{{ dig "source" "repo" "https://github.com/smiggiddy/argo" . }}'
         targetRevision: HEAD
-        path: '{{ .path.path }}'
+        path: '{{ dig "source" "path" .path.path . }}'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{ .namespace }}'
   templatePatch: |
+    {{- if not (dig "source" "repo" "" .) }}
+    metadata:
+      annotations:
+        notifications.argoproj.io/subscribe.on-sync-running-github.github: ""
+        notifications.argoproj.io/subscribe.on-deployed-github.github: ""
+        notifications.argoproj.io/subscribe.on-sync-failed-github.github: ""
+    {{- end }}
     spec:
       syncPolicy:
         syncOptions:
