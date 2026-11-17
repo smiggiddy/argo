@@ -10,6 +10,17 @@ notifications:
                 operator: In
                 values:
                   - "true"
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          podAffinityTerm:
+            topologyKey: kubernetes.io/hostname
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/part-of
+                  operator: In
+                  values:
+                    - argocd
   resources:
     requests:
       cpu: 50m
