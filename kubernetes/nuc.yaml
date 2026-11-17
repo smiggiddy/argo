@@ -1,0 +1,100 @@
+# Applications for the nuc cluster from the nuc-talos repo, named nuc-<name>;
+# Helm releases keep <name>.
+# apps/helm/*.yaml keys: name, namespace, repoURL, chart, targetRevision,
+# values (string), autoSync, extraSyncOptions.
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: nuc-helm
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://git.thecodedom.com/smig/nuc-talos.git
+        revision: HEAD
+        files:
+          - path: "apps/helm/*.yaml"
+  syncPolicy:
+    applicationsSync: create-update
+    preserveResourcesOnDeletion: true
+  template:
+    metadata:
+      name: "nuc-{{ .name }}"
+      namespace: argocd
+      labels:
+        apps: nuc
+        cluster: nuc
+      annotations:
+        notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+    spec:
+      project: default
+      source:
+        repoURL: "{{ .repoURL }}"
+        chart: '{{ .chart | default "" }}'
+        targetRevision: "{{ .targetRevision }}"
+      destination:
+        name: nuc
+        namespace: "{{ .namespace }}"
+  templatePatch: |
+    spec:
+      source:
+        helm:
+          releaseName: "{{ .name }}"
+          {{- with .values }}
+          valuesObject:
+            {{ . | nindent 12 }}
+          {{- end }}
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          {{- if .extraSyncOptions }}
+          {{- range .extraSyncOptions }}
+          - {{ . }}
+          {{- end }}
+          {{- end }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: nuc-kustomizations
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://git.thecodedom.com/smig/nuc-talos.git
+        revision: HEAD
+        directories:
+          - path: "apps/kustomizations/*"
+  syncPolicy:
+    applicationsSync: create-update
+    preserveResourcesOnDeletion: true
+  template:
+    metadata:
+      name: "nuc-{{ .path.basename }}-kustomization"
+      namespace: argocd
+      labels:
+        apps: nuc
+        cluster: nuc
+      annotations:
+        notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        argocd.argoproj.io/manifest-generate-paths: .
+    spec:
+      project: default
+      source:
+        repoURL: https://git.thecodedom.com/smig/nuc-talos.git
+        targetRevision: HEAD
+        path: "{{ .path.path }}"
+      destination:
+        name: nuc
+        namespace: "{{ .path.basename }}"
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
