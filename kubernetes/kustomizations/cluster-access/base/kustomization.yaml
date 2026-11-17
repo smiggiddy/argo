@@ -1,0 +1,6 @@
+namespace: kube-system
+commonAnnotations:
+  argocd.argoproj.io/sync-options: Delete=false,Prune=false
+resources:
+  - argocd-manager.yaml
+  - openbao-token-issuer.yaml
