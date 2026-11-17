@@ -1,6 +1,5 @@
 namespace: openbao-config
 group: security
-sync: manual
 source:
   repo: https://git.thecodedom.com/thecodedom/argocd-values.git
   path: openbao-config
