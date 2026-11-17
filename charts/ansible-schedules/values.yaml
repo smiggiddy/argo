@@ -4,6 +4,9 @@ image:
 
 nodeSelector: {}
 
+dnsSearches:
+  - lab.smig.tech
+
 git:
   repo: https://gitlab.lab.smig.tech/smig/homelab.git
   revision: main

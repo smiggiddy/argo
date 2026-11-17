@@ -6,6 +6,11 @@ spec:
   serviceAccountName: {{ .Values.serviceAccountName }}
   imagePullSecrets:
     - name: ansible-schedules-registry
+  {{- with .Values.dnsSearches }}
+  dnsConfig:
+    searches:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
   entrypoint: run
   onExit: notify
   activeDeadlineSeconds: {{ .Values.deadlineSeconds }}
