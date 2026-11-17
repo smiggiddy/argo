@@ -16,6 +16,9 @@ notifications:
       memory: 64Mi
     limits:
       memory: 128Mi
+  extraEnv:
+    - name: GOMEMLIMIT
+      value: 115MiB
   # Subscriptions are per-Application annotations, set in kubernetes/argocd.yaml
   # and the ApplicationSet templates under kubernetes/
   secret:
@@ -194,6 +197,9 @@ applicationSet:
       memory: 64Mi
     limits:
       memory: 256Mi
+  extraEnv:
+    - name: GOMEMLIMIT
+      value: 230MiB
   metrics:
     enabled: true
     serviceMonitor:
@@ -209,6 +215,9 @@ controller:
       memory: 512Mi
     limits:
       memory: 3Gi
+  env:
+    - name: GOMEMLIMIT
+      value: 2760MiB
   metrics:
     enabled: true
     serviceMonitor:
@@ -225,6 +234,9 @@ repoServer:
       memory: 256Mi
     limits:
       memory: 768Mi
+  env:
+    - name: GOMEMLIMIT
+      value: 690MiB
   metrics:
     enabled: true
     serviceMonitor:
@@ -271,6 +283,9 @@ server:
       memory: 128Mi
     limits:
       memory: 512Mi
+  env:
+    - name: GOMEMLIMIT
+      value: 460MiB
   metrics:
     enabled: true
     serviceMonitor:
