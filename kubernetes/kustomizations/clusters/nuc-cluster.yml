@@ -1,0 +1,56 @@
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: VaultDynamicSecret
+metadata:
+  name: nuc-cluster-token
+spec:
+  path: k8s-tokens-nuc/creds/argocd
+  method: POST
+  parameters:
+    kubernetes_namespace: kube-system
+  resultType: Data
+  provider:
+    server: http://openbao.openbao.svc:8200
+    auth:
+      kubernetes:
+        mountPath: kubernetes
+        role: argocd-cluster-creds
+        serviceAccountRef:
+          name: cluster-creds
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: nuc-cluster-secret
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: openbao
+  target:
+    name: nuc-cluster-secret
+    creationPolicy: Owner
+    template:
+      engineVersion: v2
+      metadata:
+        labels:
+          argocd.argoproj.io/secret-type: "cluster"
+          cluster: "nuc"
+      data:
+        name: "nuc"
+        server: "{{ .server }}"
+        config: '{{ dict "bearerToken" .service_account_token "tlsClientConfig" (dict "insecure" false "caData" .caData) | toJson }}'
+  data:
+    - secretKey: server
+      remoteRef:
+        key: argocd/clusters
+        property: nuc-server
+    - secretKey: caData
+      remoteRef:
+        key: argocd/clusters
+        property: nuc-ca
+  dataFrom:
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: VaultDynamicSecret
+          name: nuc-cluster-token

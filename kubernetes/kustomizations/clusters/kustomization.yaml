@@ -1,3 +1,4 @@
 resources:
   - ./cluster-creds.yml
   - ./k0s-cluster.yml
+  - ./nuc-cluster.yml
