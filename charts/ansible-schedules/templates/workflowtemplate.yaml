@@ -38,6 +38,7 @@ spec:
               repo: {{ .Values.git.repo }}
               revision: {{ .Values.git.revision }}
               depth: 1
+              insecureSkipTLS: true
               usernameSecret:
                 name: ansible-schedules
                 key: git-username
