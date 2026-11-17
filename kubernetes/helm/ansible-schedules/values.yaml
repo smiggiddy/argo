@@ -1,1 +1,5 @@
-schedules: {}
+schedules:
+  patch-systems:
+    schedule: "5 7 * * 5"
+    playbook: patch-systems.yml
+    limit: "always_on:headscales"
