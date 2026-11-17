@@ -1,6 +1,7 @@
 # One Application per remote cluster for each kubernetes/helm/<app>/<cluster>/cluster.yaml,
 # with the values.yaml next to it (optional). Clusters opt in with the `cluster`
-# label on their Argo CD cluster secret; the Application is named <cluster>-<app>.
+# label on their Argo CD cluster secret; the Application is named <cluster>-<app>
+# and the Helm release <app>.
 #
 # cluster.yaml keys:
 #   namespace          destination namespace (required)
@@ -63,6 +64,7 @@ spec:
           targetRevision: '{{ .chart.version }}'
           chart: '{{ .chart.name }}'
           helm:
+            releaseName: '{{ index .path.segments 2 }}'
             {{- if .skipCrds }}
             skipCrds: true
             {{- end }}
