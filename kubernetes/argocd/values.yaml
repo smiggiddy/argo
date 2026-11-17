@@ -237,7 +237,17 @@ controller:
       additionalLabels:
         release: kube-prometheus-stack
     replicas: 2
-  affinity: *controlPlaneAffinity
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: smig.tech/memory-gib
+                operator: Gt
+                values:
+                  - "12"
+              - key: node-role.kubernetes.io/control-plane
+                operator: DoesNotExist
 
 repoServer:
   resources:
