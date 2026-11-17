@@ -1,0 +1,12 @@
+namespace: openbao-config
+group: security
+sync: manual
+source:
+  repo: https://git.thecodedom.com/thecodedom/argocd-values.git
+  path: openbao-config
+retry:
+  limit: 5
+  backoff:
+    duration: 30s
+    factor: 2
+    maxDuration: 5m
