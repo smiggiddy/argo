@@ -1,0 +1,87 @@
+# One Application per remote cluster for each kubernetes/kustomizations/<app>/<cluster>/cluster.yaml;
+# the kustomization in that directory is the source. Clusters opt in with the
+# `cluster` label on their Argo CD cluster secret; the Application is named
+# <cluster>-<app>.
+#
+# cluster.yaml keys:
+#   namespace          destination namespace (required)
+#   group              value of the `apps` label (required)
+#   sync: manual       drop the automated sync policy
+#   ignoreDifferences  passed through to spec.ignoreDifferences
+#   retry              passed through to spec.syncPolicy.retry
+#   source.repo        git repo with the kustomization, defaults to this repo
+#   source.path        kustomization directory in source.repo, defaults to the cluster.yaml directory
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kustomizations-clusters
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: cluster
+                    operator: Exists
+          - git:
+              repoURL: https://github.com/smiggiddy/argo
+              revision: HEAD
+              files:
+                - path: 'kubernetes/kustomizations/*/{{ index .metadata.labels "cluster" }}/cluster.yaml'
+  syncPolicy:
+    applicationsSync: create-update
+    preserveResourcesOnDeletion: true
+  template:
+    metadata:
+      name: '{{ index .metadata.labels "cluster" }}-{{ index .path.segments 2 }}'
+      namespace: argocd
+      labels:
+        apps: '{{ .group }}'
+        cluster: '{{ index .metadata.labels "cluster" }}'
+      annotations:
+        notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        argocd.argoproj.io/compare-options: ServerSideDiff=true
+    spec:
+      project: default
+      source:
+        repoURL: '{{ dig "source" "repo" "https://github.com/smiggiddy/argo" . }}'
+        targetRevision: HEAD
+        path: '{{ dig "source" "path" .path.path . }}'
+      destination:
+        server: '{{ .server }}'
+        namespace: '{{ .namespace }}'
+  templatePatch: |
+    metadata:
+      annotations:
+        {{- if dig "source" "repo" "" . }}
+        argocd.argoproj.io/manifest-generate-paths: .
+        {{- else }}
+        notifications.argoproj.io/subscribe.on-sync-running-github.github: ""
+        notifications.argoproj.io/subscribe.on-deployed-github.github: ""
+        notifications.argoproj.io/subscribe.on-sync-failed-github.github: ""
+        argocd.argoproj.io/manifest-generate-paths: '/kubernetes/kustomizations/{{ index .path.segments 2 }}'
+        {{- end }}
+    spec:
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true
+          - ServerSideApply=true
+        {{- if ne (default "" .sync) "manual" }}
+        automated:
+          prune: true
+          selfHeal: true
+        {{- end }}
+        {{- with .retry }}
+        retry:
+          {{- toYaml . | nindent 6 }}
+        {{- end }}
+      {{- with .ignoreDifferences }}
+      ignoreDifferences:
+        {{- toYaml . | nindent 4 }}
+      {{- end }}

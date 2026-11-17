@@ -1,0 +1,11 @@
+namespace: external-secrets
+group: security
+retry:
+  limit: 5
+  backoff:
+    duration: 30s
+    factor: 2
+    maxDuration: 5m
+source:
+  repo: https://git.thecodedom.com/thecodedom/argocd-values.git
+  path: external-secrets-store/nuc

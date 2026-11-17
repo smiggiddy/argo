@@ -128,7 +128,7 @@
     {
       "customType": "regex",
       "description": "Chart versions in helm ApplicationSet app.yaml files",
-      "managerFilePatterns": ["/^kubernetes/helm/.+/app\\.ya?ml$/"],
+      "managerFilePatterns": ["/^kubernetes/helm/.+/(app|cluster)\\.ya?ml$/"],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: registryUrl=(?<registryUrl>\\S+))?\\n\\s*version: (?<currentValue>\\S+)"
       ]

@@ -1,0 +1,91 @@
+# One Application per remote cluster for each kubernetes/helm/<app>/<cluster>/cluster.yaml,
+# with the values.yaml next to it (optional). Clusters opt in with the `cluster`
+# label on their Argo CD cluster secret; the Application is named <cluster>-<app>.
+#
+# cluster.yaml keys:
+#   namespace          destination namespace (required)
+#   group              value of the `apps` label (required)
+#   chart.repo         Helm repo, OCI registry or git repo (required)
+#   chart.name         chart name in a Helm repo
+#   chart.version      chart version (required)
+#   sync: manual       drop the automated sync policy
+#   skipCrds: true     don't install the chart's CRDs
+#   syncOptions        extra spec.syncPolicy.syncOptions
+#   ignoreDifferences  passed through to spec.ignoreDifferences
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: helm-clusters
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: cluster
+                    operator: Exists
+          - git:
+              repoURL: https://github.com/smiggiddy/argo
+              revision: HEAD
+              files:
+                - path: 'kubernetes/helm/*/{{ index .metadata.labels "cluster" }}/cluster.yaml'
+  syncPolicy:
+    applicationsSync: create-update
+    preserveResourcesOnDeletion: true
+  template:
+    metadata:
+      name: '{{ index .metadata.labels "cluster" }}-{{ index .path.segments 2 }}'
+      namespace: argocd
+      labels:
+        apps: '{{ .group }}'
+        cluster: '{{ index .metadata.labels "cluster" }}'
+      annotations:
+        notifications.argoproj.io/subscribe.on-sync-failed.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-health-degraded.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-sync-status-unknown.mattermost: q51n59rsyjnyxexx5faeuuh8ua
+        notifications.argoproj.io/subscribe.on-sync-running-github.github: ""
+        notifications.argoproj.io/subscribe.on-deployed-github.github: ""
+        notifications.argoproj.io/subscribe.on-sync-failed-github.github: ""
+        argocd.argoproj.io/compare-options: ServerSideDiff=true
+        argocd.argoproj.io/manifest-generate-paths: '/{{ .path.path }}'
+    spec:
+      project: default
+      destination:
+        server: '{{ .server }}'
+        namespace: '{{ .namespace }}'
+  templatePatch: |
+    spec:
+      sources:
+        - repoURL: '{{ .chart.repo }}'
+          targetRevision: '{{ .chart.version }}'
+          chart: '{{ .chart.name }}'
+          helm:
+            {{- if .skipCrds }}
+            skipCrds: true
+            {{- end }}
+            ignoreMissingValueFiles: true
+            valueFiles:
+              - '$values/{{ .path.path }}/values.yaml'
+        - repoURL: https://github.com/smiggiddy/argo
+          targetRevision: HEAD
+          ref: values
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true
+          - ServerSideApply=true
+          {{- range .syncOptions }}
+          - {{ . }}
+          {{- end }}
+        {{- if ne (default "" .sync) "manual" }}
+        automated:
+          prune: true
+          selfHeal: true
+        {{- end }}
+      {{- with .ignoreDifferences }}
+      ignoreDifferences:
+        {{- toYaml . | nindent 4 }}
+      {{- end }}
