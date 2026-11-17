@@ -4,6 +4,8 @@ metadata:
   name: run-ansible
 spec:
   serviceAccountName: {{ .Values.serviceAccountName }}
+  imagePullSecrets:
+    - name: ansible-schedules-registry
   entrypoint: run
   onExit: notify
   activeDeadlineSeconds: {{ .Values.deadlineSeconds }}
