@@ -222,13 +222,14 @@ applicationSet:
 controller:
   resources:
     requests:
-      cpu: 250m
-      memory: 512Mi
+      cpu: 1500m
+      memory: 2560Mi
     limits:
-      memory: 3Gi
+      cpu: 1500m
+      memory: 2560Mi
   env:
     - name: GOMEMLIMIT
-      value: 2760MiB
+      value: 2300MiB
   metrics:
     enabled: true
     serviceMonitor:
