@@ -1,6 +1,5 @@
 namespace: cert-manager
 group: utilities
-sync: manual
 chart:
   repo: https://charts.jetstack.io
   name: cert-manager

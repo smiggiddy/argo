@@ -1,6 +1,5 @@
 namespace: cnpg-system
 group: utilities
-sync: manual
 chart:
   repo: https://cloudnative-pg.github.io/charts
   name: cloudnative-pg
