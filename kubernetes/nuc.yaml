@@ -56,6 +56,11 @@ spec:
           - {{ . }}
           {{- end }}
           {{- end }}
+       {{- if .autoSync }}
+        automated:
+          prune: true
+          selfHeal: true
+       {{- end }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -96,5 +101,8 @@ spec:
         name: nuc
         namespace: "{{ .path.basename }}"
       syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
         syncOptions:
           - CreateNamespace=true
