@@ -6,4 +6,5 @@ resources:
   - ./argocd-notifications-secret.yaml
   - ./external-dns-cloudflare-secret.yaml
   - ./forgejo-secrets.yaml
+  - ./garage-secrets.yaml
   - ./gatus-secrets.yaml
