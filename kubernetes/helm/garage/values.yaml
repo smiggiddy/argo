@@ -1,6 +1,7 @@
 image:
   repository: dxflrs/arm64_garage
 garage:
+  existingRpcSecret: garage-rpc
   replicationFactor: 3
   s3:
     api:
