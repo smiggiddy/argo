@@ -1,0 +1,9 @@
+crds:
+  prometheuses:
+    enabled: false
+  alertmanagers:
+    enabled: false
+  thanosrulers:
+    enabled: false
+  prometheusagents:
+    enabled: false

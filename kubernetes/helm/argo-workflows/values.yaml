@@ -1,5 +1,7 @@
 crds:
-  full: true
+  full: false
+  annotations:
+    argocd.argoproj.io/sync-options: Replace=true
 controller:
   workflowNamespaces:
     - default
