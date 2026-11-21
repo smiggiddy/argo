@@ -33,7 +33,7 @@ env:
   MM_VERSION: "v12.1.0"
   # renovate: datasource=docker depName=ubuntu
   BASE_IMAGE_TAG: "26.04"
-  BASE_IMAGE_ARM64_DIGEST: "sha256:f144425ff09be612d6d9ad965196e9cdc23dae1f42110a8a11a3e9a8198759f7"
+  BASE_IMAGE_ARM64_DIGEST: "sha256:d66b366dac61b575bee2aef07e9c26e8070096fbe84a3d4d3eb0da069b5d76db"
 
 jobs:
   build:
