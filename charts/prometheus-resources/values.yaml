@@ -48,9 +48,9 @@ gpuAlerts:
 
 pvcAlerts:
   enabled: true
-  warningRatio: 0.7
+  warningRatio: 0.85
   warningFor: 10m
-  criticalRatio: 0.85
+  criticalRatio: 0.95
   criticalFor: 10m
   # PVCs whose name matches this regex are excluded from fill alerts.
   excludePVCRegex: "open-webui.*"
