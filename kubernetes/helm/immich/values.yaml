@@ -24,7 +24,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/immich-app/immich-server
-          tag: v3.4.1@sha256:7c489add298fc2f92cda4c777de6462aa206877e04087b815f62c7664af0b53b
+          tag: v3.4.2@sha256:fc880c1bf665b4aab1e74c15e56ab871225989cd546536e6b77e771869af06bd
     strategy: Recreate
 immich:
   persistence:
@@ -48,7 +48,7 @@ machine-learning:
             MACHINE_LEARNING_RKNN_THREADS: 2
           image:
             repository: ghcr.io/immich-app/immich-machine-learning
-            tag: v3.4.1-armnn@sha256:35267bbc38bf0d06fabd4df512eca63581ce0916eb1885d6f238ab4fe269f46c
+            tag: v3.4.2-armnn@sha256:7bb3a8072f9943b4611ffbc9aa9cf939c55a7ad100740e101b3563f074e15193
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
