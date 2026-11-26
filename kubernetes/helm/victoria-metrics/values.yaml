@@ -1,31 +1,17 @@
 fullnameOverride: vm
 
-# k3s runs apiserver, scheduler, controller-manager and kube-proxy in one
-# process sharing one metrics registry, so every component endpoint
-# (including the kubelet's /metrics) returns everyone's metrics. Each scrape
-# below keeps only its own component's metrics; the apiserver job is the home
-# for shared families (workqueue_, rest_client_, go_, process_).
-# Requires the bind-address flags from the homelab ansible repo
-# (playbooks/k3s-metrics.yml) on the nodes.
-#
-# Argo CD excludes Endpoints globally (argocd-cm resource.exclusions), so the
-# chart's Service+Endpoints scrapes for out-of-cluster components never get
-# created. The components stay enabled for their rules and dashboards, the
-# chart's scrape objects are switched off, and the VMNodeScrapes in
-# extraObjects discover node IPs from the Node objects (no static IPs) and
-# scrape them under the job names the rules use.
+# k3s runs apiserver, scheduler, controller-manager, kube-proxy and kubelet in
+# one process sharing one metrics registry, so every component port returns
+# the same metrics (https://docs.k3s.io/reference/metrics). Each node's kubelet
+# /metrics is scraped once and metrics are assigned to the job names the rules
+# use by name prefix (kubelet.vmScrapes.kubelet-control-plane).
+# The vm-k3s-component-up VMRule copies the kubelet scrape's up series under
+# each component job, for the chart's up-based rules and dashboard variables.
 x-chart-scrape-off: &chartScrapeOff
   service:
     enabled: false
   vmScrape:
     enabled: false
-x-k3s-https: &k3sHttps
-  scheme: https
-  interval: 60s
-  bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-  tlsConfig:
-    # k3s serves these with self-signed certs
-    insecureSkipVerify: true
 x-control-plane-nodes: &controlPlaneNodes
   matchLabels:
     node-role.kubernetes.io/control-plane: "true"
@@ -130,19 +116,67 @@ kubelet:
     spec:
       metricRelabelConfigs:
         # chart defaults
-        - action: labeldrop
+        - &dropUid
+          action: labeldrop
           regex: (uid)
-        - action: labeldrop
+        - &dropIdName
+          action: labeldrop
           regex: (id|name)
-        - action: drop
+        - &dropRestClientDuration
+          action: drop
           source_labels: [__name__]
           regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
-        # k3s: other components' metrics, scraped by their own jobs.
-        # ~225k of the old Prometheus's 359k head series came from here.
+        # agents: client-side apiserver_* etc. would pollute the apiserver job
         - action: drop
           source_labels: [__name__]
-          regex: (apiserver|apiextensions|aggregator|authentication|authorization|etcd|scheduler|kubeproxy|workqueue|watch_cache|field_validation|lasso)_.*
+          regex: (apiserver|apiextensions|aggregator|authentication|authorization|etcd|scheduler|workqueue|watch_cache|field_validation|lasso)_.*
+        - &jobKubeProxy
+          action: replace
+          source_labels: [__name__]
+          regex: kubeproxy_.*
+          target_label: job
+          replacement: kube-proxy
   vmScrapes:
+    kubelet:
+      spec:
+        selector:
+          matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: DoesNotExist
+    kubelet-control-plane:
+      spec:
+        selector: *controlPlaneNodes
+        interval: 60s
+        scrapeTimeout: 30s
+        # ~18-23 MiB per server (whole k3s registry); default limit is 16 MiB
+        max_scrape_size: 64MiB
+        metricRelabelConfigs:
+          - *dropUid
+          - *dropIdName
+          - *dropRestClientDuration
+          # high-cardinality histograms no rule uses; _sum/_count are kept.
+          # apiserver_request_sli_duration_seconds_bucket stays: SLO burn-rate rules.
+          - action: drop
+            source_labels: [__name__]
+            regex: (apiserver_request_duration_seconds|etcd_request_duration_seconds|apiserver_request_body_size_bytes|apiserver_watch_list_duration_seconds|apiserver_watch_cache_read_wait_seconds|apiserver_response_sizes|apiserver_watch_events_sizes|apiserver_admission_controller_admission_duration_seconds)_bucket
+          # job by name prefix; later rules win, so apiserver_admission_controller_*
+          # lands in apiserver. Everything unmatched stays kubelet.
+          - action: replace
+            source_labels: [__name__]
+            regex: (.+_controller_.+|node_collector_.+|garbagecollector_.+|pv_collector_.+|attachdetach_.+|root_ca_cert_publisher_.+|ephemeral_volume_.+)
+            target_label: job
+            replacement: kube-controller-manager
+          - action: replace
+            source_labels: [__name__]
+            regex: (apiserver|apiextensions|aggregator|authentication|authorization|etcd|workqueue|watch_cache|field_validation|rest_client)_.*
+            target_label: job
+            replacement: apiserver
+          - action: replace
+            source_labels: [__name__]
+            regex: scheduler_.*
+            target_label: job
+            replacement: kube-scheduler
+          - *jobKubeProxy
     cadvisor:
       spec:
         # replaces the shared list above for cadvisor only. Drops are
@@ -182,32 +216,7 @@ kubelet:
 
 kubeApiServer:
   vmScrape:
-    spec:
-      endpoints:
-        - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-          port: https
-          scheme: https
-          tlsConfig:
-            caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-            serverName: kubernetes
-          metricRelabelConfigs:
-            - action: drop
-              source_labels: [__name__]
-              regex: (scheduler|kubeproxy|kubelet)_.*
-            # high-cardinality histograms no rule uses (checked against the
-            # live kube-prometheus rules); _sum/_count are kept.
-            # apiserver_request_sli_duration_seconds_bucket stays: SLO burn-rate rules.
-            - action: drop
-              source_labels: [__name__]
-              regex: (apiserver_request_duration_seconds|etcd_request_duration_seconds|apiserver_request_body_size_bytes|apiserver_watch_list_duration_seconds|apiserver_watch_cache_read_wait_seconds|apiserver_response_sizes|apiserver_watch_events_sizes|apiserver_admission_controller_admission_duration_seconds)_bucket
-      jobLabel: component
-      namespaceSelector:
-        matchNames:
-          - default
-      selector:
-        matchLabels:
-          component: apiserver
-          provider: kubernetes
+    enabled: false
 
 kubeScheduler:
   <<: *chartScrapeOff
@@ -224,59 +233,29 @@ kubeEtcd:
 
 extraObjects:
   - apiVersion: operator.victoriametrics.com/v1beta1
-    kind: VMNodeScrape
+    kind: VMRule
     metadata:
-      name: vm-kube-scheduler
+      name: vm-k3s-component-up
     spec:
-      <<: *k3sHttps
-      port: "10259"
-      selector: *controlPlaneNodes
-      relabelConfigs:
-        - sourceLabels: [__meta_kubernetes_node_name]
-          targetLabel: node
-        - targetLabel: job
-          replacement: kube-scheduler
-      metricRelabelConfigs:
-        - action: keep
-          source_labels: [__name__]
-          regex: scheduler_.*
-
-  - apiVersion: operator.victoriametrics.com/v1beta1
-    kind: VMNodeScrape
-    metadata:
-      name: vm-kube-controller-manager
-    spec:
-      <<: *k3sHttps
-      port: "10257"
-      selector: *controlPlaneNodes
-      relabelConfigs:
-        - sourceLabels: [__meta_kubernetes_node_name]
-          targetLabel: node
-        - targetLabel: job
-          replacement: kube-controller-manager
-      metricRelabelConfigs:
-        - action: keep
-          source_labels: [__name__]
-          regex: (.+_controller_.+|node_collector_.+|garbagecollector_.+|pv_collector_.+|attachdetach_.+|root_ca_cert_publisher_.+|ephemeral_volume_.+)
-
-  # embedded in k3s server and agent, so every node
-  - apiVersion: operator.victoriametrics.com/v1beta1
-    kind: VMNodeScrape
-    metadata:
-      name: vm-kube-proxy
-    spec:
-      scheme: http
-      interval: 60s
-      port: "10249"
-      relabelConfigs:
-        - sourceLabels: [__meta_kubernetes_node_name]
-          targetLabel: node
-        - targetLabel: job
-          replacement: kube-proxy
-      metricRelabelConfigs:
-        - action: keep
-          source_labels: [__name__]
-          regex: kubeproxy_.*
+      groups:
+        - name: k3s-component-up
+          rules:
+            - record: up
+              expr: up{job="kubelet",metrics_path="/metrics",node_role_kubernetes_io_control_plane="true"}
+              labels:
+                job: apiserver
+            - record: up
+              expr: up{job="kubelet",metrics_path="/metrics",node_role_kubernetes_io_control_plane="true"}
+              labels:
+                job: kube-scheduler
+            - record: up
+              expr: up{job="kubelet",metrics_path="/metrics",node_role_kubernetes_io_control_plane="true"}
+              labels:
+                job: kube-controller-manager
+            - record: up
+              expr: up{job="kubelet",metrics_path="/metrics"}
+              labels:
+                job: kube-proxy
 
   # k3s --etcd-expose-metrics serves plain http on 2381
   - apiVersion: operator.victoriametrics.com/v1beta1

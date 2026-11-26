@@ -3,3 +3,4 @@ test
 testing/
 .vscode/
 kubernetes/kustomizations/cnpg-databases/immich-vectorchord-migration.md
+bao-before/
