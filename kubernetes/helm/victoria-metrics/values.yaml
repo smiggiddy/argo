@@ -198,7 +198,7 @@ kubelet:
             regex: container_fs_(io_current|io_time_seconds_total|io_time_weighted_seconds_total|reads_merged_total|sector_reads_total|sector_writes_total|writes_merged_total)
           - action: drop
             source_labels: [__name__]
-            regex: container_memory_(mapped_file|swap)
+            regex: container_memory_mapped_file
           - action: drop
             source_labels: [__name__]
             regex: container_(file_descriptors|tasks_state|threads_max)
@@ -238,7 +238,35 @@ kubeProxy:
 kubeEtcd:
   <<: *chartScrapeOff
 
+defaultRules:
+  rules:
+    # replaced by vm-node-systemd in extraObjects
+    NodeSystemdServiceFailed:
+      enabled: false
+  groups:
+    # p99s of an idle scheduler are NaN, so these record nothing
+    kube-scheduler.rules:
+      enabled: false
+
 extraObjects:
+  - apiVersion: operator.victoriametrics.com/v1beta1
+    kind: VMRule
+    metadata:
+      name: vm-node-systemd
+    spec:
+      groups:
+        - name: node-systemd
+          rules:
+            - alert: NodeSystemdServiceFailed
+              expr: node_systemd_unit_state{job="node-exporter",state="failed",name!="systemd-networkd-wait-online.service"} == 1
+              for: 5m
+              labels:
+                severity: warning
+              annotations:
+                summary: Systemd service has entered failed state.
+                description: Systemd service {{`{{ $labels.name }}`}} has entered failed state at {{`{{ $labels.instance }}`}}
+                runbook_url: https://runbooks.prometheus-operator.dev/runbooks/node/nodesystemdservicefailed
+
   - apiVersion: operator.victoriametrics.com/v1beta1
     kind: VMRule
     metadata:
