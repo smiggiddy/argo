@@ -10,10 +10,10 @@
   "keywords": [],
   "type": "module",
   "devDependencies": {
-    "@types/node": "26.6.6",
+    "@types/node": "26.6.10",
     "smee-client": "5.0.0",
     "typescript": "7.0.2",
-    "wrangler": "4.160.1"
+    "wrangler": "4.168.0"
   },
   "dependencies": {
     "@hono/cloudflare-workers": "^1.0.1",
